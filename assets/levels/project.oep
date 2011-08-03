@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<project>
+	<name>Fish</name>
+	<settings>
+		<defaultWidth>640</defaultWidth>
+		<defaultHeight>480</defaultHeight>
+		<minHeight>480</minHeight>
+		<maxHeight>10000</maxHeight>
+		<workingDirectory>../gfx</workingDirectory>
+	</settings>
+	<objects>
+		<object name="player" image="bubble.png" width="16" height="16" limit="1" />
+		<object name="fish" image="fish.png" width="48" height="20" imageWidth="48" />
+	</objects>
+	<layers>
+		<grid name="walls" gridSize="16" exportAsObjects="true" />
+		<objects name="actors" gridSize="16" />
+	</layers>
+</project>
