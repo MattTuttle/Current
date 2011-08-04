@@ -7,6 +7,7 @@ import com.haxepunk.masks.Pixelmask;
 import com.haxepunk.World;
 import entities.Fish;
 import entities.Player;
+import flash.display.BitmapData;
 import flash.utils.ByteArray;
 import haxe.xml.Fast;
 
@@ -20,11 +21,17 @@ class Game extends World
 	public function new() 
 	{
 		super();
-		addGraphic(new Image(GfxOcean)).layer = 110;
-		addGraphic(new Image(GfxBackground)).layer = 100;
-		addGraphic(new Image(GfxLighting)).layer = -10;
 		
-		loadLevel("Underwater");
+		loadLevel("Room01");
+		_alphaChange = 0.01;
+	}
+	
+	private function getImageData(id:String):BitmapData
+	{
+		var c:Class<Dynamic> = Type.resolveClass("Gfx" + id);
+		if (c != null)
+			return Type.createInstance(c, []).bitmapData;
+		return null;
 	}
 	
 	private function getLevelData(id:String):ByteArray
@@ -37,21 +44,30 @@ class Game extends World
 	
 	private function loadLevel(id:String)
 	{
+		// background and lighting
+		_lighting = new Image(getImageData(id + "Lighting"));
+		addGraphic(new Image(getImageData(id + "Background"))).layer = 100;
+		addGraphic(_lighting).layer = -10;
+		
+		// load up foreground and use it as a mask
+		var image:BitmapData = getImageData(id + "Foreground");
+		var mask:Pixelmask = new Pixelmask(image);
+		mask.threshold = 250;
+		var ent:Entity = new Entity(0, 0, new Image(image), mask);
+		ent.type = "map";
+		ent.layer = 20;
+		add(ent);
+		
+		// set the level dimensions
+		levelWidth = mask.width;
+		levelHeight = mask.height;
+		
+		// load level specific data
 		var data:ByteArray = getLevelData(id);
 		if (data == null)
 			throw "Level does not exist: " + id;
 		var xml:Fast = new Fast(Xml.parse(data.toString()));
 		xml = xml.node.level;
-		
-		var mask:Pixelmask = new Pixelmask(GfxLevel);
-		mask.threshold = 250;
-		var ent:Entity = new Entity(0, 0, new Image(GfxLevel), mask);
-		ent.type = "map";
-		ent.layer = 20;
-		add(ent);
-		
-		levelWidth = mask.width;
-		levelHeight = mask.height;
 		
 		if (xml.hasNode.actors)
 			loadObjects(xml.node.actors);
@@ -77,13 +93,6 @@ class Game extends World
 	
 	private function switchRoom(direction:String)
 	{
-		switch (direction)
-		{
-			case "left":
-			case "right":
-			case "up":
-			case "down":
-		}
 	}
 	
 	private function clampCamera()
@@ -111,11 +120,18 @@ class Game extends World
 		else if (player.y > levelHeight)
 			switchRoom("down");
 		
+		_lighting.alpha += _alphaChange;
+		if (_lighting.alpha >= 1)
+			_alphaChange = -0.005;
+		else if (_lighting.alpha < 0.7)
+			_alphaChange = 0.005;
+		
 		super.update();
 		
 		clampCamera();
 	}
 	
-	private var _spawnFish:Float;
+	private var _alphaChange:Float;
+	private var _lighting:Image;
 	
 }

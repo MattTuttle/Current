@@ -11,7 +11,7 @@ class Main extends Engine
 	public static inline var kScreenWidth:Int = 640;
 	public static inline var kScreenHeight:Int = 480;
 	public static inline var kFrameRate:Int = 60;
-	public static inline var kClearColor:Int = 0x777777;
+	public static inline var kClearColor:Int = 0x000000;
 	public static inline var kProjectName:String = "SpeedGame";
 	
 	public function new() 

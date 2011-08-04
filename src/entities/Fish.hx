@@ -4,6 +4,7 @@ import com.haxepunk.graphics.Image;
 import com.haxepunk.graphics.Spritemap;
 import com.haxepunk.HXP;
 import com.haxepunk.Entity;
+import worlds.Game;
 
 class Fish extends Entity
 {
@@ -12,12 +13,12 @@ class Fish extends Entity
 	{
 		super(x, y);
 		
-		_fish = new Spritemap(GfxFish, 48, 20);
+		_fish = new Spritemap(GfxFish, 59, 32);
 		_fish.add("swim", [0, 1, 2, 1], 4);
 		_fish.play("swim");
 		graphic = _fish;
 		
-		setHitbox(48, 20);
+		setHitbox(59, 32);
 		layer = 50;
 		type = "enemy";
 		_spawnTime = HXP.random * 10;
@@ -46,7 +47,7 @@ class Fish extends Entity
 		else
 		{
 			x += 1;
-			if (x > HXP.screen.width - width)
+			if (x > Game.levelWidth - width)
 				_fish.flipped = true;
 		}
 		super.update();
