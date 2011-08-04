@@ -5,7 +5,7 @@
     <fish x="32" y="176"/>
     <fish x="512" y="256"/>
     <fish x="320" y="64"/>
-    <player x="240" y="416"/>
     <fish x="112" y="336"/>
+    <player x="368" y="336"/>
   </actors>
 </level>

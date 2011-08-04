@@ -14,14 +14,15 @@ class Game extends World
 {
 	
 	public static var player:Player;
+	public static var levelWidth:Int;
+	public static var levelHeight:Int;
 
 	public function new() 
 	{
 		super();
-		var ent:Entity = new Entity(0, 0, new Image(GfxLevel), new Pixelmask(GfxMask));
-		ent.type = "map";
-		ent.layer = 20;
-		add(ent);
+		addGraphic(new Image(GfxOcean)).layer = 110;
+		addGraphic(new Image(GfxBackground)).layer = 100;
+		addGraphic(new Image(GfxLighting)).layer = -10;
 		
 		loadLevel("Underwater");
 	}
@@ -41,6 +42,16 @@ class Game extends World
 			throw "Level does not exist: " + id;
 		var xml:Fast = new Fast(Xml.parse(data.toString()));
 		xml = xml.node.level;
+		
+		var mask:Pixelmask = new Pixelmask(GfxLevel);
+		mask.threshold = 250;
+		var ent:Entity = new Entity(0, 0, new Image(GfxLevel), mask);
+		ent.type = "map";
+		ent.layer = 20;
+		add(ent);
+		
+		levelWidth = mask.width;
+		levelHeight = mask.height;
 		
 		if (xml.hasNode.actors)
 			loadObjects(xml.node.actors);
@@ -75,19 +86,34 @@ class Game extends World
 		}
 	}
 	
+	private function clampCamera()
+	{
+		if (HXP.camera.x < 0)
+			HXP.camera.x = 0;
+		else if (HXP.camera.x > levelWidth - HXP.screen.width)
+			HXP.camera.x = levelWidth - HXP.screen.width;
+			
+		if (HXP.camera.y < 0)
+			HXP.camera.y = 0;
+		else if (HXP.camera.y > levelHeight - HXP.screen.height)
+			HXP.camera.y = levelHeight - HXP.screen.height;
+	}
+	
 	public override function update()
 	{
 		// check if player heads off screen
 		if (player.x < -player.width)
 			switchRoom("left");
-		else if (player.x > HXP.screen.width)
+		else if (player.x > levelWidth)
 			switchRoom("right");
 		if (player.y < -player.height)
 			switchRoom("up");
-		else if (player.y > HXP.screen.height)
+		else if (player.y > levelHeight)
 			switchRoom("down");
 		
 		super.update();
+		
+		clampCamera();
 	}
 	
 	private var _spawnFish:Float;

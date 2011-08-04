@@ -24,45 +24,42 @@ enum Gesture
 class Player extends Entity
 {
 	
+	private static inline var bubbleLayers:Array<Int> = [6, 12, 18];
+	private static inline var maxBubbles:Int = 0;
+	
 	public var dead:Bool;
 	public var following:Int; // bubbles following
 	
 	public var velocity:Point;
-	public var maxVelocity:Point;
+	public var acceleration:Point;
+	public var maxSpeed:Float;
+	public var drag:Float;
+	public var speed:Float;
 
 	public function new(x:Float, y:Float) 
 	{
 		super(x, y);
-		graphic = new Image(GfxBubble);
-		mask = new Pixelmask(GfxBubble);
+		var image:Image = new Image(GfxBubble);
+		image.centerOO();
+		graphic = image;
+		mask = new Pixelmask(GfxBubble, -8, -8);
 		
 		following = 0;
 		dead = false;
 		
+		_bubbles = new Array<Bubble>();
+		_bubbleAngle = 0;
+		
 		velocity = new Point();
-		maxVelocity = new Point(5, 5);
+		acceleration = new Point();
+		maxSpeed = 80;
+		drag = 8;
+		speed = 4;
 		
 		Input.define("up", [Key.W, Key.UP]);
 		Input.define("down", [Key.S, Key.DOWN]);
 		Input.define("left", [Key.A, Key.LEFT]);
 		Input.define("right", [Key.D, Key.RIGHT]);
-	}
-	
-	private function clampCamera()
-	{
-		if (x < HXP.camera.x)
-		{
-			x = HXP.camera.x;
-		}
-		else if (x > HXP.camera.x + HXP.screen.width - 16)
-		{
-			x = HXP.camera.x + HXP.screen.width - 16;
-		}
-		
-		if (y < HXP.camera.y)
-			y = HXP.camera.y;
-		else if (y > HXP.camera.y + HXP.screen.height - 16)
-			y = HXP.camera.y + HXP.screen.height - 16;
 	}
 	
 	private function kill()
@@ -78,13 +75,15 @@ class Player extends Entity
 	private function move()
 	{
 		var change:Float, delta:Int;
-		if (velocity.x > maxVelocity.x)
-			velocity.x = maxVelocity.x;
-		if (velocity.y > maxVelocity.y)
-			velocity.y = maxVelocity.y;
+		velocity.x += acceleration.x;
+		velocity.y += acceleration.y;
+		if (Math.abs(velocity.x) > maxSpeed)
+			velocity.x = maxSpeed * HXP.sign(velocity.x);
+		if (Math.abs(velocity.y) > maxSpeed)
+			velocity.y = maxSpeed * HXP.sign(velocity.y);
 		
 		// change in horizontal
-		change = velocity.x + Math.random() * 0.2; // adds wiggle
+		change = (velocity.x + Math.random() * 0.2) * HXP.elapsed; // adds wiggle
 		if (collide("map", x + change, y) == null)
 		{
 			x += change;
@@ -107,7 +106,7 @@ class Player extends Entity
 		}
 		
 		// change in vertical
-		change = velocity.y + Math.random() * 1 - 0.5; // adds wiggle
+		change = (velocity.y + Math.random() * 1 - 0.5) * HXP.elapsed; // adds wiggle
 		if (collide("map", x, y + change) == null)
 		{
 			y += change;
@@ -134,7 +133,10 @@ class Player extends Entity
 	{
 		handleInput();
 		
-		clampCamera();
+		// move camera
+		HXP.camera.x = x - HXP.screen.width / 2;
+		HXP.camera.y = y - HXP.screen.height / 2;
+		
 		mouseGesture(Input.mouseX, Input.mouseY);
 		move();
 		
@@ -142,22 +144,80 @@ class Player extends Entity
 		
 		if (collide("enemy", x, y) != null)
 		{
-			kill();
+			if (_bubbles.length == 0)
+				kill();
 		}
+		
+		// rotate bubbles
+		_bubbleAngle += 1;
+		for (i in 0 ... _bubbles.length)
+		{
+			moveBubble(i);
+		}
+		
+		var bubble:Bubble = cast(collide("bubble", x, y), Bubble);
+		if (bubble != null)
+		{
+			addBubble(bubble);
+		}
+	}
+	
+	private function moveBubble(index:Int)
+	{
+		var layer:Int = -1;
+		var numOnLayer:Int = 0;
+		var angleIndex:Int = index;
+		
+		var total:Int = 0;
+		for (i in 0 ... bubbleLayers.length)
+		{
+			total += bubbleLayers[i];
+			if (index < total)
+			{
+				numOnLayer = bubbleLayers[i];
+				layer = i;
+				break;
+			}
+			angleIndex -= bubbleLayers[i];
+		}
+		
+		// this bubble is on an undefined layer
+		if (layer == -1) return;
+		
+		var offsetAngle:Float = (angleIndex % numOnLayer) * 360 / numOnLayer;
+		var offsetRadius:Float = layer * 12 + width;
+		var angle:Float = (_bubbleAngle + offsetAngle) * HXP.RAD;
+		
+		_bubbles[index].targetX = Math.cos(angle) * offsetRadius + x;
+		_bubbles[index].targetY = Math.sin(angle) * offsetRadius + y;
+	}
+	
+	public function removeBubble(bubble:Bubble)
+	{
+		_bubbles.remove(bubble);
+	}
+	
+	private function addBubble(bubble:Bubble)
+	{
+		if (bubble.owner != null) return;
+		
+		_bubbles.push(bubble);
+		bubble.owner = this;
+		moveBubble(_bubbles.length - 1);
 	}
 	
 	private function mouseGesture(mouseX:Float, mouseY:Float)
 	{
 		if (Input.mousePressed)
 		{
-			lastMouseX = mouseX;
-			lastMouseY = mouseY;
-			gestures = new Array<Gesture>();
+			_lastMouseX = mouseX;
+			_lastMouseY = mouseY;
+			_gestures = new Array<Gesture>();
 		}
 		else if (Input.mouseDown)
 		{
-			var dx:Float = mouseX - lastMouseX;
-			var dy:Float = mouseY - lastMouseY;
+			var dx:Float = mouseX - _lastMouseX;
+			var dy:Float = mouseY - _lastMouseY;
 			if (dx * dx + dy * dy > 400) // len > 20
 			{
 				var angle:Float = Math.atan2(dy, dx) * HXP.DEG;
@@ -180,13 +240,13 @@ class Player extends Entity
 				else if (angle > -157)
 					gesture = DOWNLEFT;
 				
-				if (gestures.length == 0 || gesture != lastGesture)
+				if (_gestures.length == 0 || gesture != _lastGesture)
 				{
-					gestures.push(gesture);
-					lastGesture = gesture;
+					_gestures.push(gesture);
+					_lastGesture = gesture;
 				}
-				lastMouseX = mouseX;
-				lastMouseY = mouseY;
+				_lastMouseX = mouseX;
+				_lastMouseY = mouseY;
 			}
 		}
 		else if (Input.mouseReleased)
@@ -194,34 +254,30 @@ class Player extends Entity
 			// Process gesture
 		}
 	}
-	private var lastGesture:Gesture;
-	private var gestures:Array<Gesture>;
-	private var lastMouseX:Float;
-	private var lastMouseY:Float;
 	
 	private function handleInput()
 	{
 		// Horizontal movement
 		if (Input.check("left"))
 		{
-			velocity.x -= 0.1;
+			acceleration.x = -speed;
 		}
 		else if (Input.check("right"))
 		{
-			velocity.x += 0.1;
+			acceleration.x = speed;
 		}
 		else
 		{
 			// Horizontal drag (rest at zero)
 			if (velocity.x < 0)
 			{
-				velocity.x += 0.2;
+				velocity.x += drag;
 				if (velocity.x > 0)
 					velocity.x = 0;
 			}
 			else if (velocity.x > 0)
 			{
-				velocity.x -= 0.2;
+				velocity.x -= drag;
 				if (velocity.x < 0)
 					velocity.x = 0;
 			}
@@ -229,25 +285,37 @@ class Player extends Entity
 		
 		// Vertical movement
 		if (Input.check("up"))
-			velocity.y -= 0.1;
+		{
+			acceleration.y = -speed;
+		}
 		else if (Input.check("down"))
-			velocity.y += 0.1;
+		{
+			acceleration.y = speed;
+		}
 		else
 		{
 			// Vertical drag (rest at zero)
 			if (velocity.y < 0)
 			{
-				velocity.y += 0.2;
+				velocity.y += drag;
 				if (velocity.y > 0)
 					velocity.y = 0;
 			}
 			else if (velocity.y > 0)
 			{
-				velocity.y -= 0.2;
+				velocity.y -= drag;
 				if (velocity.y < 0)
 					velocity.y = 0;
 			}
 		}
 	}
+	
+	private var _bubbles:Array<Bubble>;
+	private var _bubbleAngle:Float;
+	
+	private var _lastGesture:Gesture;
+	private var _gestures:Array<Gesture>;
+	private var _lastMouseX:Float;
+	private var _lastMouseY:Float;
 	
 }

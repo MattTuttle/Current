@@ -12,8 +12,11 @@
 		<img:image import="assets/gfx/bubble.png" class="GfxBubble" />
 		<img:image import="assets/gfx/bubble_small.png" class="GfxSmallBubble" />
 		<img:image import="assets/gfx/fish.png" class="GfxFish" />
-		<img:image import="assets/gfx/mask.png" class="GfxMask" />
-		<img:image import="assets/gfx/level.png" class="GfxLevel" />
+		
+		<img:image import="assets/gfx/levels/RM1_foreground.png" class="GfxLevel" />
+		<img:image import="assets/gfx/levels/RM1_background.png" class="GfxBackground" />
+		<img:image import="assets/gfx/levels/RM1_lighting.png" class="GfxLighting" />
+		<img:image import="assets/gfx/levels/ocean_gradient_BG.png" class="GfxOcean" />
 		
 		<snd:sound import="assets/sfx/pop.mp3" class="SfxBubblePop" />
 		
