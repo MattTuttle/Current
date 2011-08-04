@@ -4,7 +4,9 @@ import com.haxepunk.Entity;
 import com.haxepunk.graphics.Image;
 import com.haxepunk.HXP;
 import com.haxepunk.masks.Pixelmask;
+import com.haxepunk.tweens.misc.NumTween;
 import com.haxepunk.World;
+import com.haxepunk.Tween;
 import entities.Fish;
 import entities.Player;
 import flash.display.BitmapData;
@@ -18,12 +20,27 @@ class Game extends World
 	public static var levelWidth:Int;
 	public static var levelHeight:Int;
 
-	public function new() 
+	public function new()
 	{
 		super();
 		
 		loadLevel("Room01");
-		_alphaChange = 0.01;
+		_alphaTween = new NumTween(alphaComplete, TweenType.Looping);
+		addTween(_alphaTween, true);
+		alphaComplete();
+	}
+	
+	private function alphaComplete()
+	{
+		var rand:Float = Math.random() * 5 + 10;
+		if (_alphaTween.value == 1)
+		{
+			_alphaTween.tween(1.0, 0.5, rand);
+		}
+		else
+		{
+			_alphaTween.tween(0.5, 1.0, rand);
+		}
 	}
 	
 	private function getImageData(id:String):BitmapData
@@ -120,18 +137,14 @@ class Game extends World
 		else if (player.y > levelHeight)
 			switchRoom("down");
 		
-		_lighting.alpha += _alphaChange;
-		if (_lighting.alpha >= 1)
-			_alphaChange = -0.005;
-		else if (_lighting.alpha < 0.7)
-			_alphaChange = 0.005;
+		_lighting.alpha = _alphaTween.value;
 		
 		super.update();
 		
 		clampCamera();
 	}
 	
-	private var _alphaChange:Float;
+	private var _alphaTween:NumTween;
 	private var _lighting:Image;
 	
 }

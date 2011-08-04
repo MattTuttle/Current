@@ -25,7 +25,7 @@ class Player extends Entity
 {
 	
 	private static inline var bubbleLayers:Array<Int> = [6, 12, 18];
-	private static inline var maxBubbles:Int = 0;
+	private static var maxBubbles:Int = 0;
 	
 	public var dead:Bool;
 	public var following:Int; // bubbles following
@@ -49,12 +49,17 @@ class Player extends Entity
 		
 		_bubbles = new Array<Bubble>();
 		_bubbleAngle = 0;
+		maxBubbles = 0;
+		for (i in 0 ... bubbleLayers.length)
+		{
+			maxBubbles += bubbleLayers[i];
+		}
 		
 		velocity = new Point();
 		acceleration = new Point();
-		maxSpeed = 80;
+		maxSpeed = 140;
 		drag = 8;
-		speed = 4;
+		speed = 6;
 		
 		Input.define("up", [Key.W, Key.UP]);
 		Input.define("down", [Key.S, Key.DOWN]);
@@ -199,7 +204,7 @@ class Player extends Entity
 	
 	private function addBubble(bubble:Bubble)
 	{
-		if (bubble.owner != null) return;
+		if (bubble.owner != null || _bubbles.length >= maxBubbles) return;
 		
 		_bubbles.push(bubble);
 		bubble.owner = this;
