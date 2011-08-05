@@ -13,6 +13,7 @@
 		<img:image import="assets/gfx/bubble_small.png" class="GfxSmallBubble" />
 		<img:image import="assets/gfx/redsnapper.png" class="GfxFish" />
 		
+		<img:image import="assets/gfx/levels/ocean_gradient_BG.png" class="GfxOceanBackground" />
 		<img:image import="assets/gfx/levels/RM1_foreground.png" class="GfxRoom01Foreground" />
 		<img:image import="assets/gfx/levels/RM1_background.png" class="GfxRoom01Background" />
 		<img:image import="assets/gfx/levels/RM1_lighting.png" class="GfxRoom01Lighting" />

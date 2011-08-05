@@ -61,10 +61,15 @@ class Game extends World
 	
 	private function loadLevel(id:String)
 	{
+		removeAll();
+		
 		// background and lighting
-		_lighting = new Image(getImageData(id + "Lighting"));
+		addGraphic(new Image(GfxOceanBackground)).layer = 110;
 		addGraphic(new Image(getImageData(id + "Background"))).layer = 100;
-		addGraphic(_lighting).layer = -10;
+		
+		_lighting = new Image(getImageData(id + "Lighting"));
+		if (_lighting != null)
+			addGraphic(_lighting).layer = -10;
 		
 		// load up foreground and use it as a mask
 		var image:BitmapData = getImageData(id + "Foreground");
