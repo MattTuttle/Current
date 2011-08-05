@@ -2,23 +2,26 @@
 <project>
 	<name>Fish</name>
 	<settings>
-		<defaultWidth>640</defaultWidth>
-		<defaultHeight>480</defaultHeight>
-		<minWidth>640</minWidth>
-		<maxWidth>10000</maxWidth>
-		<minHeight>480</minHeight>
-		<maxHeight>10000</maxHeight>
+		<defaultWidth>800</defaultWidth>
+		<defaultHeight>600</defaultHeight>
 		<workingDirectory>../gfx</workingDirectory>
 	</settings>
+	<values>
+		<string name="left" maxChars="6" />
+		<string name="right" maxChars="6" />
+		<string name="top" maxChars="6" />
+		<string name="bottom" maxChars="6" />
+	</values>
 	<objects>
 		<object name="player" image="bubble.png" width="16" height="16" limit="1" />
 		<object name="fish" image="redsnapper.png" width="59" height="32" imageWidth="59" />
 		<folder name="backgrounds">
 			<object name="room1" image="levels/RM1_foreground.png" width="800" height="600" limit="1" />
+			<object name="room2" image="levels/RM2_foreground.png" width="800" height="600" limit="1" />
 		</folder>
 	</objects>
 	<layers>
-		<objects name="level" gridSize="640" />
+		<objects name="level" gridSize="800" />
 		<grid name="walls" gridSize="16" exportAsObjects="true" />
 		<objects name="actors" gridSize="16" />
 	</layers>

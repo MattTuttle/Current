@@ -167,6 +167,15 @@ class Player extends Entity
 		}
 	}
 	
+	public function resetBubbles()
+	{
+		for (i in 0 ... _bubbles.length)
+		{
+			moveBubble(i);
+			_bubbles[i].reset = true;
+		}
+	}
+	
 	private function moveBubble(index:Int)
 	{
 		var layer:Int = -1;
@@ -204,7 +213,7 @@ class Player extends Entity
 	
 	private function addBubble(bubble:Bubble)
 	{
-		if (bubble.owner != null || _bubbles.length >= maxBubbles) return;
+		if (bubble.owned || _bubbles.length >= maxBubbles) return;
 		
 		_bubbles.push(bubble);
 		bubble.owner = this;

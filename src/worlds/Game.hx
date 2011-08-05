@@ -24,6 +24,8 @@ class Game extends World
 	{
 		super();
 		
+		_exits = new Hash<String>();
+		
 		loadLevel("Room01");
 		_alphaTween = new NumTween(alphaComplete, TweenType.Looping);
 		addTween(_alphaTween, true);
@@ -43,11 +45,37 @@ class Game extends World
 		}
 	}
 	
-	private function getImageData(id:String):BitmapData
+	private function addImage(id:String, layer:Int):Image
 	{
 		var c:Class<Dynamic> = Type.resolveClass("Gfx" + id);
 		if (c != null)
-			return Type.createInstance(c, []).bitmapData;
+		{
+			var image:Image = new Image(HXP.getBitmap(c));
+			var ent:Entity = new Entity(0, 0, image);
+			ent.layer = layer;
+			_entities.push(ent);
+			return image;
+		}
+		return null;
+	}
+	
+	private function loadForeground(id:String):BitmapData
+	{
+		var c:Class<Dynamic> = Type.resolveClass("Gfx" + id);
+		if (c != null)
+		{
+			var image:BitmapData = HXP.getBitmap(c);
+			var mask:Pixelmask = new Pixelmask(image);
+			mask.threshold = 250; // pass through shadows
+			var ent:Entity = new Entity(0, 0, new Image(image), mask);
+			ent.type = "map";
+			ent.layer = 20;
+			_entities.push(ent);
+			
+			// set the level dimensions
+			levelWidth = mask.width;
+			levelHeight = mask.height;
+		}
 		return null;
 	}
 	
@@ -61,38 +89,39 @@ class Game extends World
 	
 	private function loadLevel(id:String)
 	{
-		removeAll();
+		if (_entities != null) removeList(_entities);
+		_entities = new Array<Entity>();
 		
 		// background and lighting
-		addGraphic(new Image(GfxOceanBackground)).layer = 110;
-		addGraphic(new Image(getImageData(id + "Background"))).layer = 100;
-		
-		_lighting = new Image(getImageData(id + "Lighting"));
-		if (_lighting != null)
-			addGraphic(_lighting).layer = -10;
+		addImage("OceanBackground", 110);
+		addImage(id + "Background", 100);
+		_lighting = addImage(id + "Lighting", -10);
 		
 		// load up foreground and use it as a mask
-		var image:BitmapData = getImageData(id + "Foreground");
-		var mask:Pixelmask = new Pixelmask(image);
-		mask.threshold = 250;
-		var ent:Entity = new Entity(0, 0, new Image(image), mask);
-		ent.type = "map";
-		ent.layer = 20;
-		add(ent);
-		
-		// set the level dimensions
-		levelWidth = mask.width;
-		levelHeight = mask.height;
+		loadForeground(id + "Foreground");
 		
 		// load level specific data
 		var data:ByteArray = getLevelData(id);
 		if (data == null)
-			throw "Level does not exist: " + id;
-		var xml:Fast = new Fast(Xml.parse(data.toString()));
-		xml = xml.node.level;
+		{
+			trace("Level data does not exist for " + id);
+		}
+		else
+		{
+			var xml:Fast = new Fast(Xml.parse(data.toString()));
+			xml = xml.node.level;
+			
+			if (xml.has.left)   _exits.set("left", xml.att.left);
+			if (xml.has.right)  _exits.set("right", xml.att.right);
+			if (xml.has.top)    _exits.set("top", xml.att.top);
+			if (xml.has.bottom) _exits.set("bottom", xml.att.bottom);
+			
+			if (xml.hasNode.actors)
+				loadObjects(xml.node.actors);
+		}
 		
-		if (xml.hasNode.actors)
-			loadObjects(xml.node.actors);
+		// add the level specific entities
+		addList(_entities);
 	}
 	
 	private function loadObjects(group:Fast)
@@ -105,16 +134,39 @@ class Game extends World
 			switch (obj.name)
 			{
 				case "fish":
-					add(new Fish(x, y));
+					_entities.push(new Fish(x, y));
 				case "player":
-					player = new Player(x, y - 50);
-					add(player);
+					// only add the player if we're starting the game
+					if (player == null)
+					{
+						player = new Player(x, y - 50);
+						add(player);
+					}
 			}
 		}
 	}
 	
-	private function switchRoom(direction:String)
+	private function switchLevel(direction:String)
 	{
+		var level:String = _exits.get(direction);
+		if (level == "")
+		{
+			trace("No level to switch to");
+			return;
+		}
+		loadLevel(level);
+		switch (direction)
+		{
+			case "left":
+				player.x = levelWidth - 4;
+			case "right":
+				player.x = 4;
+			case "top":
+				player.y = levelHeight - 4;
+			case "bottom":
+				player.y = 4;
+		}
+		player.resetBubbles();
 	}
 	
 	private function clampCamera()
@@ -134,21 +186,25 @@ class Game extends World
 	{
 		// check if player heads off screen
 		if (player.x < -player.width)
-			switchRoom("left");
+			switchLevel("left");
 		else if (player.x > levelWidth)
-			switchRoom("right");
+			switchLevel("right");
 		if (player.y < -player.height)
-			switchRoom("up");
+			switchLevel("top");
 		else if (player.y > levelHeight)
-			switchRoom("down");
+			switchLevel("bottom");
 		
-		_lighting.alpha = _alphaTween.value;
+		// shift the alpha on the lighting layer, if it exists
+		if (_lighting != null)
+			_lighting.alpha = _alphaTween.value;
 		
 		super.update();
 		
 		clampCamera();
 	}
 	
+	private var _entities:Array<Entity>;
+	private var _exits:Hash<String>;
 	private var _alphaTween:NumTween;
 	private var _lighting:Image;
 	

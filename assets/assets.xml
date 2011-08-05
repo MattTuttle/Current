@@ -13,11 +13,16 @@
 		<img:image import="assets/gfx/bubble_small.png" class="GfxSmallBubble" />
 		<img:image import="assets/gfx/redsnapper.png" class="GfxFish" />
 		
+		<!-- Level Data -->
 		<img:image import="assets/gfx/levels/ocean_gradient_BG.png" class="GfxOceanBackground" />
+		<!-- Room 1 -->
 		<img:image import="assets/gfx/levels/RM1_foreground.png" class="GfxRoom01Foreground" />
 		<img:image import="assets/gfx/levels/RM1_background.png" class="GfxRoom01Background" />
 		<img:image import="assets/gfx/levels/RM1_lighting.png" class="GfxRoom01Lighting" />
 		<bin:binary import="assets/levels/room1.oel" class="LvlRoom01" />
+		<!-- Room 2 -->
+		<img:image import="assets/gfx/levels/RM2_foreground.png" class="GfxRoom02Foreground" />
+		<bin:binary import="assets/levels/room2.oel" class="LvlRoom02" />
 		
 		<snd:sound import="assets/sfx/pop.mp3" class="SfxBubblePop" />
 	</shx:frame>

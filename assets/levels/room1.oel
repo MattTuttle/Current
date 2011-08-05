@@ -1,4 +1,4 @@
-<level>
+<level left="" right="" top="Room02" bottom="">
   <width>800</width>
   <height>600</height>
   <level>
@@ -40,8 +40,5 @@
   </walls>
   <actors>
     <player x="432" y="384"/>
-    <fish x="256" y="128"/>
-    <fish x="512" y="208"/>
-    <fish x="416" y="32"/>
   </actors>
 </level>
