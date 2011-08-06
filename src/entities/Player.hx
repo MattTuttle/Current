@@ -79,9 +79,12 @@ class Player extends Entity
 	
 	private function move()
 	{
+		var bounce:Float = 2;
 		var change:Float, delta:Int;
 		velocity.x += acceleration.x;
 		velocity.y += acceleration.y;
+		
+		// clamp to max speed
 		if (Math.abs(velocity.x) > maxSpeed)
 			velocity.x = maxSpeed * HXP.sign(velocity.x);
 		if (Math.abs(velocity.y) > maxSpeed)
@@ -95,8 +98,8 @@ class Player extends Entity
 		}
 		else
 		{
-			delta = Math.floor(change);
-			for (i in 0...delta)
+			delta = Std.int(change);
+			for (i in 0 ... Std.int(Math.abs(delta)))
 			{
 				if (collide("map", x + HXP.sign(delta), y) == null)
 				{
@@ -104,7 +107,11 @@ class Player extends Entity
 				}
 				else
 				{
-					velocity.x = 0;
+					// bounce off wall if going a certain speed
+					if (Math.abs(velocity.x) > 1)
+						velocity.x = -velocity.x * bounce;
+					else
+						velocity.x = 0;
 					break;
 				}
 			}
@@ -118,8 +125,8 @@ class Player extends Entity
 		}
 		else
 		{
-			delta = Math.floor(change);
-			for (i in 0...delta)
+			delta = Std.int(change);
+			for (i in 0 ... Std.int(Math.abs(delta)))
 			{
 				if (collide("map", x, y + HXP.sign(delta)) == null)
 				{
@@ -127,7 +134,11 @@ class Player extends Entity
 				}
 				else
 				{
-					velocity.y = 0;
+					// bounce off floor if going a certain speed
+					if (Math.abs(velocity.y) > 1)
+						velocity.y = -velocity.y * bounce;
+					else
+						velocity.y = 0;
 					break;
 				}
 			}

@@ -139,7 +139,7 @@ class Game extends World
 					// only add the player if we're starting the game
 					if (player == null)
 					{
-						player = new Player(x, y - 50);
+						player = new Player(x, y);
 						add(player);
 					}
 			}
@@ -166,6 +166,7 @@ class Game extends World
 			case "bottom":
 				player.y = 4;
 		}
+		player.velocity.x = player.velocity.y = 0;
 		player.resetBubbles();
 	}
 	
