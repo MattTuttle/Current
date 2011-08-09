@@ -225,7 +225,6 @@ class Player extends Entity
 	private function addBubble(bubble:Bubble)
 	{
 		if (bubble.owned || _bubbles.length >= maxBubbles) return;
-		
 		_bubbles.push(bubble);
 		bubble.owner = this;
 		moveBubble(_bubbles.length - 1);

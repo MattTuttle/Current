@@ -3,6 +3,7 @@ package worlds;
 import com.haxepunk.Entity;
 import com.haxepunk.graphics.Image;
 import com.haxepunk.HXP;
+import com.haxepunk.masks.Grid;
 import com.haxepunk.masks.Pixelmask;
 import com.haxepunk.tweens.misc.NumTween;
 import com.haxepunk.World;
@@ -12,6 +13,7 @@ import entities.Player;
 import flash.display.BitmapData;
 import flash.utils.ByteArray;
 import haxe.xml.Fast;
+import hxmikmod.MikModPlayer;
 
 class Game extends World
 {
@@ -19,6 +21,7 @@ class Game extends World
 	public static var player:Player;
 	public static var levelWidth:Int;
 	public static var levelHeight:Int;
+//	public static var musicPlayer:MikModPlayer = new MikModPlayer();
 
 	public function new()
 	{
@@ -26,7 +29,12 @@ class Game extends World
 		
 		_exits = new Hash<String>();
 		
-		loadLevel("Room01");
+		_currentMusic = "";
+		_music = new Hash<ByteArray>();
+		_music.set("R01", new ModHome());
+		_music.set("R02", new ModTheme());
+		
+		loadLevel("R01");
 		_alphaTween = new NumTween(alphaComplete, TweenType.Looping);
 		addTween(_alphaTween, true);
 		alphaComplete();
@@ -45,12 +53,13 @@ class Game extends World
 		}
 	}
 	
-	private function addImage(id:String, layer:Int):Image
+	private function addImage(id:String, layer:Int, scroll:Float = 1):Image
 	{
 		var c:Class<Dynamic> = Type.resolveClass("Gfx" + id);
 		if (c != null)
 		{
 			var image:Image = new Image(HXP.getBitmap(c));
+			image.scrollX = image.scrollY = scroll;
 			var ent:Entity = new Entity(0, 0, image);
 			ent.layer = layer;
 			_entities.push(ent);
@@ -65,23 +74,23 @@ class Game extends World
 		if (c != null)
 		{
 			var image:BitmapData = HXP.getBitmap(c);
-			var mask:Pixelmask = new Pixelmask(image);
-			mask.threshold = 250; // pass through shadows
-			var ent:Entity = new Entity(0, 0, new Image(image), mask);
-			ent.type = "map";
+//			var mask:Pixelmask = new Pixelmask(image);
+//			mask.threshold = 250; // pass through shadows
+			var ent:Entity = new Entity(0, 0, new Image(image));
+//			ent.type = "map";
 			ent.layer = 20;
 			_entities.push(ent);
 			
 			// set the level dimensions
-			levelWidth = mask.width;
-			levelHeight = mask.height;
+			levelWidth = image.width;
+			levelHeight = image.height;
 		}
 		return null;
 	}
 	
 	private function getLevelData(id:String):ByteArray
 	{
-		var c:Class<Dynamic> = Type.resolveClass("Lvl" + id);
+		var c:Class<Dynamic> = Type.resolveClass("Lvl" + id + "Data");
 		if (c != null)
 			return Type.createInstance(c, []);
 		return null;
@@ -92,13 +101,25 @@ class Game extends World
 		if (_entities != null) removeList(_entities);
 		_entities = new Array<Entity>();
 		
-		// background and lighting
-		addImage("OceanBackground", 110);
-		addImage(id + "Background", 100);
-		_lighting = addImage(id + "Lighting", -10);
+		// change the music
+		var music:ByteArray = _music.get(id);
+		if (music != null && _currentMusic != id)
+		{
+//			musicPlayer.stop();
+//			musicPlayer.loadSong(music);
+			_currentMusic = id;
+		}
 		
-		// load up foreground and use it as a mask
-		loadForeground(id + "Foreground");
+		// background and lighting
+		addImage("Parallax", 100, 0);
+		addImage(id + "Background", 90);
+		addImage(id + "Decor", 80);
+		
+		// load up wall image and use it as a mask
+		loadForeground(id + "Walls");
+		
+		addImage(id + "Front", -10);
+		_lighting = addImage(id + "Lighting", -100);
 		
 		// load level specific data
 		var data:ByteArray = getLevelData(id);
@@ -118,10 +139,29 @@ class Game extends World
 			
 			if (xml.hasNode.actors)
 				loadObjects(xml.node.actors);
+			if (xml.hasNode.walls)
+				loadWalls(xml.node.walls);
 		}
 		
 		// add the level specific entities
 		addList(_entities);
+	}
+	
+	private function loadWalls(group:Fast)
+	{
+		var grid:Grid = new Grid(levelWidth, levelHeight, 16, 16);
+		for (obj in group.nodes.rect)
+		{
+			grid.setRect(Std.int(Std.parseInt(obj.att.x) / 16),
+				Std.int(Std.parseInt(obj.att.y) / 16),
+				Std.int(Std.parseInt(obj.att.w) / 16),
+				Std.int(Std.parseInt(obj.att.h) / 16),
+				true);
+		}
+		var ent:Entity = new Entity(0, 0);
+		ent.mask = grid;
+		ent.type = "map";
+		_entities.push(ent);
 	}
 	
 	private function loadObjects(group:Fast)
@@ -186,14 +226,17 @@ class Game extends World
 	public override function update()
 	{
 		// check if player heads off screen
-		if (player.x < -player.width)
-			switchLevel("left");
-		else if (player.x > levelWidth)
-			switchLevel("right");
-		if (player.y < -player.height)
-			switchLevel("top");
-		else if (player.y > levelHeight)
-			switchLevel("bottom");
+		if (player != null)
+		{
+			if (player.x < -player.width)
+				switchLevel("left");
+			else if (player.x > levelWidth)
+				switchLevel("right");
+			if (player.y < -player.height)
+				switchLevel("top");
+			else if (player.y > levelHeight)
+				switchLevel("bottom");
+		}
 		
 		// shift the alpha on the lighting layer, if it exists
 		if (_lighting != null)
@@ -204,6 +247,8 @@ class Game extends World
 		clampCamera();
 	}
 	
+	private var _currentMusic:String;
+	private var _music:Hash<ByteArray>;
 	private var _entities:Array<Entity>;
 	private var _exits:Hash<String>;
 	private var _alphaTween:NumTween;

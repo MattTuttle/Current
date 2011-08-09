@@ -21,7 +21,7 @@ class Fish extends Entity
 		setHitbox(59, 32);
 		layer = 50;
 		type = "enemy";
-		_spawnTime = HXP.random * 10;
+		_spawnTime = HXP.random * 5;
 	}
 	
 	private function spawnBubbles()
@@ -31,13 +31,14 @@ class Fish extends Entity
 		
 		HXP.world.add(new Bubble(x, y - 16));
 		
-		_spawnTime = HXP.random * 5 + 5;
+		_spawnTime = HXP.random * 2 + 2;
 	}
 	
 	public override function update()
 	{
 		spawnBubbles();
 		
+		// flip on level boundaries
 		if (_fish.flipped)
 		{
 			x -= 1;
@@ -49,6 +50,12 @@ class Fish extends Entity
 			x += 1;
 			if (x > Game.levelWidth - width)
 				_fish.flipped = true;
+		}
+		
+		// collide with walls
+		if (collide("map", x, y) != null)
+		{
+			_fish.flipped = !_fish.flipped;
 		}
 		super.update();
 	}

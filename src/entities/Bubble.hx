@@ -26,7 +26,7 @@ class Bubble extends Entity
 		graphic = _bubble;
 		
 		setHitbox(8, 8, 4, 4);
-		layer = 30;
+		layer = -5;
 		type = "bubble";
 		speed = 3;
 		_life = 5;
@@ -36,9 +36,12 @@ class Bubble extends Entity
 	{
 		HXP.world.remove(this);
 		if (_owner != null)
+		{
 			_owner.removeBubble(this);
-		var pop:Sfx = new Sfx(new SfxBubblePop());
-		pop.play();
+			var pop:Sfx = new Sfx(new SfxBubblePop());
+			pop.play();
+		}
+		type = "dead";
 	}
 	
 	public var owned(getOwned, null):Bool;
@@ -48,7 +51,7 @@ class Bubble extends Entity
 	private function setOwner(value:Player):Player
 	{
 		_owner = value;
-		_bubble.alpha = 1;
+		type = "owned";
 		return value;
 	}
 	
@@ -56,17 +59,22 @@ class Bubble extends Entity
 	{
 		if (_owner == null)
 		{
+			// move upward in the water
+			x += Math.random() * 0.2;
+			y += Math.random() - 1.5;
+			
 			// without an owner we have a limited lifespan
 			_life -= HXP.elapsed;
-			if (_life < 1) _bubble.alpha = _life;
-			if (_life < 0) kill();
-			
-			// make it wiggle a bit like it's underwater
-			x += Math.random() * 0.2;
-			y += Math.random() * 1 - 0.5;
+			if (_life < 1) 
+			{
+				_bubble.alpha = _life;
+				type = "dead";
+			}
+			if (_life < 0 || collide("map", x, y) != null) kill();
 		}
 		else
 		{
+			_bubble.alpha = 1;
 			var dx:Float = targetX - x;
 			var dy:Float = targetY - y;
 			var dist:Float = Math.sqrt(dx * dx + dy * dy);

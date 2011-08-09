@@ -4,7 +4,10 @@
 	<settings>
 		<defaultWidth>800</defaultWidth>
 		<defaultHeight>600</defaultHeight>
-		<workingDirectory>../gfx</workingDirectory>
+		<minWidth>640</minWidth>
+		<maxWidth>3000</maxWidth>
+		<minHeight>480</minHeight>
+		<maxHeight>3000</maxHeight>
 	</settings>
 	<values>
 		<string name="left" maxChars="6" />
@@ -13,15 +16,17 @@
 		<string name="bottom" maxChars="6" />
 	</values>
 	<objects>
-		<object name="player" image="bubble.png" width="16" height="16" limit="1" />
-		<object name="fish" image="redsnapper.png" width="59" height="32" imageWidth="59" />
+		<object name="player" image="../gfx/bubble.png" width="16" height="16" limit="1" />
+		<object name="fish" image="../gfx/redsnapper.png" width="59" height="32" imageWidth="59" />
 		<folder name="backgrounds">
-			<object name="room1" image="levels/RM1_foreground.png" width="800" height="600" limit="1" />
-			<object name="room2" image="levels/RM2_foreground.png" width="800" height="600" limit="1" />
+			<object name="room1" image="../levels/room1/walls.png" width="800" height="600" limit="1" />
+			<object name="room2" image="../levels/room2/walls.png" width="800" height="1100" limit="1" />
+			<object name="room3" image="../levels/room3/walls.png" width="1100" height="1100" limit="1" />
+			<object name="room4" image="../levels/room4/walls.png" width="800" height="1100" limit="1" />
 		</folder>
 	</objects>
 	<layers>
-		<objects name="level" gridSize="800" />
+		<objects name="level" gridSize="640" />
 		<grid name="walls" gridSize="16" exportAsObjects="true" />
 		<objects name="actors" gridSize="16" />
 	</layers>

@@ -9,21 +9,48 @@
 	xmlns:comp0="http://mindless-labs.com/samhaxe/modules/Compose#1.0"
 	xmlns:comp1="http://mindless-labs.com/samhaxe/modules/Compose#1.1">
 	<shx:frame>
+		<!-- Sprites -->
 		<img:image import="assets/gfx/bubble.png" class="GfxBubble" />
 		<img:image import="assets/gfx/bubble_small.png" class="GfxSmallBubble" />
 		<img:image import="assets/gfx/redsnapper.png" class="GfxFish" />
+		<img:image import="assets/gfx/ThermalVent.png" class="GfxThermalVent" />
 		
-		<!-- Level Data -->
-		<img:image import="assets/gfx/levels/ocean_gradient_BG.png" class="GfxOceanBackground" />
+		<img:image  class="GfxParallax"   import="assets/levels/parallax.png" />
+		
 		<!-- Room 1 -->
-		<img:image import="assets/gfx/levels/RM1_foreground.png" class="GfxRoom01Foreground" />
-		<img:image import="assets/gfx/levels/RM1_background.png" class="GfxRoom01Background" />
-		<img:image import="assets/gfx/levels/RM1_lighting.png" class="GfxRoom01Lighting" />
-		<bin:binary import="assets/levels/room1.oel" class="LvlRoom01" />
+		<img:image  class="GfxR01Front"      import="assets/levels/room1/front.png" />
+		<img:image  class="GfxR01Walls"      import="assets/levels/room1/walls.png" />
+		<img:image  class="GfxR01Background" import="assets/levels/room1/immediatebg.png" />
+		<img:image  class="GfxR01Lighting"   import="assets/levels/room1/lighting.png" />
+		<img:image  class="GfxR01Decor"      import="assets/levels/room1/decor.png" />
+		<bin:binary class="LvlR01Data"       import="assets/levels/room1/level.oel" />
 		<!-- Room 2 -->
-		<img:image import="assets/gfx/levels/RM2_foreground.png" class="GfxRoom02Foreground" />
-		<bin:binary import="assets/levels/room2.oel" class="LvlRoom02" />
+		<img:image  class="GfxR02Front"      import="assets/levels/room2/front.png" />
+		<img:image  class="GfxR02Walls"      import="assets/levels/room2/walls.png" />
+		<img:image  class="GfxR02Background" import="assets/levels/room2/immediatebg.png" />
+		<img:image  class="GfxR02Lighting"   import="assets/levels/room2/lighting.png" />
+		<img:image  class="GfxR02Decor"      import="assets/levels/room2/decor.png" />
+		<bin:binary class="LvlR02Data"       import="assets/levels/room2/level.oel" />
+		<!-- Room 3 -->
+		<img:image  class="GfxR03Front"      import="assets/levels/room3/front.png" />
+		<img:image  class="GfxR03Walls"      import="assets/levels/room3/walls.png" />
+		<img:image  class="GfxR03Background" import="assets/levels/room3/immediatebg.png" />
+		<img:image  class="GfxR03Lighting"   import="assets/levels/room3/lighting.png" />
+		<img:image  class="GfxR03Decor"      import="assets/levels/room3/decor.png" />
+		<bin:binary class="LvlR03Data"       import="assets/levels/room3/level.oel" />
+		<!-- Room 4 -->
+		<img:image  class="GfxR04Walls"      import="assets/levels/room4/walls.png" />
+		<img:image  class="GfxR04Background" import="assets/levels/room4/immediatebg.png" />
+		<img:image  class="GfxR04Decor"      import="assets/levels/room4/decor.png" />
+		<bin:binary class="LvlR04Data"       import="assets/levels/room4/level.oel" />
 		
+		<!-- Sound effects -->
 		<snd:sound import="assets/sfx/pop.mp3" class="SfxBubblePop" />
+		
+		<!-- Music -->
+		<bin:binary import="assets/music/home.xm" class="ModHome" />
+		<bin:binary import="assets/music/theme.xm" class="ModTheme" />
+		<bin:binary import="assets/music/title.xm" class="ModTitle" />
+		<bin:binary import="assets/music/storm.xm" class="ModStorm" />
 	</shx:frame>
 </shx:resource>
