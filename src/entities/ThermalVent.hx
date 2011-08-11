@@ -7,10 +7,12 @@ import com.haxepunk.graphics.Image;
 class ThermalVent extends Entity
 {
 
-	public function new(x:Float, y:Float) 
+	public function new(x:Float, y:Float, angle:Float) 
 	{
 		super(x, y);
-		graphic = new Image(GfxThermalVent);
+		graphic = _image = new Image(GfxThermalVent);
+		_image.centerOO();
+		_image.angle = angle;
 		layer = 15;
 		_spawnTime = 2;
 		type = "scenery";
@@ -18,7 +20,7 @@ class ThermalVent extends Entity
 	
 	private function spawnBubble()
 	{
-		HXP.world.add(new Bubble(x + 16 + Math.random() * 16, y + 8, 2));
+		HXP.world.add(new Bubble(x + Math.random() * 16, y, 2));
 		_spawnTime = Math.random();
 	}
 	
@@ -30,6 +32,7 @@ class ThermalVent extends Entity
 		
 	}
 	
+	private var _image:Image;
 	private var _spawnTime:Float;
 	
 }

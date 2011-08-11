@@ -1,5 +1,6 @@
 package entities;
 
+import base.Being;
 import base.Physics;
 import com.haxepunk.HXP;
 import com.haxepunk.Entity;
@@ -59,14 +60,12 @@ class Player extends Physics
 		Input.define("grab", [Key.SPACE, Key.SHIFT]);
 	}
 	
-	private function kill()
+	public override function kill()
 	{
-		if (dead) return;
-		
 		HXP.world.remove(this);
 		var pop:Sfx = new Sfx(new SfxBubblePop());
 		pop.play();
-		dead = true;
+		super.kill();
 	}
 	
 	public var bubbles(getBubbleCount, null):Int;
@@ -84,9 +83,13 @@ class Player extends Physics
 		
 		super.update();
 		
-		if (collide("enemy", x, y) != null && _bubbles.length == 0)
+		var e:Entity = collideTypes(_enemyTypes, x, y);
+		if (e != null && _bubbles.length == 0)
 		{
-			kill();
+			if (Std.is(e, Being))
+				hurt(cast(e, Being).attack);
+			else
+				hurt(1);
 		}
 		else
 		{
@@ -247,10 +250,19 @@ class Player extends Physics
 		{
 			if (_grabObject == null)
 			{
-				_grabObject = cast(HXP.world.nearestToEntity("grab", this), Physics);
+				var i:Int = 0;
+				while (_grabObject == null || i > _grabTypes.length)
+				{
+					_grabObject = cast(HXP.world.nearestToEntity(_grabTypes[i], this), Physics);
+					i++;
+				}
 				_grabTime = 1;
 				if (HXP.distance(_grabObject.x, _grabObject.y, x, y) > 100)
 					_grabObject = null;
+			}
+			else if (_grabObject.dead)
+			{
+				_grabObject = null;
 			}
 			else
 			{
@@ -275,6 +287,9 @@ class Player extends Physics
 			_grabObject = null;
 		}
 	}
+	
+	private static inline var _enemyTypes:Array<String> = ["fish", "coral"];
+	private static inline var _grabTypes:Array<String> = ["rock"];
 	
 	private var _grabTime:Float;
 	private var _grabObject:Physics;

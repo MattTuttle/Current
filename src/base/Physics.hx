@@ -4,7 +4,7 @@ import com.haxepunk.HXP;
 import com.haxepunk.Entity;
 import flash.geom.Point;
 
-class Physics extends Entity
+class Physics extends Being
 {
 	
 	public var velocity:Point;
@@ -12,10 +12,7 @@ class Physics extends Entity
 	public var maxSpeed:Float;
 	public var drag:Float;
 	public var speed:Float;
-	public var solid:String;
 	public var bounce:Float;
-	
-	public var dead:Bool;
 
 	public function new(x:Float, y:Float)
 	{
@@ -28,7 +25,6 @@ class Physics extends Entity
 		speed = 6;
 		bounce = 0;
 		dead = false;
-		solid = "map";
 	}
 	
 	public override function update()
@@ -46,7 +42,7 @@ class Physics extends Entity
 		// change in horizontal
 		onWall = false;
 		change = (velocity.x + Math.random() * 0.2) * HXP.elapsed; // adds wiggle
-		if (collide(solid, x + change, y) == null)
+		if (collideTypes(_solidTypes, x + change, y) == null)
 		{
 			x += change;
 		}
@@ -55,7 +51,7 @@ class Physics extends Entity
 			delta = Std.int(change);
 			for (i in 0 ... Std.int(Math.abs(delta)))
 			{
-				if (collide(solid, x + HXP.sign(delta), y) == null)
+				if (collideTypes(_solidTypes, x + HXP.sign(delta), y) == null)
 				{
 					x += HXP.sign(delta);
 				}
@@ -75,7 +71,7 @@ class Physics extends Entity
 		// change in vertical
 		onFloor = false;
 		change = (velocity.y + Math.random() * 1 - 0.5) * HXP.elapsed; // adds wiggle
-		if (collide(solid, x, y + change) == null)
+		if (collideTypes(_solidTypes, x, y + change) == null)
 		{
 			y += change;
 		}
@@ -84,7 +80,7 @@ class Physics extends Entity
 			delta = Std.int(change);
 			for (i in 0 ... Std.int(Math.abs(delta)))
 			{
-				if (collide(solid, x, y + HXP.sign(delta)) == null)
+				if (collideTypes(_solidTypes, x, y + HXP.sign(delta)) == null)
 				{
 					y += HXP.sign(delta);
 				}
@@ -110,6 +106,7 @@ class Physics extends Entity
 		velocity.y = y * 20;
 	}
 	
+	private static inline var _solidTypes:Array<String> = ["map", "rock"];
 	private var onFloor:Bool;
 	private var onWall:Bool;
 	

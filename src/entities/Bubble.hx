@@ -1,5 +1,6 @@
 package entities;
 
+import base.Being;
 import com.haxepunk.graphics.Spritemap;
 import com.haxepunk.HXP;
 import com.haxepunk.Entity;
@@ -8,7 +9,7 @@ import com.haxepunk.Sfx;
 import flash.geom.Point;
 import worlds.Game;
 
-class Bubble extends Entity
+class Bubble extends Being
 {
 	
 	public var speed:Float;
@@ -35,7 +36,7 @@ class Bubble extends Entity
 			_life = 4 + Math.random() * 2;
 	}
 	
-	public function kill()
+	public override function kill()
 	{
 		if (_owner != null)
 		{
@@ -47,6 +48,7 @@ class Bubble extends Entity
 			new Sfx(new SfxBubblePop()).play();
 		}
 		HXP.world.remove(this);
+		super.kill();
 	}
 	
 	public var owned(getOwned, null):Bool;
@@ -84,6 +86,7 @@ class Bubble extends Entity
 			}
 			if (_life < 0) HXP.world.remove(this);
 			
+			// hit map without an owner, POP!
 			if (collide("map", x, y) != null) kill();
 		}
 		else
@@ -109,11 +112,13 @@ class Bubble extends Entity
 		
 		super.update();
 		
-		if (collide("enemy", x, y) != null)
+		if (collideTypes(_enemyTypes, x, y) != null)
 		{
-			kill();
+			hurt(1);
 		}
 	}
+	
+	private static inline var _enemyTypes:Array<String> = ["fish", "coral"];
 	
 	private var _owner:Dynamic;
 	private var _life:Float;

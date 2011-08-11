@@ -1,6 +1,11 @@
-<level left="R06" right="" top="R04" bottom="">
+<level left="R06" right="" top="R04" bottom="" music="home">
   <width>800</width>
   <height>800</height>
+  <actors>
+    <snapper x="280" y="80"/>
+    <snapper x="380" y="280"/>
+    <snapper x="240" y="500"/>
+  </actors>
   <level>
     <room5 x="0" y="0"/>
   </level>
@@ -61,9 +66,4 @@
     <rect x="610" y="440" w="190" h="10"/>
     <rect x="620" y="350" w="180" h="90"/>
   </walls>
-  <actors>
-    <fish x="280" y="80"/>
-    <fish x="380" y="280"/>
-    <fish x="240" y="500"/>
-  </actors>
 </level>

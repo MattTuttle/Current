@@ -12,12 +12,13 @@ import com.haxepunk.utils.Data;
 import com.haxepunk.World;
 import com.haxepunk.Tween;
 import base.Physics;
+import entities.enemies.Coral;
+import entities.enemies.Piranha;
+import entities.enemies.Snapper;
+import entities.enemies.Sheol;
 import entities.Checkpoint;
-import entities.Coral;
-import entities.Fish;
 import entities.Player;
 import entities.Rock;
-import entities.Sheol;
 import entities.ThermalVent;
 import flash.display.BitmapData;
 import flash.utils.ByteArray;
@@ -27,6 +28,7 @@ import hxmikmod.MikModPlayer;
 class Game extends World
 {
 	
+//	public var shader:WaterShader;
 	public static var player:Player;
 	public static var level:String;
 	public static var levelWidth:Int;
@@ -37,12 +39,17 @@ class Game extends World
 	{
 		super();
 		
+//		shader = new WaterShader();
 		_exits = new Hash<String>();
 		
 		_currentMusic = "";
 		_music = new Hash<ByteArray>();
-		_music.set("R01", new ModHome());
-		_music.set("R02", new ModTheme());
+		_music.set("heartbeat", new ModHeartbeat());
+		_music.set("boss", new ModBoss());
+		_music.set("home", new ModHome());
+		_music.set("city", new ModCity());
+		_music.set("title", new ModTitle());
+		_music.set("storm", new ModStorm());
 	}
 	
 	public override function begin()
@@ -124,15 +131,6 @@ class Game extends World
 				remove(entity);
 		}
 		
-		// change the music
-		var music:ByteArray = _music.get(id);
-		if (music != null && _currentMusic != id)
-		{
-			musicPlayer.stop();
-//			musicPlayer.loadSong(music);
-			_currentMusic = id;
-		}
-		
 		// parallax image
 		var parallax:Image;
 		parallax = addImage("FarParallax", 110);
@@ -155,8 +153,6 @@ class Game extends World
 		if (data == null)
 		{
 			trace("Level data does not exist for " + id);
-			levelWidth = walls.width;
-			levelHeight = walls.height;
 		}
 		else
 		{
@@ -172,6 +168,11 @@ class Game extends World
 			levelWidth = Std.parseInt(xml.node.width.innerData);
 			levelHeight = Std.parseInt(xml.node.height.innerData);
 			
+			// change music
+			if (xml.has.music)
+				changeMusic(xml.att.music);
+			
+			// load objects and walls
 			if (xml.hasNode.actors)
 				loadObjects(xml.node.actors);
 			if (xml.hasNode.world)
@@ -181,9 +182,20 @@ class Game extends World
 		}
 	}
 	
+	private function changeMusic(id:String)
+	{
+		var music:ByteArray = _music.get(id);
+		if (music != null && _currentMusic != id)
+		{
+			musicPlayer.stop();
+			musicPlayer.loadSong(music);
+			_currentMusic = id;
+		}
+	}
+	
 	private function loadWorld(group:Fast)
 	{
-		var size:Int = 50;
+		var size:Int = 32;
 		var map:Tilemap = new Tilemap(GfxTileset, levelWidth, levelHeight, size, size);
 		for (obj in group.nodes.tile)
 		{
@@ -196,7 +208,7 @@ class Game extends World
 	
 	private function loadWalls(group:Fast)
 	{
-		var size:Int = 10;
+		var size:Int = 8;
 		var grid:Grid = new Grid(levelWidth, levelHeight, size, size);
 		for (obj in group.nodes.rect)
 		{
@@ -211,19 +223,21 @@ class Game extends World
 	
 	private function loadObjects(group:Fast)
 	{
-		var x:Float, y:Float;
+		var x:Float, y:Float, angle:Float;
 		for (obj in group.elements)
 		{
 			x = Std.parseFloat(obj.att.x);
 			y = Std.parseFloat(obj.att.y);
+			angle = (obj.has.angle) ? -Std.parseFloat(obj.att.angle) : 0;
 			switch (obj.name)
 			{
-				case "fish": add(new Fish(x, y));
+				case "snapper": add(new Snapper(x, y));
+				case "piranha": add(new Piranha(x, y, angle));
 				case "rock": add(new Rock(x, y, obj.name));
 				case "smallrock": add(new Rock(x, y, obj.name));
-				case "coral": add(new Coral(x, y, Std.parseFloat(obj.att.angle)));
+				case "coral": add(new Coral(x, y, angle));
 				case "sheol": add(new Sheol(x, y));
-				case "vent": add(new ThermalVent(x, y));
+				case "vent": add(new ThermalVent(x, y, angle));
 				case "checkpoint": add(new Checkpoint(x, y));
 				case "player":
 					// only add the player if we're starting the game
@@ -284,7 +298,12 @@ class Game extends World
 			_tossObject = null;
 			if (player.bubbles > 0)
 			{
-				_tossObject = cast(collidePoint("grab", mouseX, mouseY), Physics);
+				var i:Int = 0;
+				while (_tossObject == null || i > _tossTypes.length)
+				{
+					_tossObject = cast(collidePoint(_tossTypes[i], mouseX, mouseY), Physics);
+					i++;
+				}
 				if (_tossObject != null)
 				{
 					_dragX = mouseX;
@@ -303,6 +322,7 @@ class Game extends World
 		
 		super.update();
 		clampCamera();
+//		shader.update();
 	}
 	
 	// drag objects
@@ -310,6 +330,8 @@ class Game extends World
 	private var _dragY:Float;
 	private var _dragTime:Float;
 	private var _tossObject:Physics;
+	
+	private static inline var _tossTypes:Array<String> = ["rock"];
 	
 	// music
 	private var _currentMusic:String;

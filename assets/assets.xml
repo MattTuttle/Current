@@ -12,11 +12,12 @@
 		<!-- Sprites -->
 		<img:image import="assets/gfx/bubble.png" class="GfxBubble" />
 		<img:image import="assets/gfx/bubble_small.png" class="GfxSmallBubble" />
-		<img:image import="assets/gfx/rock.png" class="GfxRock" />
-		<img:image import="assets/gfx/rock_small.png" class="GfxSmallRock" />
+		<img:image import="assets/gfx/MovableRock.png" class="GfxRock" />
+		<img:image import="assets/gfx/MovableRock_small.png" class="GfxSmallRock" />
 		<!-- Enemies -->
 		<img:image import="assets/gfx/sheol_boss.png" class="GfxSheol" />
-		<img:image import="assets/gfx/redsnapper.png" class="GfxFish" />
+		<img:image import="assets/gfx/redsnapper.png" class="GfxSnapper" />
+		<img:image import="assets/gfx/piranha.png" class="GfxPiranha" />
 		<img:image import="assets/gfx/SpikeCoral.png" class="GfxSpikeCoral" />
 		<!-- Objects -->
 		<img:image import="assets/gfx/ThermalVent.png" class="GfxThermalVent" />
@@ -59,15 +60,35 @@
 		<img:image  class="GfxR05Background" import="assets/levels/room5/immediatebg.png" />
 		<img:image  class="GfxR05Decor"      import="assets/levels/room5/decor.png" />
 		<bin:binary class="LvlR05Data"       import="assets/levels/room5/level.oel" />
+		<!-- Room 6 -->
+		<img:image  class="GfxR06Walls"      import="assets/levels/room6/walls.png" />
+		<img:image  class="GfxR06Background" import="assets/levels/room6/immediatebg.png" />
+		<img:image  class="GfxR06Decor"      import="assets/levels/room6/decor.png" />
+		<bin:binary class="LvlR06Data"       import="assets/levels/room6/level.oel" />
+		<!-- Room 7 -->
+		<img:image  class="GfxR07Walls"      import="assets/levels/room7/walls.png" />
+		<img:image  class="GfxR07Background" import="assets/levels/room7/immediatebg.png" />
+		<img:image  class="GfxR07Decor"      import="assets/levels/room7/decor.png" />
+		<bin:binary class="LvlR07Data"       import="assets/levels/room7/level.oel" />
+		<!-- Room 8 -->
+		<img:image  class="GfxR08Walls"      import="assets/levels/room8/walls.png" />
+		<img:image  class="GfxR08Background" import="assets/levels/room8/immediatebg.png" />
+		<img:image  class="GfxR08Decor"      import="assets/levels/room8/decor.png" />
+		<img:image  class="GfxR08Lighting"   import="assets/levels/room8/lighting.png" />
+		<bin:binary class="LvlR08Data"       import="assets/levels/room8/level.oel" />
 		<!-- Boss -->
 		<bin:binary class="LvlBossData"       import="assets/levels/boss/level.oel" />
+		
+		<bin:binary class="PbjWater" import="assets/shader/water.pbj" />
 		
 		<!-- Sound effects -->
 		<snd:sound import="assets/sfx/pop.mp3" class="SfxBubblePop" />
 		
 		<!-- Music -->
-		<bin:binary import="assets/music/home.xm" class="ModHome" />
-		<bin:binary import="assets/music/theme.xm" class="ModTheme" />
+		<bin:binary import="assets/music/boss.xm" class="ModBoss" />
+		<bin:binary import="assets/music/city.xm" class="ModHome" />
+		<bin:binary import="assets/music/heartbeat.xm" class="ModHeartbeat" />
+		<bin:binary import="assets/music/home.xm" class="ModCity" />
 		<bin:binary import="assets/music/title.xm" class="ModTitle" />
 		<bin:binary import="assets/music/storm.xm" class="ModStorm" />
 	</shx:frame>

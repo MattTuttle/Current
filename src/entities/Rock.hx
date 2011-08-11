@@ -20,25 +20,44 @@ class Rock extends Physics
 			case "smallrock": image = GfxSmallRock;
 		}
 		graphic = _image = new Image(image);
-		type = "grab";
-		mask = new Pixelmask(image);
+		_image.centerOO();
+		type = "rock";
+		mask = new Pixelmask(image, -Std.int(_image.width / 2), -Std.int(_image.height / 2));
 		layer = 10;
 		maxSpeed = 450;
+	}
+	
+	public override function kill()
+	{
+		HXP.world.remove(this);
+		super.kill();
 	}
 	
 	public override function update()
 	{
 		velocity.y += 4; // gravity
-		var enemy:Entity = collide("enemy", x, y);
-		if (enemy != null)
-		{
-			HXP.world.remove(enemy);
-			HXP.world.remove(this);
-		}
 		super.update();
-		if (onFloor) velocity.x = 0;
+		
+		if (onFloor)
+		{
+			velocity.x = 0;
+		}
+		else if (onWall)
+		{
+			velocity.y = 0;
+		}
+		else
+		{
+			var enemy:Entity = collideTypes(_hitTypes, x, y);
+			if (enemy != null)
+			{
+				HXP.world.remove(enemy);
+				kill();
+			}
+		}
 	}
 	
+	private static inline var _hitTypes:Array<String> = ["fish", "sheol"];
 	private var _image:Image;
 	
 }

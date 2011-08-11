@@ -1,5 +1,3 @@
-package ;
-
 import flash.system.Capabilities;
 import com.haxepunk.Engine;
 import com.haxepunk.HXP;
