@@ -299,7 +299,7 @@ class Game extends World
 			if (player.bubbles > 0)
 			{
 				var i:Int = 0;
-				while (_tossObject == null || i > _tossTypes.length)
+				while (_tossObject == null && i < _tossTypes.length)
 				{
 					_tossObject = cast(collidePoint(_tossTypes[i], mouseX, mouseY), Physics);
 					i++;

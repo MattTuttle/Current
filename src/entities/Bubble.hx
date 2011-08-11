@@ -57,7 +57,7 @@ class Bubble extends Being
 	public var owner(null, setOwner):Dynamic;
 	private function setOwner(value:Dynamic):Dynamic
 	{
-		if (value != _owner)
+		if (value != _owner && !dead)
 		{
 			// if we're owned try to remove the bubble
 			if (_owner != null && Reflect.hasField(_owner, "removeBubble"))
