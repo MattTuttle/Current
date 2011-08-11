@@ -1,5 +1,6 @@
 package entities;
 
+import base.Physics;
 import com.haxepunk.HXP;
 import com.haxepunk.Entity;
 import com.haxepunk.graphics.Image;
@@ -21,20 +22,13 @@ enum Gesture
 	UPRIGHT;
 }
 
-class Player extends Entity
+class Player extends Physics
 {
 	
 	private static inline var bubbleLayers:Array<Int> = [6, 12, 18];
 	private static var maxBubbles:Int = 0;
 	
-	public var dead:Bool;
 	public var following:Int; // bubbles following
-	
-	public var velocity:Point;
-	public var acceleration:Point;
-	public var maxSpeed:Float;
-	public var drag:Float;
-	public var speed:Float;
 
 	public function new(x:Float, y:Float) 
 	{
@@ -45,7 +39,7 @@ class Player extends Entity
 		mask = new Pixelmask(GfxBubble, -8, -8);
 		
 		following = 0;
-		dead = false;
+		bounce = 2;
 		
 		_bubbles = new Array<Bubble>();
 		_bubbleAngle = 0;
@@ -55,16 +49,13 @@ class Player extends Entity
 			maxBubbles += bubbleLayers[i];
 		}
 		
-		velocity = new Point();
-		acceleration = new Point();
-		maxSpeed = 140;
-		drag = 8;
-		speed = 6;
+		type = "keep";
 		
 		Input.define("up", [Key.W, Key.UP]);
 		Input.define("down", [Key.S, Key.DOWN]);
 		Input.define("left", [Key.A, Key.LEFT]);
 		Input.define("right", [Key.D, Key.RIGHT]);
+		Input.define("grab", [Key.SPACE, Key.SHIFT]);
 	}
 	
 	private function kill()
@@ -77,73 +68,8 @@ class Player extends Entity
 		dead = true;
 	}
 	
-	private function move()
-	{
-		var bounce:Float = 2;
-		var change:Float, delta:Int;
-		velocity.x += acceleration.x;
-		velocity.y += acceleration.y;
-		
-		// clamp to max speed
-		if (Math.abs(velocity.x) > maxSpeed)
-			velocity.x = maxSpeed * HXP.sign(velocity.x);
-		if (Math.abs(velocity.y) > maxSpeed)
-			velocity.y = maxSpeed * HXP.sign(velocity.y);
-		
-		// change in horizontal
-		change = (velocity.x + Math.random() * 0.2) * HXP.elapsed; // adds wiggle
-		if (collide("map", x + change, y) == null)
-		{
-			x += change;
-		}
-		else
-		{
-			delta = Std.int(change);
-			for (i in 0 ... Std.int(Math.abs(delta)))
-			{
-				if (collide("map", x + HXP.sign(delta), y) == null)
-				{
-					x += HXP.sign(delta);
-				}
-				else
-				{
-					// bounce off wall if going a certain speed
-					if (Math.abs(velocity.x) > 1)
-						velocity.x = -velocity.x * bounce;
-					else
-						velocity.x = 0;
-					break;
-				}
-			}
-		}
-		
-		// change in vertical
-		change = (velocity.y + Math.random() * 1 - 0.5) * HXP.elapsed; // adds wiggle
-		if (collide("map", x, y + change) == null)
-		{
-			y += change;
-		}
-		else
-		{
-			delta = Std.int(change);
-			for (i in 0 ... Std.int(Math.abs(delta)))
-			{
-				if (collide("map", x, y + HXP.sign(delta)) == null)
-				{
-					y += HXP.sign(delta);
-				}
-				else
-				{
-					// bounce off floor if going a certain speed
-					if (Math.abs(velocity.y) > 1)
-						velocity.y = -velocity.y * bounce;
-					else
-						velocity.y = 0;
-					break;
-				}
-			}
-		}
-	}
+	public var bubbles(getBubbleCount, null):Int;
+	private function getBubbleCount():Int { return _bubbles.length; }
 	
 	public override function update()
 	{
@@ -153,8 +79,7 @@ class Player extends Entity
 		HXP.camera.x = x - HXP.screen.width / 2;
 		HXP.camera.y = y - HXP.screen.height / 2;
 		
-		mouseGesture(Input.mouseX, Input.mouseY);
-		move();
+//		mouseGesture(Input.mouseX, Input.mouseY);
 		
 		super.update();
 		
@@ -217,9 +142,17 @@ class Player extends Entity
 		_bubbles[index].targetY = Math.sin(angle) * offsetRadius + y;
 	}
 	
-	public function removeBubble(bubble:Bubble)
+	public function removeBubble(?bubble:Bubble)
 	{
-		_bubbles.remove(bubble);
+		if (bubble == null)
+		{
+			if (_bubbles.length > 0)
+				_bubbles.pop().kill();
+		}
+		else
+		{
+			_bubbles.remove(bubble);
+		}
 	}
 	
 	private function addBubble(bubble:Bubble)
@@ -228,55 +161,6 @@ class Player extends Entity
 		_bubbles.push(bubble);
 		bubble.owner = this;
 		moveBubble(_bubbles.length - 1);
-	}
-	
-	private function mouseGesture(mouseX:Float, mouseY:Float)
-	{
-		if (Input.mousePressed)
-		{
-			_lastMouseX = mouseX;
-			_lastMouseY = mouseY;
-			_gestures = new Array<Gesture>();
-		}
-		else if (Input.mouseDown)
-		{
-			var dx:Float = mouseX - _lastMouseX;
-			var dy:Float = mouseY - _lastMouseY;
-			if (dx * dx + dy * dy > 400) // len > 20
-			{
-				var angle:Float = Math.atan2(dy, dx) * HXP.DEG;
-				// LEFT = -22 to 22
-				var gesture:Gesture = LEFT;
-				
-				// determine approx angle
-				if (angle > 112)
-					gesture = UPLEFT;
-				else if (angle > 67)
-					gesture = UP;
-				else if (angle > 22)
-					gesture = UPRIGHT;
-				else if (angle > -22)
-					gesture = RIGHT;
-				else if (angle > -67)
-					gesture = DOWNRIGHT;
-				else if (angle > -112)
-					gesture = DOWN;
-				else if (angle > -157)
-					gesture = DOWNLEFT;
-				
-				if (_gestures.length == 0 || gesture != _lastGesture)
-				{
-					_gestures.push(gesture);
-					_lastGesture = gesture;
-				}
-				_lastMouseX = mouseX;
-				_lastMouseY = mouseY;
-			}
-		}
-		else if (Input.mouseReleased)
-		{
-			// Process gesture
-		}
 	}
 	
 	private function handleInput()
@@ -332,7 +216,81 @@ class Player extends Entity
 					velocity.y = 0;
 			}
 		}
+		
+		if (Input.check("grab"))
+		{
+			if (_grabObject == null)
+			{
+				_grabObject = cast(HXP.world.nearestToEntity("grab", this), Physics);
+				if (HXP.distance(_grabObject.x, _grabObject.y, x, y) > 100)
+					_grabObject = null;
+			}
+			else
+			{
+				_point.x = x - _grabObject.x;
+				_point.y = y - _grabObject.y;
+				_point.normalize(5);
+				
+				_grabObject.x += _point.x;
+				_grabObject.y += _point.y;
+			}
+		}
+		else
+		{
+			_grabObject = null;
+		}
 	}
+	
+	private function mouseGesture(mouseX:Float, mouseY:Float)
+	{
+		if (Input.mousePressed)
+		{
+			_lastMouseX = mouseX;
+			_lastMouseY = mouseY;
+			_gestures = new Array<Gesture>();
+		}
+		else if (Input.mouseDown)
+		{
+			var dx:Float = mouseX - _lastMouseX;
+			var dy:Float = mouseY - _lastMouseY;
+			if (dx * dx + dy * dy > 400) // len > 20
+			{
+				var angle:Float = Math.atan2(dy, dx) * HXP.DEG;
+				// LEFT = -22 to 22
+				var gesture:Gesture = LEFT;
+				
+				// determine approx angle
+				if (angle > 112)
+					gesture = UPLEFT;
+				else if (angle > 67)
+					gesture = UP;
+				else if (angle > 22)
+					gesture = UPRIGHT;
+				else if (angle > -22)
+					gesture = RIGHT;
+				else if (angle > -67)
+					gesture = DOWNRIGHT;
+				else if (angle > -112)
+					gesture = DOWN;
+				else if (angle > -157)
+					gesture = DOWNLEFT;
+				
+				if (_gestures.length == 0 || gesture != _lastGesture)
+				{
+					_gestures.push(gesture);
+					_lastGesture = gesture;
+				}
+				_lastMouseX = mouseX;
+				_lastMouseY = mouseY;
+			}
+		}
+		else if (Input.mouseReleased)
+		{
+			// Process gesture
+		}
+	}
+	
+	private var _grabObject:Physics;
 	
 	private var _bubbles:Array<Bubble>;
 	private var _bubbleAngle:Float;

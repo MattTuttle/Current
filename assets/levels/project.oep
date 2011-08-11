@@ -15,19 +15,28 @@
 		<string name="top" maxChars="6" />
 		<string name="bottom" maxChars="6" />
 	</values>
+	<tilesets>
+		<tileset name="tiles" image="tileset.png" tileWidth="50" tileHeight="50" />
+	</tilesets>
 	<objects>
 		<object name="player" image="../gfx/bubble.png" width="16" height="16" limit="1" />
 		<object name="fish" image="../gfx/redsnapper.png" width="59" height="32" imageWidth="59" />
+		<object name="vent" image="../gfx/thermalvent.png" width="47" height="61" />
+		<object name="sheol" image="../gfx/sheol_boss.png" width="285" height="269" limit="1" />
+		<object name="rock" image="../gfx/rock.png" width="48" height="39" />
+		<object name="smallrock" image="../gfx/rock_small.png" width="26" height="23" />
 		<folder name="backgrounds">
 			<object name="room1" image="../levels/room1/walls.png" width="800" height="600" limit="1" />
 			<object name="room2" image="../levels/room2/walls.png" width="800" height="1100" limit="1" />
 			<object name="room3" image="../levels/room3/walls.png" width="1100" height="1100" limit="1" />
 			<object name="room4" image="../levels/room4/walls.png" width="800" height="1100" limit="1" />
+			<object name="room5" image="../levels/room5/walls.png" width="800" height="800" limit="1" />
 		</folder>
 	</objects>
 	<layers>
 		<objects name="level" gridSize="640" />
-		<grid name="walls" gridSize="16" exportAsObjects="true" />
-		<objects name="actors" gridSize="16" />
+		<grid name="walls" gridSize="10" exportAsObjects="true" color="ffaa3333" />
+		<tiles name="world" gridSize="50" exportAsObjects="true" />
+		<objects name="actors" gridSize="20" />
 	</layers>
 </project>

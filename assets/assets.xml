@@ -13,9 +13,15 @@
 		<img:image import="assets/gfx/bubble.png" class="GfxBubble" />
 		<img:image import="assets/gfx/bubble_small.png" class="GfxSmallBubble" />
 		<img:image import="assets/gfx/redsnapper.png" class="GfxFish" />
+		<img:image import="assets/gfx/rock.png" class="GfxRock" />
+		<img:image import="assets/gfx/rock_small.png" class="GfxSmallRock" />
+		<img:image import="assets/gfx/sheol_boss.png" class="GfxSheol" />
 		<img:image import="assets/gfx/ThermalVent.png" class="GfxThermalVent" />
 		
-		<img:image  class="GfxParallax"   import="assets/levels/parallax.png" />
+		<img:image class="GfxParallax" import="assets/gfx/Parallax.png" />
+		<img:image class="GfxFarParallax" import="assets/gfx/FarParallax.png" />
+		
+		<img:image class="GfxTileset"   import="assets/levels/tileset.png" />
 		
 		<!-- Room 1 -->
 		<img:image  class="GfxR01Front"      import="assets/levels/room1/front.png" />
@@ -43,6 +49,14 @@
 		<img:image  class="GfxR04Background" import="assets/levels/room4/immediatebg.png" />
 		<img:image  class="GfxR04Decor"      import="assets/levels/room4/decor.png" />
 		<bin:binary class="LvlR04Data"       import="assets/levels/room4/level.oel" />
+		<!-- Room 5 -->
+		<img:image  class="GfxR05Front"      import="assets/levels/room5/front.png" />
+		<img:image  class="GfxR05Walls"      import="assets/levels/room5/walls.png" />
+		<img:image  class="GfxR05Background" import="assets/levels/room5/immediatebg.png" />
+		<img:image  class="GfxR05Decor"      import="assets/levels/room5/decor.png" />
+		<bin:binary class="LvlR05Data"       import="assets/levels/room5/level.oel" />
+		<!-- Boss -->
+		<bin:binary class="LvlBossData"       import="assets/levels/boss/level.oel" />
 		
 		<!-- Sound effects -->
 		<snd:sound import="assets/sfx/pop.mp3" class="SfxBubblePop" />

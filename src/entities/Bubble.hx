@@ -16,7 +16,7 @@ class Bubble extends Entity
 	public var targetY:Float;
 	public var reset:Bool;
 
-	public function new(x:Float, y:Float) 
+	public function new(x:Float, y:Float, ?life:Float) 
 	{
 		super(x, y);
 		_bubble = new Spritemap(GfxSmallBubble, 8, 8);
@@ -29,19 +29,23 @@ class Bubble extends Entity
 		layer = -5;
 		type = "bubble";
 		speed = 3;
-		_life = 5;
+		if (life != null)
+			_life = life;
+		else
+			_life = 4 + Math.random() * 2;
 	}
 	
-	private function kill()
+	public function kill()
 	{
-		HXP.world.remove(this);
 		if (_owner != null)
 		{
 			_owner.removeBubble(this);
-			var pop:Sfx = new Sfx(new SfxBubblePop());
-			pop.play();
 		}
-		type = "dead";
+		if (onCamera)
+		{
+			new Sfx(new SfxBubblePop()).play();
+		}
+		HXP.world.remove(this);
 	}
 	
 	public var owned(getOwned, null):Bool;
@@ -51,7 +55,7 @@ class Bubble extends Entity
 	private function setOwner(value:Player):Player
 	{
 		_owner = value;
-		type = "owned";
+		type = "keep";
 		return value;
 	}
 	
@@ -60,7 +64,7 @@ class Bubble extends Entity
 		if (_owner == null)
 		{
 			// move upward in the water
-			x += Math.random() * 0.2;
+			x += Math.random() - 0.5;
 			y += Math.random() - 1.5;
 			
 			// without an owner we have a limited lifespan
@@ -68,9 +72,11 @@ class Bubble extends Entity
 			if (_life < 1) 
 			{
 				_bubble.alpha = _life;
-				type = "dead";
+				HXP.world.removeType(this);
 			}
-			if (_life < 0 || collide("map", x, y) != null) kill();
+			if (_life < 0) HXP.world.remove(this);
+			
+			if (collide("map", x, y) != null) kill();
 		}
 		else
 		{
