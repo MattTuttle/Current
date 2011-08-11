@@ -8,10 +8,12 @@ import com.haxepunk.masks.Grid;
 import com.haxepunk.masks.Pixelmask;
 import com.haxepunk.tweens.misc.NumTween;
 import com.haxepunk.utils.Input;
+import com.haxepunk.utils.Data;
 import com.haxepunk.World;
 import com.haxepunk.Tween;
 import base.Physics;
 import entities.Checkpoint;
+import entities.Coral;
 import entities.Fish;
 import entities.Player;
 import entities.Rock;
@@ -26,6 +28,7 @@ class Game extends World
 {
 	
 	public static var player:Player;
+	public static var level:String;
 	public static var levelWidth:Int;
 	public static var levelHeight:Int;
 	public static var musicPlayer:MikModPlayer = new MikModPlayer();
@@ -40,11 +43,24 @@ class Game extends World
 		_music = new Hash<ByteArray>();
 		_music.set("R01", new ModHome());
 		_music.set("R02", new ModTheme());
+	}
+	
+	public override function begin()
+	{
+		restart();
 		
-		loadLevel("Boss");
+		// lighting alpha tween
 		_alphaTween = new NumTween(alphaComplete, TweenType.Looping);
 		addTween(_alphaTween, true);
 		alphaComplete();
+	}
+	
+	public function restart()
+	{
+		player = null;
+		Data.load("Current");
+		level = Data.readString("level", "R01");
+		loadLevel(level);
 	}
 	
 	private function alphaComplete()
@@ -99,6 +115,7 @@ class Game extends World
 	
 	private function loadLevel(id:String)
 	{
+		Game.level = id;
 		var entities:Array<Entity> = new Array<Entity>();
 		getAll(entities);
 		for (entity in entities)
@@ -204,6 +221,7 @@ class Game extends World
 				case "fish": add(new Fish(x, y));
 				case "rock": add(new Rock(x, y, obj.name));
 				case "smallrock": add(new Rock(x, y, obj.name));
+				case "coral": add(new Coral(x, y, Std.parseFloat(obj.att.angle)));
 				case "sheol": add(new Sheol(x, y));
 				case "vent": add(new ThermalVent(x, y));
 				case "checkpoint": add(new Checkpoint(x, y));
@@ -218,15 +236,15 @@ class Game extends World
 		}
 	}
 	
-	private function switchLevel(direction:String)
+	public function switchLevel(direction:String)
 	{
-		var level:String = _exits.get(direction);
-		if (level == "")
+		var nextLevel:String = _exits.get(direction);
+		if (nextLevel == "")
 		{
 			trace("No level to switch to");
 			return;
 		}
-		loadLevel(level);
+		loadLevel(nextLevel);
 		switch (direction)
 		{
 			case "left":
@@ -257,26 +275,9 @@ class Game extends World
 	
 	public override function update()
 	{
-		// check if player heads off screen
-		if (player != null)
-		{
-			if (player.x < -player.width)
-				switchLevel("left");
-			else if (player.x > levelWidth)
-				switchLevel("right");
-			if (player.y < -player.height)
-				switchLevel("top");
-			else if (player.y > levelHeight)
-				switchLevel("bottom");
-		}
-		
 		// shift the alpha on the lighting layer, if it exists
 		if (_lighting != null)
 			_lighting.alpha = _alphaTween.value;
-		
-		super.update();
-		
-		clampCamera();
 		
 		if (Input.mousePressed)
 		{
@@ -299,6 +300,9 @@ class Game extends World
 				_tossObject.toss(mouseX - _dragX, mouseY - _dragY);
 			}
 		}
+		
+		super.update();
+		clampCamera();
 	}
 	
 	// drag objects

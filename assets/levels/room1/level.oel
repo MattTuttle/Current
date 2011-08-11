@@ -58,6 +58,7 @@
     <rect x="700" y="250" w="100" h="20"/>
   </walls>
   <actors>
-    <player x="432" y="384"/>
+    <checkpoint x="380" y="340"/>
+    <player x="380" y="340"/>
   </actors>
 </level>

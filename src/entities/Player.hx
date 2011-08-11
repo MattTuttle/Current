@@ -9,6 +9,7 @@ import com.haxepunk.Sfx;
 import com.haxepunk.utils.Input;
 import com.haxepunk.utils.Key;
 import flash.geom.Point;
+import worlds.Game;
 
 enum Gesture
 {
@@ -25,7 +26,7 @@ enum Gesture
 class Player extends Physics
 {
 	
-	private static inline var bubbleLayers:Array<Int> = [6, 12, 18];
+	private static inline var bubbleLayers:Array<Int> = [6, 12, 18, 24];
 	private static var maxBubbles:Int = 0;
 	
 	public var following:Int; // bubbles following
@@ -81,27 +82,50 @@ class Player extends Physics
 		HXP.camera.x = x - HXP.screen.width / 2;
 		HXP.camera.y = y - HXP.screen.height / 2;
 		
-//		mouseGesture(Input.mouseX, Input.mouseY);
-		
 		super.update();
 		
-		if (collide("enemy", x, y) != null)
+		if (collide("enemy", x, y) != null && _bubbles.length == 0)
 		{
-			if (_bubbles.length == 0)
-				kill();
+			kill();
+		}
+		else
+		{
+			var checkpoint:Checkpoint = cast(collide("checkpoint", x, y), Checkpoint);
+			if (checkpoint != null)
+			{
+				checkpoint.save(this);
+			}
 		}
 		
-		// rotate bubbles
-		_bubbleAngle += 1;
-		for (i in 0 ... _bubbles.length)
+		// check if player heads off screen
+		var game:Game = cast(HXP.world, Game);
+		if (dead)
 		{
-			moveBubble(i);
+			game.restart();
 		}
-		
-		var bubble:Bubble = cast(collide("bubble", x, y), Bubble);
-		if (bubble != null)
+		else
 		{
-			addBubble(bubble);
+			if (x < -width)
+				game.switchLevel("left");
+			else if (x > Game.levelWidth)
+				game.switchLevel("right");
+			if (y < -height)
+				game.switchLevel("top");
+			else if (y > Game.levelHeight)
+				game.switchLevel("bottom");
+			
+			// rotate bubbles
+			_bubbleAngle += 1;
+			for (i in 0 ... _bubbles.length)
+			{
+				moveBubble(i);
+			}
+			
+			var bubble:Bubble = cast(collide("bubble", x, y), Bubble);
+			if (bubble != null)
+			{
+				addBubble(bubble);
+			}
 		}
 	}
 	
@@ -252,64 +276,10 @@ class Player extends Physics
 		}
 	}
 	
-	private function mouseGesture(mouseX:Float, mouseY:Float)
-	{
-		if (Input.mousePressed)
-		{
-			_lastMouseX = mouseX;
-			_lastMouseY = mouseY;
-			_gestures = new Array<Gesture>();
-		}
-		else if (Input.mouseDown)
-		{
-			var dx:Float = mouseX - _lastMouseX;
-			var dy:Float = mouseY - _lastMouseY;
-			if (dx * dx + dy * dy > 400) // len > 20
-			{
-				var angle:Float = Math.atan2(dy, dx) * HXP.DEG;
-				// LEFT = -22 to 22
-				var gesture:Gesture = LEFT;
-				
-				// determine approx angle
-				if (angle > 112)
-					gesture = UPLEFT;
-				else if (angle > 67)
-					gesture = UP;
-				else if (angle > 22)
-					gesture = UPRIGHT;
-				else if (angle > -22)
-					gesture = RIGHT;
-				else if (angle > -67)
-					gesture = DOWNRIGHT;
-				else if (angle > -112)
-					gesture = DOWN;
-				else if (angle > -157)
-					gesture = DOWNLEFT;
-				
-				if (_gestures.length == 0 || gesture != _lastGesture)
-				{
-					_gestures.push(gesture);
-					_lastGesture = gesture;
-				}
-				_lastMouseX = mouseX;
-				_lastMouseY = mouseY;
-			}
-		}
-		else if (Input.mouseReleased)
-		{
-			// Process gesture
-		}
-	}
-	
 	private var _grabTime:Float;
 	private var _grabObject:Physics;
 	
 	private var _bubbles:Array<Bubble>;
 	private var _bubbleAngle:Float;
-	
-	private var _lastGesture:Gesture;
-	private var _gestures:Array<Gesture>;
-	private var _lastMouseX:Float;
-	private var _lastMouseY:Float;
 	
 }

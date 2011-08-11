@@ -17,6 +17,7 @@
 		<!-- Enemies -->
 		<img:image import="assets/gfx/sheol_boss.png" class="GfxSheol" />
 		<img:image import="assets/gfx/redsnapper.png" class="GfxFish" />
+		<img:image import="assets/gfx/SpikeCoral.png" class="GfxSpikeCoral" />
 		<!-- Objects -->
 		<img:image import="assets/gfx/ThermalVent.png" class="GfxThermalVent" />
 		<img:image import="assets/gfx/checkpoint_crystal.png" class="GfxCheckpoint" />

@@ -1,6 +1,31 @@
 <level left="R04" right="R02" top="R06" bottom="">
   <width>1100</width>
   <height>1100</height>
+  <actors>
+    <fish x="660" y="880"/>
+    <fish x="500" y="680"/>
+    <fish x="340" y="40"/>
+    <rock x="300" y="640"/>
+    <checkpoint x="860" y="960"/>
+    <vent x="164" y="974" angle="0"/>
+    <coral x="373" y="709" angle="75"/>
+    <coral x="387" y="764" angle="60"/>
+    <coral x="416" y="821" angle="90"/>
+    <coral x="270" y="19" angle="135"/>
+    <coral x="18" y="175" angle="165"/>
+    <vent x="489" y="1002" angle="30"/>
+    <player x="850" y="992"/>
+    <smallrock x="633" y="1026"/>
+    <smallrock x="780" y="1036"/>
+    <rock x="982" y="370"/>
+    <coral x="271" y="489" angle="-15"/>
+    <coral x="332" y="466" angle="0"/>
+    <coral x="407" y="484" angle="45"/>
+    <coral x="459" y="543" angle="45"/>
+    <coral x="369" y="469" angle="15"/>
+    <coral x="429" y="508" angle="30"/>
+    <coral x="299" y="475" angle="-15"/>
+  </actors>
   <level>
     <room3 x="0" y="0"/>
   </level>
@@ -59,7 +84,7 @@
     <rect x="490" y="1030" w="30" h="70"/>
     <rect x="520" y="1040" w="80" h="60"/>
     <rect x="600" y="1050" w="130" h="50"/>
-    <rect x="730" y="1060" w="190" h="40"/>
+    <rect x="730" y="1060" w="370" h="40"/>
     <rect x="780" y="720" w="320" h="40"/>
     <rect x="790" y="700" w="310" h="20"/>
     <rect x="790" y="760" w="310" h="10"/>
@@ -91,9 +116,7 @@
     <rect x="910" y="470" w="190" h="20"/>
     <rect x="920" y="40" w="180" h="10"/>
     <rect x="920" y="460" w="180" h="10"/>
-    <rect x="920" y="1070" w="180" h="30"/>
     <rect x="930" y="450" w="170" h="10"/>
-    <rect x="930" y="1060" w="170" h="10"/>
     <rect x="940" y="440" w="160" h="10"/>
     <rect x="950" y="50" w="150" h="10"/>
     <rect x="950" y="420" w="150" h="20"/>
@@ -114,13 +137,4 @@
     <rect x="1030" y="150" w="50" h="10"/>
     <rect x="1060" y="400" w="40" h="10"/>
   </walls>
-  <actors>
-    <player x="336" y="384"/>
-    <fish x="660" y="880"/>
-    <fish x="500" y="680"/>
-    <fish x="340" y="40"/>
-    <rock x="240" y="460"/>
-    <rock x="320" y="440"/>
-    <rock x="400" y="460"/>
-  </actors>
 </level>

@@ -62,10 +62,7 @@ class Bubble extends Entity
 				_owner.removeBubble(this);
 			
 			_owner = value;
-			if (_owner.type == "keep")
-				type = "keep";
-			else
-				type = null;
+			type = "keep";
 		}
 		return value;
 	}

@@ -19,12 +19,18 @@
 		<tileset name="tiles" image="tileset.png" tileWidth="50" tileHeight="50" />
 	</tilesets>
 	<objects>
-		<object name="player" image="../gfx/bubble.png" width="16" height="16" limit="1" />
-		<object name="fish" image="../gfx/redsnapper.png" width="59" height="32" imageWidth="59" />
-		<object name="vent" image="../gfx/thermalvent.png" width="47" height="61" />
-		<object name="sheol" image="../gfx/sheol_boss.png" width="285" height="269" limit="1" />
-		<object name="rock" image="../gfx/rock.png" width="48" height="39" />
-		<object name="smallrock" image="../gfx/rock_small.png" width="26" height="23" />
+		<object name="player" image="../gfx/bubble.png" width="16" height="16" originX="8" originY="8" limit="1" />
+		<folder name="enemies">
+			<object name="fish" image="../gfx/redsnapper.png" width="59" height="32" imageWidth="59" imageOffsetX="59" />
+			<object name="coral" image="../gfx/SpikeCoral.png" width="64" height="64" rotatable="true" rotationPrecision="15" originX="32" originY="32" />
+			<object name="sheol" image="../gfx/sheol_boss.png" width="285" height="269" limit="1" />
+		</folder>
+		<folder name="objects">
+			<object name="vent" image="../gfx/thermalvent.png" width="48" height="64" rotatable="true" rotationPrecision="15" originX="24" originY="32" />
+			<object name="checkpoint" image="../gfx/checkpoint_crystal.png" width="64" height="128" imageWidth="64" limit="1" />
+			<object name="rock" image="../gfx/rock.png" width="48" height="39" />
+			<object name="smallrock" image="../gfx/rock_small.png" width="26" height="23" />
+		</folder>
 		<folder name="backgrounds">
 			<object name="room1" image="../levels/room1/walls.png" width="800" height="600" limit="1" />
 			<object name="room2" image="../levels/room2/walls.png" width="800" height="1100" limit="1" />
@@ -34,9 +40,9 @@
 		</folder>
 	</objects>
 	<layers>
+		<objects name="actors" gridSize="1" />
+		<tiles name="world" gridSize="50" exportAsObjects="true" />
 		<objects name="level" gridSize="640" />
 		<grid name="walls" gridSize="10" exportAsObjects="true" color="ffaa3333" />
-		<tiles name="world" gridSize="50" exportAsObjects="true" />
-		<objects name="actors" gridSize="20" />
 	</layers>
 </project>
