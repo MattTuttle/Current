@@ -12,11 +12,14 @@
 		<!-- Sprites -->
 		<img:image import="assets/gfx/bubble.png" class="GfxBubble" />
 		<img:image import="assets/gfx/bubble_small.png" class="GfxSmallBubble" />
-		<img:image import="assets/gfx/redsnapper.png" class="GfxFish" />
 		<img:image import="assets/gfx/rock.png" class="GfxRock" />
 		<img:image import="assets/gfx/rock_small.png" class="GfxSmallRock" />
+		<!-- Enemies -->
 		<img:image import="assets/gfx/sheol_boss.png" class="GfxSheol" />
+		<img:image import="assets/gfx/redsnapper.png" class="GfxFish" />
+		<!-- Objects -->
 		<img:image import="assets/gfx/ThermalVent.png" class="GfxThermalVent" />
+		<img:image import="assets/gfx/checkpoint_crystal.png" class="GfxCheckpoint" />
 		
 		<img:image class="GfxParallax" import="assets/gfx/Parallax.png" />
 		<img:image class="GfxFarParallax" import="assets/gfx/FarParallax.png" />

@@ -71,6 +71,8 @@ class Player extends Physics
 	public var bubbles(getBubbleCount, null):Int;
 	private function getBubbleCount():Int { return _bubbles.length; }
 	
+	public function lastBubble():Bubble { return (_bubbles.length == 0) ? null : _bubbles[_bubbles.length - 1]; }
+	
 	public override function update()
 	{
 		handleInput();
@@ -217,22 +219,31 @@ class Player extends Physics
 			}
 		}
 		
-		if (Input.check("grab"))
+		if (Input.check("grab") && _bubbles.length > 0)
 		{
 			if (_grabObject == null)
 			{
 				_grabObject = cast(HXP.world.nearestToEntity("grab", this), Physics);
+				_grabTime = 1;
 				if (HXP.distance(_grabObject.x, _grabObject.y, x, y) > 100)
 					_grabObject = null;
 			}
 			else
 			{
+				_grabTime -= HXP.elapsed;
+				if (_grabTime < 0)
+				{
+					removeBubble();
+					_grabTime = 1;
+				}
 				_point.x = x - _grabObject.x;
 				_point.y = y - _grabObject.y;
-				_point.normalize(5);
-				
-				_grabObject.x += _point.x;
-				_grabObject.y += _point.y;
+				if (_point.length > 30)
+				{
+					_point.normalize(8);
+					_grabObject.velocity.x += _point.x;
+					_grabObject.velocity.y += _point.y;
+				}
 			}
 		}
 		else
@@ -290,6 +301,7 @@ class Player extends Physics
 		}
 	}
 	
+	private var _grabTime:Float;
 	private var _grabObject:Physics;
 	
 	private var _bubbles:Array<Bubble>;

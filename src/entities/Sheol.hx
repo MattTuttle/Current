@@ -24,8 +24,8 @@ class Sheol extends Entity
 		_image.centerOO();
 		graphic = _image;
 		_state = FOLLOW;
-		layer = 10;
-		_spawnTime = 1;
+		layer = 60;
+		_bubbleTime = _spawnTime = 1;
 	}
 	
 	private function spawnRock()
@@ -35,9 +35,44 @@ class Sheol extends Entity
 		_spawnTime = 10;
 	}
 	
+	private function pullBubbles()
+	{
+		_bubbleTime -= HXP.elapsed;
+		
+		if (_bubble == null)
+		{
+			if (_bubbleTime > 0) return;
+			_point.x = Game.player.x - x;
+			_point.y = Game.player.y - y;
+			if (_point.length < 150)
+			{
+				_bubble = Game.player.lastBubble();
+				if (_bubble != null)
+					_bubble.owner = this;
+			}
+		}
+		else
+		{
+			_point.x = x - _bubble.x;
+			_point.y = y - _bubble.y;
+			if (_point.length < 2)
+			{
+				_bubble.kill();
+				_bubble = null;
+				_bubbleTime = 1; // grab the next bubble
+			}
+			else
+			{
+				_bubble.targetX = x;
+				_bubble.targetY = y;
+			}
+		}
+	}
+	
 	public override function update()
 	{
 		_spawnTime -= HXP.elapsed;
+		pullBubbles();
 		switch(_state)
 		{
 			case FOLLOW:
@@ -66,6 +101,10 @@ class Sheol extends Entity
 		}
 		super.update();
 	}
+	
+	// pull off bubbles
+	private var _bubble:Bubble;
+	private var _bubbleTime:Float;
 	
 	private var _spawnTime:Float;
 	private var _image:Image;

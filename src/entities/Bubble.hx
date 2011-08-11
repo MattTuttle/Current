@@ -39,7 +39,8 @@ class Bubble extends Entity
 	{
 		if (_owner != null)
 		{
-			_owner.removeBubble(this);
+			if (Reflect.hasField(_owner, "removeBubble"))
+				_owner.removeBubble(this);
 		}
 		if (onCamera)
 		{
@@ -51,11 +52,21 @@ class Bubble extends Entity
 	public var owned(getOwned, null):Bool;
 	private function getOwned():Bool { return (_owner != null); }
 	
-	public var owner(null, setOwner):Player;
-	private function setOwner(value:Player):Player
+	public var owner(null, setOwner):Dynamic;
+	private function setOwner(value:Dynamic):Dynamic
 	{
-		_owner = value;
-		type = "keep";
+		if (value != _owner)
+		{
+			// if we're owned try to remove the bubble
+			if (_owner != null && Reflect.hasField(_owner, "removeBubble"))
+				_owner.removeBubble(this);
+			
+			_owner = value;
+			if (_owner.type == "keep")
+				type = "keep";
+			else
+				type = null;
+		}
 		return value;
 	}
 	
@@ -81,10 +92,10 @@ class Bubble extends Entity
 		else
 		{
 			_bubble.alpha = 1;
-			var dx:Float = targetX - x;
-			var dy:Float = targetY - y;
-			var dist:Float = Math.sqrt(dx * dx + dy * dy);
-			if (dist < 3 || reset)
+			_point.x = targetX - x;
+			_point.y = targetY - y;
+			// if close enough or resetting, snap into place
+			if (_point.length < 3 || reset)
 			{
 				x = targetX;
 				y = targetY;
@@ -93,8 +104,9 @@ class Bubble extends Entity
 			}
 			else
 			{
-				x += dx / dist * speed;
-				y += dy / dist * speed;
+				_point.normalize(speed);
+				x += _point.x;
+				y += _point.y;
 			}
 		}
 		
@@ -106,7 +118,7 @@ class Bubble extends Entity
 		}
 	}
 	
-	private var _owner:Player;
+	private var _owner:Dynamic;
 	private var _life:Float;
 	private var _bubble:Spritemap;
 	

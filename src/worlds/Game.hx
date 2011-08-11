@@ -11,6 +11,7 @@ import com.haxepunk.utils.Input;
 import com.haxepunk.World;
 import com.haxepunk.Tween;
 import base.Physics;
+import entities.Checkpoint;
 import entities.Fish;
 import entities.Player;
 import entities.Rock;
@@ -40,7 +41,7 @@ class Game extends World
 		_music.set("R01", new ModHome());
 		_music.set("R02", new ModTheme());
 		
-		loadLevel("R03");
+		loadLevel("Boss");
 		_alphaTween = new NumTween(alphaComplete, TweenType.Looping);
 		addTween(_alphaTween, true);
 		alphaComplete();
@@ -115,11 +116,18 @@ class Game extends World
 			_currentMusic = id;
 		}
 		
-		// background and lighting
-		var parallax:Image = addImage("FarParallax", 110);
-		var farParallax:Image = addImage("Parallax", 100);
+		// parallax image
+		var parallax:Image;
+		parallax = addImage("FarParallax", 110);
+		parallax.scrollX = 0.8;
+		parallax.scrollY = 0.6;
+		parallax.x -= 200;
+		parallax = addImage("Parallax", 100);
+		parallax.scrollX = 0.9;
+		parallax.scrollY = 0.7;
+		
 		addImage(id + "Background", 90);
-		var walls:Image = addForeground(id + "Walls", 30);
+		var walls:Image = addImage(id + "Walls", 30);
 		addImage(id + "Decor", 20);
 		
 		addImage(id + "Front", -90);
@@ -154,11 +162,6 @@ class Game extends World
 			if (xml.hasNode.walls)
 				loadWalls(xml.node.walls);
 		}
-		
-		parallax.scrollX = 0.5;
-		parallax.scrollY = 0.3;
-		farParallax.scrollX = 0.4;
-		farParallax.scrollY = 0.2;
 	}
 	
 	private function loadWorld(group:Fast)
@@ -203,6 +206,7 @@ class Game extends World
 				case "smallrock": add(new Rock(x, y, obj.name));
 				case "sheol": add(new Sheol(x, y));
 				case "vent": add(new ThermalVent(x, y));
+				case "checkpoint": add(new Checkpoint(x, y));
 				case "player":
 					// only add the player if we're starting the game
 					if (player == null)
