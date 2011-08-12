@@ -57,6 +57,15 @@ class Game extends World
 		_music.set("storm", new ModStorm());
 	}
 	
+	private function fadeComplete()
+	{
+		if (_fadeTween.value == 1)
+		{
+			loadNextLevel();
+			_fadeTween.tween(1, 0, 0.5);
+		}
+	}
+	
 	public override function begin()
 	{
 		restart();
@@ -65,6 +74,14 @@ class Game extends World
 		_alphaTween = new NumTween(alphaComplete, TweenType.Looping);
 		addTween(_alphaTween, true);
 		alphaComplete();
+		
+		// fade to black
+		_fade = Image.createRect(HXP.screen.width, HXP.screen.height, 0);
+		_fade.scrollX = _fade.scrollY = 0;
+		addGraphic(_fade, -1000).type = "keep";
+		_fadeTween = new NumTween(fadeComplete);
+		addTween(_fadeTween);
+		_fadeTween.tween(1, 0, 2);
 	}
 	
 	public function restart()
@@ -76,16 +93,33 @@ class Game extends World
 	public function load()
 	{
 		Data.load("Current");
+		_doors = Data.read("doors", new Array<String>());
+		
 		_level = Data.readString("level", "R01");
 		loadLevel(_level);
-		player.loadData();
 	}
 	
 	public function save()
 	{
+		Data.write("doors", _doors);
 		Data.write("level", _level);
 		player.saveData();
 		Data.save("Current");
+	}
+	
+	public function openedDoor()
+	{
+		_doors.push(_level);
+	}
+	
+	private function doorOpen():Bool
+	{
+		for (room in _doors)
+		{
+			if (room == _level)
+				return true;
+		}
+		return false;
 	}
 	
 	private function alphaComplete()
@@ -211,7 +245,7 @@ class Game extends World
 		if (music != null && _currentMusic != id)
 		{
 			musicPlayer.stop();
-//			musicPlayer.loadSong(music);
+			musicPlayer.loadSong(music);
 			_currentMusic = id;
 		}
 	}
@@ -258,6 +292,27 @@ class Game extends World
 	private function loadObjects(group:Fast)
 	{
 		var x:Float, y:Float, angle:Float;
+		
+		// only add the player if we're starting the game
+		if (player == null)
+		{
+			if (group.hasNode.player)
+			{
+				var obj = group.node.player;
+				x = Std.parseFloat(obj.att.x);
+				y = Std.parseFloat(obj.att.y);
+			}
+			else
+			{
+				x = levelWidth / 2;
+				y = levelHeight / 2;
+				trace("No player spawn found, you should think about adding one...");
+			}
+			player = new Player(x, y);
+			player.loadData();
+			add(player);
+		}
+		
 		for (obj in group.elements)
 		{
 			x = Std.parseFloat(obj.att.x);
@@ -272,16 +327,10 @@ class Game extends World
 				case "urchin": add(new Urchin(x, y));
 				case "sheol": add(new Sheol(x, y));
 				
-				//powerups
-				case "shoot": add(new Powerup(x, y, obj.name));
-				case "grab": add(new Powerup(x, y, obj.name));
-				case "toss": add(new Powerup(x, y, obj.name));
-				case "layer": add(new Powerup(x, y, obj.name));
-				
 				// gem panel
-				case "gem": add(new Gem(x, y));
-				case "panel": add(new GemPanel(x, y));
-				case "door": add(new Door(x, y));
+				case "gem": if (!doorOpen()) add(new Gem(x, y));
+				case "door": if (!doorOpen()) add(new Door(x, y));
+				case "panel": add(new GemPanel(x, y, doorOpen()));
 				
 				// objects
 				case "scroll": add(new Scroll(x, y));
@@ -290,37 +339,42 @@ class Game extends World
 				case "rock": add(new Rock(x, y, obj.name));
 				case "smallrock": add(new Rock(x, y, obj.name));
 				
-				// only add the player if we're starting the game
-				case "player":
-					if (player == null)
-					{
-						player = new Player(x, y);
-						add(player);
-					}
+				//powerups
+				default:
+					if (!player.hasPickup(obj.name, _level) && obj.name != "player")
+						add(new Powerup(x, y, obj.name, _level));
 			}
 		}
 	}
 	
 	public function switchLevel(direction:String)
 	{
-		var nextLevel:String = _exits.get(direction);
-		if (nextLevel == "")
+		_direction = direction;
+		_nextLevel = _exits.get(direction);
+		if (_nextLevel == "")
 		{
 			trace("No level to switch to");
 			return;
 		}
-		loadLevel(nextLevel);
-		switch (direction)
+		player.frozen = true; // don't let player move
+		_fadeTween.tween(0, 1, 0.3);
+	}
+	
+	private function loadNextLevel()
+	{
+		loadLevel(_nextLevel);
+		switch (_direction)
 		{
 			case "left":
-				player.x = levelWidth - 4;
+				player.x = levelWidth - 8;
 			case "right":
-				player.x = 4;
+				player.x = 8;
 			case "top":
-				player.y = levelHeight - 4;
+				player.y = levelHeight - 8;
 			case "bottom":
-				player.y = 4;
+				player.y = 8;
 		}
+		player.frozen = false;
 		player.velocity.x = player.velocity.y = 0;
 		player.resetBubbles();
 	}
@@ -340,6 +394,8 @@ class Game extends World
 	
 	public override function update()
 	{
+		_fade.alpha = _fadeTween.value;
+		
 		// shift the alpha on the lighting layer, if it exists
 		if (_lighting != null)
 			_lighting.alpha = _alphaTween.value;
@@ -353,12 +409,20 @@ class Game extends World
 	private var _currentMusic:String;
 	private var _music:Hash<ByteArray>;
 	
-	// exits
-	private var _exits:Hash<String>;
+	// level info
+	private var _doors:Array<String>;
 	private var _level:String;
+	// switch level
+	private var _exits:Hash<String>;
+	private var _nextLevel:String;
+	private var _direction:String;
 	
 	// lighting
 	private var _alphaTween:NumTween;
 	private var _lighting:Image;
+	
+	// fade to black
+	private var _fadeTween:NumTween;
+	private var _fade:Image;
 	
 }

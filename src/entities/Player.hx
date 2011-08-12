@@ -26,10 +26,16 @@ enum Gesture
 	UPRIGHT;
 }
 
+typedef Pickup = {
+	var number:Int;
+	var rooms:Array<String>;
+};
+
 class Player extends Physics
 {
 	
 	public var following:Int; // bubbles following
+	public var frozen:Bool;
 	
 	public function new(x:Float, y:Float) 
 	{
@@ -46,6 +52,7 @@ class Player extends Physics
 		_shootTime = 0;
 		
 		type = "keep";
+		frozen = false;
 		
 		Input.define("up", [Key.W, Key.UP]);
 		Input.define("down", [Key.S, Key.DOWN]);
@@ -60,11 +67,11 @@ class Player extends Physics
 		maxLayer = Data.readInt("maxLayer", 1);
 		// load pickups
 		var numPickups:Int = Data.readInt("numPickups", 0);
-		_pickups = new Hash<Int>();
+		_pickups = new Hash<Pickup>();
 		for (i in 0 ... numPickups)
 		{
 			var key:String = Data.readString("pickup" + i);
-			_pickups.set(key, Data.readInt(key, 1));
+			_pickups.set(key, { number:Data.readInt(key + "number", 1), rooms:Data.read(key + "rooms", new Array<String>()) });
 		}
 	}
 	
@@ -76,39 +83,63 @@ class Player extends Physics
 		for (key in _pickups.keys())
 		{
 			Data.write("pickup" + i, key);
-			Data.write(key, _pickups.get(key));
+			Data.write(key + "number", _pickups.get(key).number);
+			Data.write(key + "rooms", _pickups.get(key).rooms);
 			i += 1;
 		}
 		Data.write("numPickups", i);
 	}
 	
-	public function hasPickup(pickup:String):Bool
+	public function hasPickup(pickup:String, ?level:String):Bool
 	{
 		if (_pickups.exists(pickup))
-			return true;
+		{
+			if (level == null)
+			{
+				// just checking type
+				return true;
+			}
+			else
+			{
+				// checking if we picked up the object in a specific room
+				for (room in _pickups.get(pickup).rooms)
+				{
+					if (room == level)
+						return true;
+				}
+			}
+		}
 		return false;
 	}
 	
 	public function getPickup(pickup:String):Int
 	{
 		if (_pickups.exists(pickup))
-			return _pickups.get(pickup);
+			return _pickups.get(pickup).number;
 		return 0;
 	}
 	
-	public function setPickup(pickup:String)
+	public function setPickup(pickup:String, room:String)
 	{
-		var value:Int = 1;
+		var p:Pickup;
 		if (_pickups.exists(pickup))
-			value += _pickups.get(pickup);
+		{
+			p = _pickups.get(pickup);
+			p.number += 1;
+		}
+		else
+		{
+			p = { number: 1, rooms:new Array<String>() };
+		}
+		p.rooms.push(room);
 		
 		// special cases
 		switch (pickup)
 		{
-			case "layer": maxLayer = value;
+			case "layer": maxLayer = p.number;
 		}
 		
-		_pickups.set(pickup, value);
+		_pickups.set(pickup, p);
 	}
 	
 	/**
@@ -147,6 +178,7 @@ class Player extends Physics
 	
 	public override function update()
 	{
+		if (frozen) return;
 		handleMovement();
 		handleGrab();
 		handleToss();
@@ -340,14 +372,19 @@ class Player extends Physics
 			if (_grabObject == null)
 			{
 				var i:Int = 0;
-				while (_grabObject == null || i > _grabTypes.length)
+				while (_grabObject == null && i < _grabTypes.length)
 				{
-					_grabObject = cast(HXP.world.nearestToEntity(_grabTypes[i], this), Physics);
+					var e:Entity = HXP.world.nearestToEntity(_grabTypes[i], this);
+					if (e != null && HXP.distance(e.x, e.y, x, y) < 100 && Std.is(e, Physics))
+						_grabObject = cast(e, Physics);
 					i += 1;
 				}
-				_grabTime = 1;
-				if (HXP.distance(_grabObject.x, _grabObject.y, x, y) > 100)
-					_grabObject = null;
+				// check that we got something to grab
+				if (_grabObject != null)
+				{
+					removeBubble();
+					_grabTime = 1;
+				}
 			}
 			else if (_grabObject.dead)
 			{
@@ -389,7 +426,9 @@ class Player extends Physics
 				var i:Int = 0;
 				while (_tossObject == null && i < _tossTypes.length)
 				{
-					_tossObject = cast(_world.collidePoint(_tossTypes[i], _world.mouseX, _world.mouseY), Physics);
+					var e:Entity = _world.collidePoint(_tossTypes[i], _world.mouseX, _world.mouseY);
+					if (e != null && Std.is(e, Physics))
+						_tossObject = cast(e, Physics);
 					i += 1;
 				}
 				if (_tossObject != null)
@@ -425,7 +464,7 @@ class Player extends Physics
 	
 	private var _shootTime:Float;
 	
-	private var _pickups:Hash<Int>;
+	private var _pickups:Hash<Pickup>;
 	
 	private var _maxBubbles:Int;
 	private var _maxLayer:Int;

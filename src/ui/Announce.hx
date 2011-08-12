@@ -34,6 +34,7 @@ class Announce extends Entity
 		_angle = 0;
 		originX = originY = 0;
 		_waitTime = 0;
+		_displaySpeed = 1 / text.length;
 		_matrix = HXP.matrix;
 		_centered = centered;
 		layer = -500;
@@ -66,7 +67,7 @@ class Announce extends Entity
 				if (_index == _text.length)
 					_waitTime = 5;
 				else
-					_waitTime = 0.2;
+					_waitTime = _displaySpeed;
 			}
 			else
 			{
@@ -86,6 +87,7 @@ class Announce extends Entity
 		super.render();
 	}
 	
+	private var _displaySpeed:Float;
 	private var _centered:Bool;
 	private var _angle:Float;
 	private var _matrix:Matrix;

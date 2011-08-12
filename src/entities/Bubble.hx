@@ -92,6 +92,7 @@ class Bubble extends Being
 	
 	public override function update()
 	{
+		if (dead) return;
 		// always check if we are colliding with something
 		var enemy:Being = cast(collideTypes(_enemyTypes, x, y), Being);
 		

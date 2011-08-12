@@ -3,6 +3,7 @@ package entities;
 import com.haxepunk.HXP;
 import com.haxepunk.Entity;
 import com.haxepunk.graphics.Spritemap;
+import worlds.Game;
 
 class Door extends Entity
 {
@@ -23,7 +24,10 @@ class Door extends Entity
 	public function onAnimEnd()
 	{
 		if (_sprite.currentAnim == "open")
-			HXP.world.remove(this);
+		{
+			cast(_world, Game).openedDoor();
+			_world.remove(this);
+		}
 	}
 	
 	public function open()
