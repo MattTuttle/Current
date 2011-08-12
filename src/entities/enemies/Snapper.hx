@@ -25,6 +25,11 @@ class Snapper extends Being
 		_spawnTime = HXP.random * 5;
 	}
 	
+	public override function kill()
+	{
+		_world.remove(this);
+	}
+	
 	private function spawnBubbles()
 	{
 		_spawnTime -= HXP.elapsed;

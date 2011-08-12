@@ -60,10 +60,11 @@ class Player extends Physics
 		maxLayer = Data.readInt("maxLayer", 1);
 		// load pickups
 		var numPickups:Int = Data.readInt("numPickups", 0);
-		_pickups = new Hash<Bool>();
+		_pickups = new Hash<Int>();
 		for (i in 0 ... numPickups)
 		{
-			_pickups.set(Data.readString("pickup" + i), true);
+			var key:String = Data.readString("pickup" + i);
+			_pickups.set(key, Data.readInt(key, 1));
 		}
 	}
 	
@@ -72,9 +73,10 @@ class Player extends Physics
 		Data.write("maxLayer", maxLayer);
 		// save pickups
 		var i:Int = 0;
-		for (key in _pickups)
+		for (key in _pickups.keys())
 		{
 			Data.write("pickup" + i, key);
+			Data.write(key, _pickups.get(key));
 			i += 1;
 		}
 		Data.write("numPickups", i);
@@ -87,9 +89,26 @@ class Player extends Physics
 		return false;
 	}
 	
+	public function getPickup(pickup:String):Int
+	{
+		if (_pickups.exists(pickup))
+			return _pickups.get(pickup);
+		return 0;
+	}
+	
 	public function setPickup(pickup:String)
 	{
-		_pickups.set(pickup, true);
+		var value:Int = 1;
+		if (_pickups.exists(pickup))
+			value += _pickups.get(pickup);
+		
+		// special cases
+		switch (pickup)
+		{
+			case "layer": maxLayer = value;
+		}
+		
+		_pickups.set(pickup, value);
 	}
 	
 	/**
@@ -301,7 +320,7 @@ class Player extends Physics
 	
 	private function handleShoot()
 	{
-		if (!hasPickup("shoot")) return;
+		if (!hasPickup("shoot") || _tossObject != null) return;
 		
 		_shootTime -= HXP.elapsed;
 		if (Input.mouseDown && _bubbles.length > 0 && _shootTime < 0)
@@ -406,7 +425,7 @@ class Player extends Physics
 	
 	private var _shootTime:Float;
 	
-	private var _pickups:Hash<Bool>;
+	private var _pickups:Hash<Int>;
 	
 	private var _maxBubbles:Int;
 	private var _maxLayer:Int;

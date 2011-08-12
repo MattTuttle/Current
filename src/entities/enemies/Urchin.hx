@@ -18,4 +18,9 @@ class Urchin extends Being
 		type = "fish";
 	}
 	
+	public override function kill()
+	{
+		_world.remove(this);
+	}
+	
 }

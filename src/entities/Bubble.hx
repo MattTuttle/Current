@@ -87,6 +87,7 @@ class Bubble extends Being
 		targetX = _point.x;
 		targetY = _point.y;
 		_owner = null;
+		type = "dead";
 	}
 	
 	public override function update()
@@ -106,7 +107,7 @@ class Bubble extends Being
 				if (_life < 1) 
 				{
 					_bubble.alpha = _life;
-					HXP.world.removeType(this);
+					type = "dead";
 				}
 				if (_life < 0) HXP.world.remove(this);
 				
@@ -134,7 +135,11 @@ class Bubble extends Being
 				// pop if we hit something
 				if (enemy != null) hurt(1);
 			case SHOOT:
-				if (enemy != null) enemy.hurt(attack);
+				if (enemy != null)
+				{
+					enemy.hurt(attack);
+					hurt(enemy.attack);
+				}
 				moveBy(targetX, targetY);
 		}
 		

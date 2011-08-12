@@ -33,6 +33,11 @@ class Piranha extends Physics
 		faceAngle(angle);
 	}
 	
+	public override function kill()
+	{
+		_world.remove(this);
+	}
+	
 	private function faceAngle(angle:Float)
 	{
 		_sprite.angle = angle;

@@ -1,9 +1,10 @@
 package entities.enemies;
 
+import base.Being;
 import com.haxepunk.Entity;
 import com.haxepunk.graphics.Image;
 
-class Coral extends Entity
+class Coral extends Being
 {
 
 	public function new(x:Float, y:Float, angle:Float) 

@@ -25,7 +25,7 @@
 			<object name="snapper" image="../gfx/redsnapper.png" width="59" height="32" imageWidth="59" imageOffsetX="59" />
 			<object name="piranha" image="../gfx/piranha.png" width="32" height="32" imageWidth="32" imageOffsetX="32" originX="16" originY="16" rotatable="true" />
 			<object name="coral" image="../gfx/SpikeCoral.png" width="64" height="64" rotatable="true" rotationPrecision="15" originX="32" originY="32" />
-			<object name="urchin" image="../gfx/urchin.png" width="64" height="64" originX="32" originY="32" />
+			<object name="urchin" image="../gfx/urchin.png" width="48" height="48" originX="24" originY="24" />
 			<object name="sheol" image="../gfx/sheol_boss.png" width="285" height="269" limit="1" />
 		</folder>
 		<folder name="pickups">
