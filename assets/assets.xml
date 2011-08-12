@@ -20,14 +20,17 @@
 		<img:image import="assets/gfx/objects/MovableRock_small.png" class="GfxSmallRock" />
 		<img:image import="assets/gfx/objects/ThermalVent.png" class="GfxThermalVent" />
 		<img:image import="assets/gfx/objects/checkpoint_crystal.png" class="GfxCheckpoint" />
+		<img:image import="assets/gfx/objects/scroll.png" class="GfxScroll" />
+		<!-- Gem/Door -->
 		<img:image import="assets/gfx/objects/gempanel.png" class="GfxGemPanel" />
 		<img:image import="assets/gfx/objects/gem.png" class="GfxGem" />
-		<img:image import="assets/gfx/objects/scroll.png" class="GfxScroll" />
+		<img:image import="assets/gfx/objects/door.png" class="GfxDoor" />
 		<!-- Enemies -->
 		<img:image import="assets/gfx/sheol_boss.png" class="GfxSheol" />
 		<img:image import="assets/gfx/redsnapper.png" class="GfxSnapper" />
 		<img:image import="assets/gfx/piranha.png" class="GfxPiranha" />
 		<img:image import="assets/gfx/SpikeCoral.png" class="GfxSpikeCoral" />
+		<img:image import="assets/gfx/urchin.png" class="GfxUrchin" />
 		
 		<img:image class="GfxParallax" import="assets/gfx/Parallax.png" />
 		<img:image class="GfxFarParallax" import="assets/gfx/FarParallax.png" />

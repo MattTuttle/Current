@@ -1,5 +1,6 @@
 package entities;
 
+import base.Interactable;
 import com.haxepunk.HXP;
 import com.haxepunk.Entity;
 import com.haxepunk.graphics.Spritemap;
@@ -8,7 +9,7 @@ import com.haxepunk.utils.Data;
 import ui.Announce;
 import worlds.Game;
 
-class Checkpoint extends Entity
+class Checkpoint extends Interactable
 {
 
 	public function new(x:Float, y:Float) 
@@ -20,12 +21,11 @@ class Checkpoint extends Entity
 		_sprite.play("idle");
 		graphic = _sprite;
 		layer = 18;
-		type = "checkpoint";
 		setHitbox(64, 128);
 		_saved = false;
 	}
 	
-	public function save(player:Player)
+	public override function activate(player:Player)
 	{
 		// if we've already saved, don't save again
 		if (_saved) return;

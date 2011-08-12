@@ -9,6 +9,13 @@ import com.haxepunk.Sfx;
 import flash.geom.Point;
 import worlds.Game;
 
+enum BubbleState
+{
+	FLOAT;
+	OWNED;
+	SHOOT;
+}
+
 class Bubble extends Being
 {
 	
@@ -34,6 +41,7 @@ class Bubble extends Being
 			_life = life;
 		else
 			_life = 4 + Math.random() * 2;
+		_state = FLOAT;
 	}
 	
 	public override function kill()
@@ -64,67 +72,78 @@ class Bubble extends Being
 				_owner.removeBubble(this);
 			
 			_owner = value;
+			_state = OWNED;
 			type = "keep";
 		}
 		return value;
 	}
 	
-	public function shoot(dx:Float, dy:Float)
+	public function shoot(wx:Float, wy:Float)
 	{
-		
+		_state = SHOOT;
+		_point.x = wx - x;
+		_point.y = wy - y;
+		_point.normalize(speed);
+		targetX = _point.x;
+		targetY = _point.y;
+		_owner = null;
 	}
 	
 	public override function update()
 	{
-		if (_owner == null)
+		// always check if we are colliding with something
+		var enemy:Being = cast(collideTypes(_enemyTypes, x, y), Being);
+		
+		switch (_state)
 		{
-			// move upward in the water
-			x += Math.random() - 0.5;
-			y += Math.random() - 1.5;
-			
-			// without an owner we have a limited lifespan
-			_life -= HXP.elapsed;
-			if (_life < 1) 
-			{
-				_bubble.alpha = _life;
-				HXP.world.removeType(this);
-			}
-			if (_life < 0) HXP.world.remove(this);
-			
-			// hit map without an owner, POP!
-			if (collide("map", x, y) != null) kill();
-		}
-		else
-		{
-			_bubble.alpha = 1;
-			_point.x = targetX - x;
-			_point.y = targetY - y;
-			// if close enough or resetting, snap into place
-			if (_point.length < 3 || reset)
-			{
-				x = targetX;
-				y = targetY;
-				// used to switch levels;
-				reset = false;
-			}
-			else
-			{
-				_point.normalize(speed);
-				x += _point.x;
-				y += _point.y;
-			}
+			case FLOAT:
+				// move upward in the water
+				x += Math.random() - 0.5;
+				y += Math.random() - 1.5;
+				
+				// without an owner we have a limited lifespan
+				_life -= HXP.elapsed;
+				if (_life < 1) 
+				{
+					_bubble.alpha = _life;
+					HXP.world.removeType(this);
+				}
+				if (_life < 0) HXP.world.remove(this);
+				
+				// hit map without an owner, POP!
+				if (collide("map", x, y) != null || enemy != null) kill();
+			case OWNED:
+				_bubble.alpha = 1;
+				_point.x = targetX - x;
+				_point.y = targetY - y;
+				// if close enough or resetting, snap into place
+				if (_point.length < 3 || reset)
+				{
+					x = targetX;
+					y = targetY;
+					// used to switch levels;
+					reset = false;
+				}
+				else
+				{
+					_point.normalize(speed);
+					x += _point.x;
+					y += _point.y;
+				}
+				
+				// pop if we hit something
+				if (enemy != null) hurt(1);
+			case SHOOT:
+				if (enemy != null) enemy.hurt(attack);
+				moveBy(targetX, targetY);
 		}
 		
 		super.update();
-		
-		if (collideTypes(_enemyTypes, x, y) != null)
-		{
-			hurt(1);
-		}
 	}
 	
 	private static inline var _enemyTypes:Array<String> = ["fish", "coral"];
 	
+	private var _state:BubbleState;
 	private var _owner:Dynamic;
 	private var _life:Float;
 	private var _bubble:Spritemap;

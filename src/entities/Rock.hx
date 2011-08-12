@@ -52,7 +52,6 @@ class Rock extends Physics
 			if (enemy != null)
 			{
 				HXP.world.remove(enemy);
-				kill();
 			}
 		}
 	}

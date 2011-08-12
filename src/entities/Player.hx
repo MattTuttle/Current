@@ -1,6 +1,7 @@
 package entities;
 
 import base.Being;
+import base.Interactable;
 import base.Physics;
 import com.haxepunk.HXP;
 import com.haxepunk.Entity;
@@ -42,6 +43,7 @@ class Player extends Physics
 		bounce = 2;
 		_bubbles = new Array<Bubble>();
 		_bubbleAngle = 0;
+		_shootTime = 0;
 		
 		type = "keep";
 		
@@ -85,7 +87,7 @@ class Player extends Physics
 		return false;
 	}
 	
-	public function getPickup(pickup:String)
+	public function setPickup(pickup:String)
 	{
 		_pickups.set(pickup, true);
 	}
@@ -109,8 +111,6 @@ class Player extends Physics
 		return value;
 	}
 	
-	
-	
 	public override function kill()
 	{
 		HXP.world.remove(this);
@@ -126,30 +126,6 @@ class Player extends Physics
 		return null;
 	}
 	
-	private function checkCollisions()
-	{
-		var e:Entity = collideTypes(_enemyTypes, x, y);
-		if (e != null && _bubbles.length == 0)
-		{
-			if (Std.is(e, Being))
-				hurt(cast(e, Being).attack);
-			else
-				hurt(1);
-		}
-		
-		var checkpoint:Checkpoint = cast(collide("checkpoint", x, y), Checkpoint);
-		if (checkpoint != null)
-		{
-			checkpoint.save(this);
-		}
-		
-		var powerup:Powerup = cast(collide("scroll", x, y), Powerup);
-		if (powerup != null)
-		{
-			powerup.apply(this);
-		}
-	}
-	
 	public override function update()
 	{
 		handleMovement();
@@ -159,7 +135,18 @@ class Player extends Physics
 		
 		super.update();
 		
-		checkCollisions();
+		var e:Entity = collideTypes(_enemyTypes, x, y);
+		if (e != null && _bubbles.length == 0)
+		{
+			if (Std.is(e, Being))
+				hurt(cast(e, Being).attack);
+			else
+				hurt(1);
+		}
+		
+		var interact:Interactable = cast(collide("interact", x, y), Interactable);
+		if (interact != null)
+			interact.activate(this);
 		
 		// check if player heads off screen
 		var game:Game = cast(HXP.world, Game);
@@ -316,13 +303,12 @@ class Player extends Physics
 	{
 		if (!hasPickup("shoot")) return;
 		
-		if (Input.mouseDown && _bubbles.length > 0)
+		_shootTime -= HXP.elapsed;
+		if (Input.mouseDown && _bubbles.length > 0 && _shootTime < 0)
 		{
 			var bubble:Bubble = _bubbles.pop();
-			_point.x = bubble.x - _world.mouseX;
-			_point.y = bubble.y - _world.mouseY;
-			_point.normalize(1);
-			bubble.shoot(_point.x, _point.y);
+			bubble.shoot(_world.mouseX, _world.mouseY);
+			_shootTime = 0.2; // shoot cooldown
 		}
 	}
 	
@@ -417,6 +403,8 @@ class Player extends Physics
 	private var _tossY:Float;
 	private var _tossTime:Float;
 	private var _tossObject:Physics;
+	
+	private var _shootTime:Float;
 	
 	private var _pickups:Hash<Bool>;
 	

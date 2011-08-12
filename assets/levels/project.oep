@@ -25,16 +25,25 @@
 			<object name="snapper" image="../gfx/redsnapper.png" width="59" height="32" imageWidth="59" imageOffsetX="59" />
 			<object name="piranha" image="../gfx/piranha.png" width="32" height="32" imageWidth="32" imageOffsetX="32" originX="16" originY="16" rotatable="true" />
 			<object name="coral" image="../gfx/SpikeCoral.png" width="64" height="64" rotatable="true" rotationPrecision="15" originX="32" originY="32" />
+			<object name="urchin" image="../gfx/urchin.png" width="64" height="64" originX="32" originY="32" />
 			<object name="sheol" image="../gfx/sheol_boss.png" width="285" height="269" limit="1" />
+		</folder>
+		<folder name="pickups">
+			<object name="shoot" image="../gfx/objects/scroll.png" width="32" height="32" />
+			<object name="grab" image="../gfx/objects/scroll.png" width="32" height="32" />
+			<object name="toss" image="../gfx/objects/scroll.png" width="32" height="32" />
+			<object name="layer" image="../gfx/objects/scroll.png" width="32" height="32" />
+		</folder>
+		<folder name="puzzle">
+			<object name="gem" image="../gfx/objects/gem.png" width="35" height="35" imageWidth="35" originX="17" originY="17" limit="1" />
+			<object name="panel" image="../gfx/objects/gempanel.png" width="64" height="64" limit="1" />
+			<object name="door" image="../gfx/objects/door.png" width="32" height="64" imageWidth="32" limit="1" />
 		</folder>
 		<folder name="objects">
 			<object name="vent" image="../gfx/objects/thermalvent.png" width="48" height="64" rotatable="true" rotationPrecision="15" originX="24" originY="32" />
 			<object name="checkpoint" image="../gfx/objects/checkpoint_crystal.png" width="64" height="128" imageWidth="64" limit="1" />
 			<object name="rock" image="../gfx/objects/MovableRock.png" width="48" height="39" originX="24" originY="19" />
 			<object name="smallrock" image="../gfx/objects/MovableRock_small.png" width="26" height="23" originX="13" originY="11" />
-			<object name="gem" image="../gfx/objects/gem.png" width="16" height="16" imageWidth="16" originX="8" originY="8" />
-			<object name="panel" image="../gfx/objects/gempanel.png" width="64" height="64" />
-			<object name="powerup" image="../gfx/objects/scroll.png" width="32" height="32" />
 		</folder>
 		<folder name="backgrounds">
 			<object name="room1" image="../levels/room1/walls.png" width="800" height="600" limit="1" />

@@ -12,11 +12,13 @@ import com.haxepunk.utils.Data;
 import com.haxepunk.World;
 import com.haxepunk.Tween;
 import base.Physics;
+import entities.Door;
 import entities.enemies.Coral;
 import entities.enemies.Piranha;
 import entities.enemies.Snapper;
 import entities.enemies.Sheol;
 import entities.Checkpoint;
+import entities.enemies.Urchin;
 import entities.Gem;
 import entities.GemPanel;
 import entities.Player;
@@ -263,20 +265,33 @@ class Game extends World
 			angle = (obj.has.angle) ? -Std.parseFloat(obj.att.angle) : 0;
 			switch (obj.name)
 			{
+				// enemies
 				case "snapper": add(new Snapper(x, y));
 				case "piranha": add(new Piranha(x, y, angle));
+				case "coral": add(new Coral(x, y, angle));
+				case "urchin": add(new Urchin(x, y));
+				case "sheol": add(new Sheol(x, y));
+				
+				//powerups
+				case "shoot": add(new Powerup(x, y, obj.name));
+				case "grab": add(new Powerup(x, y, obj.name));
+				case "toss": add(new Powerup(x, y, obj.name));
+				case "layer": add(new Powerup(x, y, obj.name));
+				
+				// gem panel
 				case "gem": add(new Gem(x, y));
 				case "panel": add(new GemPanel(x, y));
-				case "powerup": add(new Powerup(x, y));
+				case "door": add(new Door(x, y));
+				
+				// objects
 				case "scroll": add(new Scroll(x, y));
+				case "checkpoint": add(new Checkpoint(x, y));
+				case "vent": add(new ThermalVent(x, y, angle));
 				case "rock": add(new Rock(x, y, obj.name));
 				case "smallrock": add(new Rock(x, y, obj.name));
-				case "coral": add(new Coral(x, y, angle));
-				case "sheol": add(new Sheol(x, y));
-				case "vent": add(new ThermalVent(x, y, angle));
-				case "checkpoint": add(new Checkpoint(x, y));
+				
+				// only add the player if we're starting the game
 				case "player":
-					// only add the player if we're starting the game
 					if (player == null)
 					{
 						player = new Player(x, y);

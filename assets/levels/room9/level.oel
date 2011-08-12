@@ -60,6 +60,8 @@
     <tile tx="0" ty="0" x="0" y="64"/>
     <tile tx="320" ty="0" x="192" y="704"/>
     <tile tx="0" ty="0" x="0" y="0"/>
+    <tile tx="352" ty="0" x="992" y="384"/>
+    <tile tx="320" ty="0" x="992" y="352"/>
   </world>
   <actors>
     <coral x="943" y="124" angle="-120"/>
@@ -68,6 +70,10 @@
     <coral x="921" y="97" angle="-150"/>
     <coral x="959" y="157" angle="-120"/>
     <snapper x="179" y="583"/>
+    <gem x="1008" y="331"/>
+    <panel x="198" y="608"/>
+    <door x="64" y="481"/>
+    <shoot x="915" y="364"/>
   </actors>
   <level>
     <room9 x="0" y="0"/>
