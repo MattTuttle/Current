@@ -1,8 +1,11 @@
 package entities;
 
+import com.haxepunk.HXP;
 import com.haxepunk.Entity;
 import com.haxepunk.graphics.Spritemap;
+import com.haxepunk.Sfx;
 import com.haxepunk.utils.Data;
+import ui.Announce;
 import worlds.Game;
 
 class Checkpoint extends Entity
@@ -29,8 +32,9 @@ class Checkpoint extends Entity
 		_saved = true;
 		
 		_sprite.play("glow");
-		Data.write("level", Game.level);
-		Data.save("Current");
+		new Sfx(new SfxSave()).play(0.4); // play sfx
+		cast(HXP.world, Game).save();
+		HXP.world.add(new Announce(HXP.screen.width / 2, 150, "Game Saved", true));
 	}
 	
 	private var _saved:Bool;

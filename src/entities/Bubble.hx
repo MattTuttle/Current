@@ -69,6 +69,11 @@ class Bubble extends Being
 		return value;
 	}
 	
+	public function shoot(dx:Float, dy:Float)
+	{
+		
+	}
+	
 	public override function update()
 	{
 		if (_owner == null)

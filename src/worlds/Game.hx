@@ -17,7 +17,10 @@ import entities.enemies.Piranha;
 import entities.enemies.Snapper;
 import entities.enemies.Sheol;
 import entities.Checkpoint;
+import entities.Gem;
+import entities.GemPanel;
 import entities.Player;
+import entities.Powerup;
 import entities.Rock;
 import entities.ThermalVent;
 import flash.display.BitmapData;
@@ -30,7 +33,6 @@ class Game extends World
 	
 //	public var shader:WaterShader;
 	public static var player:Player;
-	public static var level:String;
 	public static var levelWidth:Int;
 	public static var levelHeight:Int;
 	public static var musicPlayer:MikModPlayer = new MikModPlayer();
@@ -65,9 +67,22 @@ class Game extends World
 	public function restart()
 	{
 		player = null;
+		load();
+	}
+	
+	public function load()
+	{
 		Data.load("Current");
-		level = Data.readString("level", "R01");
-		loadLevel(level);
+		_level = Data.readString("level", "R01");
+		loadLevel(_level);
+		player.loadData();
+	}
+	
+	public function save()
+	{
+		Data.write("level", _level);
+		player.saveData();
+		Data.save("Current");
 	}
 	
 	private function alphaComplete()
@@ -122,7 +137,7 @@ class Game extends World
 	
 	private function loadLevel(id:String)
 	{
-		Game.level = id;
+		_level = id;
 		var entities:Array<Entity> = new Array<Entity>();
 		getAll(entities);
 		for (entity in entities)
@@ -188,7 +203,7 @@ class Game extends World
 		if (music != null && _currentMusic != id)
 		{
 			musicPlayer.stop();
-			musicPlayer.loadSong(music);
+//			musicPlayer.loadSong(music);
 			_currentMusic = id;
 		}
 	}
@@ -197,11 +212,22 @@ class Game extends World
 	{
 		var size:Int = 32;
 		var map:Tilemap = new Tilemap(GfxTileset, levelWidth, levelHeight, size, size);
-		for (obj in group.nodes.tile)
+		map.usePositions = true;
+		for (obj in group.elements)
 		{
-			map.setTile(Std.int(Std.parseInt(obj.att.x) / size),
-				Std.int(Std.parseInt(obj.att.y) / size),
-				map.getTile(Std.int(Std.parseInt(obj.att.tx) / size), Std.int(Std.parseInt(obj.att.ty) / size)));
+			switch(obj.name)
+			{
+				case "tile":
+					map.setTile(Std.parseInt(obj.att.x),
+						Std.parseInt(obj.att.y),
+						map.getIndex(Std.int(Std.parseInt(obj.att.tx) / size), Std.int(Std.parseInt(obj.att.ty) / size)));
+				case "rect":
+					map.setRect(Std.parseInt(obj.att.x),
+						Std.parseInt(obj.att.y),
+						Std.parseInt(obj.att.w),
+						Std.parseInt(obj.att.h),
+						map.getIndex(Std.int(Std.parseInt(obj.att.tx) / size), Std.int(Std.parseInt(obj.att.ty) / size)));
+			}
 		}
 		addGraphic(map, 40);
 	}
@@ -233,6 +259,9 @@ class Game extends World
 			{
 				case "snapper": add(new Snapper(x, y));
 				case "piranha": add(new Piranha(x, y, angle));
+				case "gem": add(new Gem(x, y));
+				case "panel": add(new GemPanel(x, y));
+				case "powerup": add(new Powerup(x, y));
 				case "rock": add(new Rock(x, y, obj.name));
 				case "smallrock": add(new Rock(x, y, obj.name));
 				case "coral": add(new Coral(x, y, angle));
@@ -293,45 +322,10 @@ class Game extends World
 		if (_lighting != null)
 			_lighting.alpha = _alphaTween.value;
 		
-		if (Input.mousePressed)
-		{
-			_tossObject = null;
-			if (player.bubbles > 0)
-			{
-				var i:Int = 0;
-				while (_tossObject == null && i < _tossTypes.length)
-				{
-					_tossObject = cast(collidePoint(_tossTypes[i], mouseX, mouseY), Physics);
-					i++;
-				}
-				if (_tossObject != null)
-				{
-					_dragX = mouseX;
-					_dragY = mouseY;
-				}
-			}
-		}
-		else if (Input.mouseReleased)
-		{
-			if (_tossObject != null)
-			{
-				player.removeBubble();
-				_tossObject.toss(mouseX - _dragX, mouseY - _dragY);
-			}
-		}
-		
 		super.update();
 		clampCamera();
 //		shader.update();
 	}
-	
-	// drag objects
-	private var _dragX:Float;
-	private var _dragY:Float;
-	private var _dragTime:Float;
-	private var _tossObject:Physics;
-	
-	private static inline var _tossTypes:Array<String> = ["rock"];
 	
 	// music
 	private var _currentMusic:String;
@@ -339,6 +333,7 @@ class Game extends World
 	
 	// exits
 	private var _exits:Hash<String>;
+	private var _level:String;
 	
 	// lighting
 	private var _alphaTween:NumTween;

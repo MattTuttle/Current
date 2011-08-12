@@ -9,6 +9,7 @@ import com.haxepunk.masks.Pixelmask;
 import com.haxepunk.Sfx;
 import com.haxepunk.utils.Input;
 import com.haxepunk.utils.Key;
+import com.haxepunk.utils.Data;
 import flash.geom.Point;
 import worlds.Game;
 
@@ -27,9 +28,6 @@ enum Gesture
 class Player extends Physics
 {
 	
-	private static inline var bubbleLayers:Array<Int> = [6, 12, 18, 24];
-	private static var maxBubbles:Int = 0;
-	
 	public var following:Int; // bubbles following
 
 	public function new(x:Float, y:Float) 
@@ -42,14 +40,8 @@ class Player extends Physics
 		
 		following = 0;
 		bounce = 2;
-		
 		_bubbles = new Array<Bubble>();
 		_bubbleAngle = 0;
-		maxBubbles = 0;
-		for (i in 0 ... bubbleLayers.length)
-		{
-			maxBubbles += bubbleLayers[i];
-		}
 		
 		type = "keep";
 		
@@ -60,6 +52,65 @@ class Player extends Physics
 		Input.define("grab", [Key.SPACE, Key.SHIFT]);
 	}
 	
+	public function loadData()
+	{
+		// sets max bubbles as well
+		maxLayer = Data.readInt("maxLayer", 1);
+		// load pickups
+		var numPickups:Int = Data.readInt("numPickups", 0);
+		_pickups = new Hash<Bool>();
+		for (i in 0 ... numPickups)
+		{
+			_pickups.set(Data.readString("pickup" + i), true);
+		}
+	}
+	
+	public function saveData()
+	{
+		Data.write("maxLayer", maxLayer);
+		// save pickups
+		var i:Int = 0;
+		for (key in _pickups)
+		{
+			Data.write("pickup" + i, key);
+			i += 1;
+		}
+		Data.write("numPickups", i);
+	}
+	
+	public function hasPickup(pickup:String):Bool
+	{
+		if (_pickups.exists(pickup))
+			return true;
+		return false;
+	}
+	
+	public function getPickup(pickup:String)
+	{
+		_pickups.set(pickup, true);
+	}
+	
+	/**
+	 * Sets how many bubble layers we can have
+	 */
+	public var maxLayer(getMaxLayer, setMaxLayer):Int;
+	private function getMaxLayer():Int { return _maxLayer; }
+	private function setMaxLayer(value:Int):Int
+	{
+		// clamp to max layers
+		if (value > _bubbleLayers.length)
+			value = _bubbleLayers.length;
+		_maxLayer = value;
+		_maxBubbles = 0;
+		for (i in 0 ... value)
+		{
+			_maxBubbles += _bubbleLayers[i];
+		}
+		return value;
+	}
+	
+	
+	
 	public override function kill()
 	{
 		HXP.world.remove(this);
@@ -68,18 +119,14 @@ class Player extends Physics
 		super.kill();
 	}
 	
-	public var bubbles(getBubbleCount, null):Int;
-	private function getBubbleCount():Int { return _bubbles.length; }
-	
 	public function lastBubble():Bubble { return (_bubbles.length == 0) ? null : _bubbles[_bubbles.length - 1]; }
 	
 	public override function update()
 	{
-		handleInput();
-		
-		// move camera
-		HXP.camera.x = x - HXP.screen.width / 2;
-		HXP.camera.y = y - HXP.screen.height / 2;
+		handleMovement();
+		handleGrab();
+		handleToss();
+		handleShoot();
 		
 		super.update();
 		
@@ -130,6 +177,10 @@ class Player extends Physics
 				addBubble(bubble);
 			}
 		}
+		
+		// move camera
+		HXP.camera.x = x - HXP.screen.width / 2;
+		HXP.camera.y = y - HXP.screen.height / 2;
 	}
 	
 	public function resetBubbles()
@@ -148,16 +199,16 @@ class Player extends Physics
 		var angleIndex:Int = index;
 		
 		var total:Int = 0;
-		for (i in 0 ... bubbleLayers.length)
+		for (i in 0 ... _bubbleLayers.length)
 		{
-			total += bubbleLayers[i];
+			total += _bubbleLayers[i];
 			if (index < total)
 			{
-				numOnLayer = bubbleLayers[i];
+				numOnLayer = _bubbleLayers[i];
 				layer = i;
 				break;
 			}
-			angleIndex -= bubbleLayers[i];
+			angleIndex -= _bubbleLayers[i];
 		}
 		
 		// this bubble is on an undefined layer
@@ -186,13 +237,13 @@ class Player extends Physics
 	
 	private function addBubble(bubble:Bubble)
 	{
-		if (bubble.owned || _bubbles.length >= maxBubbles) return;
+		if (bubble.owned || _bubbles.length >= _maxBubbles) return;
 		_bubbles.push(bubble);
 		bubble.owner = this;
 		moveBubble(_bubbles.length - 1);
 	}
 	
-	private function handleInput()
+	private function handleMovement()
 	{
 		// Horizontal movement
 		if (Input.check("left"))
@@ -245,6 +296,25 @@ class Player extends Physics
 					velocity.y = 0;
 			}
 		}
+	}
+	
+	private function handleShoot()
+	{
+		if (!hasPickup("shoot")) return;
+		
+		if (Input.mouseDown && _bubbles.length > 0)
+		{
+			var bubble:Bubble = _bubbles.pop();
+			_point.x = bubble.x - _world.mouseX;
+			_point.y = bubble.y - _world.mouseY;
+			_point.normalize(1);
+			bubble.shoot(_point.x, _point.y);
+		}
+	}
+	
+	private function handleGrab()
+	{
+		if (!hasPickup("grab")) return;
 		
 		if (Input.check("grab") && _bubbles.length > 0)
 		{
@@ -254,7 +324,7 @@ class Player extends Physics
 				while (_grabObject == null || i > _grabTypes.length)
 				{
 					_grabObject = cast(HXP.world.nearestToEntity(_grabTypes[i], this), Physics);
-					i++;
+					i += 1;
 				}
 				_grabTime = 1;
 				if (HXP.distance(_grabObject.x, _grabObject.y, x, y) > 100)
@@ -288,12 +358,56 @@ class Player extends Physics
 		}
 	}
 	
+	private function handleToss()
+	{
+		if (!hasPickup("toss")) return;
+		
+		if (Input.mousePressed)
+		{
+			_tossObject = null;
+			if (_bubbles.length > 0)
+			{
+				var i:Int = 0;
+				while (_tossObject == null && i < _tossTypes.length)
+				{
+					_tossObject = cast(_world.collidePoint(_tossTypes[i], _world.mouseX, _world.mouseY), Physics);
+					i += 1;
+				}
+				if (_tossObject != null)
+				{
+					_tossX = _world.mouseX;
+					_tossY = _world.mouseY;
+				}
+			}
+		}
+		else if (Input.mouseReleased)
+		{
+			if (_tossObject != null)
+			{
+				removeBubble();
+				_tossObject.toss(_world.mouseX - _tossX, _world.mouseY - _tossY);
+			}
+		}
+	}
+	
 	private static inline var _enemyTypes:Array<String> = ["fish", "coral"];
-	private static inline var _grabTypes:Array<String> = ["rock"];
+	private static inline var _grabTypes:Array<String> = ["rock", "gem"];
+	private static inline var _tossTypes:Array<String> = ["rock"];
+	private static inline var _bubbleLayers:Array<Int> = [6, 12, 18, 24];
 	
 	private var _grabTime:Float;
 	private var _grabObject:Physics;
 	
+	// drag objects
+	private var _tossX:Float;
+	private var _tossY:Float;
+	private var _tossTime:Float;
+	private var _tossObject:Physics;
+	
+	private var _pickups:Hash<Bool>;
+	
+	private var _maxBubbles:Int;
+	private var _maxLayer:Int;
 	private var _bubbles:Array<Bubble>;
 	private var _bubbleAngle:Float;
 	

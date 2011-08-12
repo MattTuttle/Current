@@ -2,14 +2,14 @@
   <width>800</width>
   <height>800</height>
   <actors>
-    <vent x="445" y="526" angle="0"/>
-    <checkpoint x="533" y="449"/>
     <player x="533" y="467"/>
     <smallrock x="431" y="87"/>
     <smallrock x="437" y="57"/>
     <smallrock x="422" y="30"/>
     <smallrock x="453" y="33"/>
     <smallrock x="443" y="11"/>
+    <vent x="453" y="507" angle="0"/>
+    <checkpoint x="539" y="440"/>
   </actors>
   <level>
     <room7 x="0" y="0"/>

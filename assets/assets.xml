@@ -9,19 +9,25 @@
 	xmlns:comp0="http://mindless-labs.com/samhaxe/modules/Compose#1.0"
 	xmlns:comp1="http://mindless-labs.com/samhaxe/modules/Compose#1.1">
 	<shx:frame>
+		<font:ttf import="assets/fonts/bubblesstandard.ttf" name="FontBubble" />
+	</shx:frame>
+	<shx:frame>
 		<!-- Sprites -->
 		<img:image import="assets/gfx/bubble.png" class="GfxBubble" />
 		<img:image import="assets/gfx/bubble_small.png" class="GfxSmallBubble" />
-		<img:image import="assets/gfx/MovableRock.png" class="GfxRock" />
-		<img:image import="assets/gfx/MovableRock_small.png" class="GfxSmallRock" />
+		<!-- Objects -->
+		<img:image import="assets/gfx/objects/MovableRock.png" class="GfxRock" />
+		<img:image import="assets/gfx/objects/MovableRock_small.png" class="GfxSmallRock" />
+		<img:image import="assets/gfx/objects/ThermalVent.png" class="GfxThermalVent" />
+		<img:image import="assets/gfx/objects/checkpoint_crystal.png" class="GfxCheckpoint" />
+		<img:image import="assets/gfx/objects/gempanel.png" class="GfxGemPanel" />
+		<img:image import="assets/gfx/objects/gem.png" class="GfxGem" />
+		<img:image import="assets/gfx/objects/scroll.png" class="GfxScroll" />
 		<!-- Enemies -->
 		<img:image import="assets/gfx/sheol_boss.png" class="GfxSheol" />
 		<img:image import="assets/gfx/redsnapper.png" class="GfxSnapper" />
 		<img:image import="assets/gfx/piranha.png" class="GfxPiranha" />
 		<img:image import="assets/gfx/SpikeCoral.png" class="GfxSpikeCoral" />
-		<!-- Objects -->
-		<img:image import="assets/gfx/ThermalVent.png" class="GfxThermalVent" />
-		<img:image import="assets/gfx/checkpoint_crystal.png" class="GfxCheckpoint" />
 		
 		<img:image class="GfxParallax" import="assets/gfx/Parallax.png" />
 		<img:image class="GfxFarParallax" import="assets/gfx/FarParallax.png" />
@@ -77,12 +83,14 @@
 		<img:image  class="GfxR08Lighting"   import="assets/levels/room8/lighting.png" />
 		<bin:binary class="LvlR08Data"       import="assets/levels/room8/level.oel" />
 		<!-- Boss -->
-		<bin:binary class="LvlBossData"       import="assets/levels/boss/level.oel" />
+		<bin:binary class="LvlBossData"       import="assets/levels/temple/boss.oel" />
+		<bin:binary class="LvlR09Data"       import="assets/levels/temple/room09.oel" />
 		
 		<bin:binary class="PbjWater" import="assets/shader/water.pbj" />
 		
 		<!-- Sound effects -->
 		<snd:sound import="assets/sfx/pop.mp3" class="SfxBubblePop" />
+		<snd:sound import="assets/sfx/save.mp3" class="SfxSave" />
 		
 		<!-- Music -->
 		<bin:binary import="assets/music/boss.xm" class="ModBoss" />
