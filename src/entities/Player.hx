@@ -29,7 +29,7 @@ class Player extends Physics
 {
 	
 	public var following:Int; // bubbles following
-
+	
 	public function new(x:Float, y:Float) 
 	{
 		super(x, y);
@@ -119,7 +119,36 @@ class Player extends Physics
 		super.kill();
 	}
 	
-	public function lastBubble():Bubble { return (_bubbles.length == 0) ? null : _bubbles[_bubbles.length - 1]; }
+	public function lastBubble():Bubble
+	{
+		if (_bubbles.length != 0)
+			_bubbles[_bubbles.length - 1];
+		return null;
+	}
+	
+	private function checkCollisions()
+	{
+		var e:Entity = collideTypes(_enemyTypes, x, y);
+		if (e != null && _bubbles.length == 0)
+		{
+			if (Std.is(e, Being))
+				hurt(cast(e, Being).attack);
+			else
+				hurt(1);
+		}
+		
+		var checkpoint:Checkpoint = cast(collide("checkpoint", x, y), Checkpoint);
+		if (checkpoint != null)
+		{
+			checkpoint.save(this);
+		}
+		
+		var powerup:Powerup = cast(collide("scroll", x, y), Powerup);
+		if (powerup != null)
+		{
+			powerup.apply(this);
+		}
+	}
 	
 	public override function update()
 	{
@@ -130,22 +159,7 @@ class Player extends Physics
 		
 		super.update();
 		
-		var e:Entity = collideTypes(_enemyTypes, x, y);
-		if (e != null && _bubbles.length == 0)
-		{
-			if (Std.is(e, Being))
-				hurt(cast(e, Being).attack);
-			else
-				hurt(1);
-		}
-		else
-		{
-			var checkpoint:Checkpoint = cast(collide("checkpoint", x, y), Checkpoint);
-			if (checkpoint != null)
-			{
-				checkpoint.save(this);
-			}
-		}
+		checkCollisions();
 		
 		// check if player heads off screen
 		var game:Game = cast(HXP.world, Game);

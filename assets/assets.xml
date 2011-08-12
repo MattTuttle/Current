@@ -82,9 +82,14 @@
 		<img:image  class="GfxR08Decor"      import="assets/levels/room8/decor.png" />
 		<img:image  class="GfxR08Lighting"   import="assets/levels/room8/lighting.png" />
 		<bin:binary class="LvlR08Data"       import="assets/levels/room8/level.oel" />
+		<!-- Room 9 -->
+		<img:image  class="GfxR09Walls"      import="assets/levels/room9/walls.png" />
+		<img:image  class="GfxR09Front"      import="assets/levels/room9/front.png" />
+		<img:image  class="GfxR09Decor"      import="assets/levels/room9/decor.png" />
+		<img:image  class="GfxR09Lighting"   import="assets/levels/room9/lighting.png" />
+		<bin:binary class="LvlR09Data"       import="assets/levels/room9/level.oel" />
 		<!-- Boss -->
 		<bin:binary class="LvlBossData"       import="assets/levels/temple/boss.oel" />
-		<bin:binary class="LvlR09Data"       import="assets/levels/temple/room09.oel" />
 		
 		<bin:binary class="PbjWater" import="assets/shader/water.pbj" />
 		

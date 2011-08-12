@@ -22,6 +22,7 @@ import entities.GemPanel;
 import entities.Player;
 import entities.Powerup;
 import entities.Rock;
+import entities.Scroll;
 import entities.ThermalVent;
 import flash.display.BitmapData;
 import flash.utils.ByteArray;
@@ -187,11 +188,16 @@ class Game extends World
 			if (xml.has.music)
 				changeMusic(xml.att.music);
 			
-			// load objects and walls
+			// load objects
 			if (xml.hasNode.actors)
 				loadObjects(xml.node.actors);
+			// load tilemaps
+			if (xml.hasNode.background)
+				loadTilemap(xml.node.background, 80);
 			if (xml.hasNode.world)
-				loadWorld(xml.node.world);
+				loadTilemap(xml.node.world, 40);
+			if (xml.hasNode.foreground)
+				loadTilemap(xml.node.foreground, -20);
 			if (xml.hasNode.walls)
 				loadWalls(xml.node.walls);
 		}
@@ -208,7 +214,7 @@ class Game extends World
 		}
 	}
 	
-	private function loadWorld(group:Fast)
+	private function loadTilemap(group:Fast, layer:Int)
 	{
 		var size:Int = 32;
 		var map:Tilemap = new Tilemap(GfxTileset, levelWidth, levelHeight, size, size);
@@ -229,7 +235,7 @@ class Game extends World
 						map.getIndex(Std.int(Std.parseInt(obj.att.tx) / size), Std.int(Std.parseInt(obj.att.ty) / size)));
 			}
 		}
-		addGraphic(map, 40);
+		addGraphic(map, layer);
 	}
 	
 	private function loadWalls(group:Fast)
@@ -262,6 +268,7 @@ class Game extends World
 				case "gem": add(new Gem(x, y));
 				case "panel": add(new GemPanel(x, y));
 				case "powerup": add(new Powerup(x, y));
+				case "scroll": add(new Scroll(x, y));
 				case "rock": add(new Rock(x, y, obj.name));
 				case "smallrock": add(new Rock(x, y, obj.name));
 				case "coral": add(new Coral(x, y, angle));

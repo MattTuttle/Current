@@ -45,12 +45,15 @@
 			<object name="room6" image="../levels/room6/walls.png" width="1200" height="800" limit="1" />
 			<object name="room7" image="../levels/room7/walls.png" width="800" height="800" limit="1" />
 			<object name="room8" image="../levels/room8/walls.png" width="640" height="800" limit="1" />
+			<object name="room9" image="../levels/room9/walls.png" width="1100" height="800" limit="1" />
 		</folder>
 	</objects>
 	<layers>
+		<tiles name="background" gridSize="32" />
+		<tiles name="world" gridSize="32" />
 		<objects name="actors" gridSize="1" />
-		<tiles name="world" gridSize="32" exportAsObjects="true" />
 		<objects name="level" gridSize="640" />
+		<tiles name="foreground" gridSize="32" />
 		<grid name="walls" gridSize="8" exportAsObjects="true" color="ffaa3333" />
 	</layers>
 </project>
