@@ -5,8 +5,8 @@ import base.Physics;
 import com.haxepunk.HXP;
 import com.haxepunk.Entity;
 import com.haxepunk.graphics.Image;
+import entities.Player;
 import flash.geom.Point;
-import worlds.Game;
 
 enum SheolState
 {
@@ -18,13 +18,14 @@ enum SheolState
 class Sheol extends Being
 {
 
-	public function new(x:Float, y:Float) 
+	public function new(x:Float, y:Float, target:Player) 
 	{
 		super(x, y);
 		_image = new Image(GfxSheol);
 		_image.centerOO();
 		graphic = _image;
 		_state = FOLLOW;
+		_target = target;
 		layer = 60;
 		_bubbleTime = _spawnTime = 1;
 	}
@@ -43,11 +44,11 @@ class Sheol extends Being
 		if (_bubble == null)
 		{
 			if (_bubbleTime > 0) return;
-			_point.x = Game.player.x - x;
-			_point.y = Game.player.y - y;
+			_point.x = _target.x - x;
+			_point.y = _target.y - y;
 			if (_point.length < 150)
 			{
-				_bubble = Game.player.lastBubble();
+				_bubble = _target.lastBubble();
 				if (_bubble != null)
 					_bubble.owner = this;
 			}
@@ -77,8 +78,8 @@ class Sheol extends Being
 		switch(_state)
 		{
 			case FOLLOW:
-				_point.x = Game.player.x - x;
-				_point.y = Game.player.y - y;
+				_point.x = _target.x - x;
+				_point.y = _target.y - y;
 				if (_point.length < 250)
 					spawnRock(); // _state = PULL;
 				_point.normalize(20);
@@ -105,6 +106,7 @@ class Sheol extends Being
 	private var _bubble:Bubble;
 	private var _bubbleTime:Float;
 	
+	private var _target:Player;
 	private var _spawnTime:Float;
 	private var _image:Image;
 	private var _state:SheolState;

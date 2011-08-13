@@ -1,7 +1,7 @@
 package entities.enemies;
 
 import base.Physics;
-import worlds.Game;
+import com.haxepunk.Entity;
 import com.haxepunk.HXP;
 import com.haxepunk.graphics.Spritemap;
 
@@ -15,7 +15,7 @@ enum PiranhaState
 class Piranha extends Physics
 {
 
-	public function new(x:Float, y:Float, angle:Float) 
+	public function new(x:Float, y:Float, angle:Float, target:Entity) 
 	{
 		super(x, y);
 		_sprite = new Spritemap(GfxPiranha, 32, 32);
@@ -28,6 +28,7 @@ class Piranha extends Physics
 		setHitbox(24, 24, 12, 12);
 		type = "fish";
 		_state = IDLE;
+		_target = target;
 		_waitTime = 0;
 		speed = 20;
 		faceAngle(angle);
@@ -66,8 +67,8 @@ class Piranha extends Physics
 	public override function update()
 	{
 		_waitTime -= HXP.elapsed;
-		_point.x = Game.player.x - x;
-		_point.y = Game.player.y - y;
+		_point.x = _target.x - x;
+		_point.y = _target.y - y;
 		switch (_state)
 		{
 			case IDLE:
@@ -103,6 +104,7 @@ class Piranha extends Physics
 		super.update();
 	}
 	
+	private var _target:Entity;
 	private var _waitTime:Float;
 	private var _state:PiranhaState;
 	private var _sprite:Spritemap;

@@ -35,7 +35,7 @@ class Game extends World
 {
 	
 //	public var shader:WaterShader;
-	public static var player:Player;
+	public var player:Player;
 	public static var levelWidth:Int;
 	public static var levelHeight:Int;
 	public static var musicPlayer:MikModPlayer = new MikModPlayer();
@@ -68,7 +68,7 @@ class Game extends World
 	
 	public override function begin()
 	{
-		restart();
+		load();
 		
 		// lighting alpha tween
 		_alphaTween = new NumTween(alphaComplete, TweenType.Looping);
@@ -87,7 +87,9 @@ class Game extends World
 	public function restart()
 	{
 		player = null;
-		load();
+		_nextLevel = Data.readString("level", "R01");
+		_direction = "none"; // fake direction
+		_fadeTween.tween(0, 1, 1);
 	}
 	
 	public function load()
@@ -231,9 +233,9 @@ class Game extends World
 			if (xml.hasNode.background)
 				loadTilemap(xml.node.background, 80);
 			if (xml.hasNode.world)
-				loadTilemap(xml.node.world, 40);
+				loadTilemap(xml.node.world, 75);
 			if (xml.hasNode.foreground)
-				loadTilemap(xml.node.foreground, -20);
+				loadTilemap(xml.node.foreground, -30);
 			if (xml.hasNode.walls)
 				loadWalls(xml.node.walls);
 		}
@@ -322,10 +324,10 @@ class Game extends World
 			{
 				// enemies
 				case "snapper": add(new Snapper(x, y));
-				case "piranha": add(new Piranha(x, y, angle));
+				case "piranha": add(new Piranha(x, y, angle, player));
 				case "coral": add(new Coral(x, y, angle));
 				case "urchin": add(new Urchin(x, y));
-				case "sheol": add(new Sheol(x, y));
+				case "sheol": add(new Sheol(x, y, player));
 				
 				// gem panel
 				case "gem": if (!doorOpen()) add(new Gem(x, y));

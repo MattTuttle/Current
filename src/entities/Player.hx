@@ -136,7 +136,7 @@ class Player extends Physics
 		// special cases
 		switch (pickup)
 		{
-			case "layer": maxLayer = p.number;
+			case "layer": maxLayer = p.number + 1;
 		}
 		
 		_pickups.set(pickup, p);
