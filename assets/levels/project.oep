@@ -36,7 +36,7 @@
 		</folder>
 		<folder name="puzzle">
 			<object name="gem" image="../gfx/objects/gem.png" width="35" height="35" imageWidth="35" originX="17" originY="17" limit="1" />
-			<object name="panel" image="../gfx/objects/gempanel.png" width="64" height="64" limit="1" />
+			<object name="panel" image="../gfx/objects/gempanel.png" width="64" height="64" imageWidth="64" limit="1" />
 			<object name="door" image="../gfx/objects/door.png" width="32" height="64" imageWidth="32" limit="1" />
 		</folder>
 		<folder name="objects">
@@ -55,6 +55,7 @@
 			<object name="room7" image="../levels/room7/walls.png" width="800" height="800" limit="1" />
 			<object name="room8" image="../levels/room8/walls.png" width="640" height="800" limit="1" />
 			<object name="room9" image="../levels/room9/walls.png" width="1100" height="800" limit="1" />
+			<object name="room22" image="../levels/room22/walls.png" width="800" height="640" limit="1" />
 		</folder>
 	</objects>
 	<layers>

@@ -375,8 +375,11 @@ class Game extends World
 	private function clampCamera()
 	{
 		// move camera with player
-		camera.x = player.x - HXP.screen.width / 2;
-		camera.y = player.y - HXP.screen.height / 2;
+		if (player != null)
+		{
+			camera.x = player.x - HXP.screen.width / 2;
+			camera.y = player.y - HXP.screen.height / 2;
+		}
 		
 		if (camera.x < 0)
 			camera.x = 0;
