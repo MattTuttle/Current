@@ -108,7 +108,7 @@ class Bubble extends Being
 				if (_life < 1) 
 				{
 					_bubble.alpha = _life;
-					type = "dead";
+					if (_world != null) type = "dead"; // check _world to prevent crash...
 				}
 				if (_life < 0) HXP.world.remove(this);
 				

@@ -26,7 +26,7 @@ enum Gesture
 	UPRIGHT;
 }
 
-typedef Pickup = {
+typedef PickupType = {
 	var number:Int;
 	var rooms:Array<String>;
 };
@@ -67,7 +67,7 @@ class Player extends Physics
 		maxLayer = Data.readInt("maxLayer", 1);
 		// load pickups
 		var numPickups:Int = Data.readInt("numPickups", 0);
-		_pickups = new Hash<Pickup>();
+		_pickups = new Hash<PickupType>();
 		for (i in 0 ... numPickups)
 		{
 			var key:String = Data.readString("pickup" + i);
@@ -121,7 +121,7 @@ class Player extends Physics
 	
 	public function setPickup(pickup:String, room:String)
 	{
-		var p:Pickup;
+		var p:PickupType;
 		if (_pickups.exists(pickup))
 		{
 			p = _pickups.get(pickup);
@@ -229,10 +229,6 @@ class Player extends Physics
 				addBubble(bubble);
 			}
 		}
-		
-		// move camera
-		HXP.camera.x = x - HXP.screen.width / 2;
-		HXP.camera.y = y - HXP.screen.height / 2;
 	}
 	
 	public function resetBubbles()
@@ -308,19 +304,7 @@ class Player extends Physics
 		}
 		else
 		{
-			// Horizontal drag (rest at zero)
-			if (velocity.x < 0)
-			{
-				velocity.x += drag;
-				if (velocity.x > 0)
-					velocity.x = 0;
-			}
-			else if (velocity.x > 0)
-			{
-				velocity.x -= drag;
-				if (velocity.x < 0)
-					velocity.x = 0;
-			}
+			applyDrag(true, false); // horizontal
 		}
 		
 		// Vertical movement
@@ -334,19 +318,7 @@ class Player extends Physics
 		}
 		else
 		{
-			// Vertical drag (rest at zero)
-			if (velocity.y < 0)
-			{
-				velocity.y += drag;
-				if (velocity.y > 0)
-					velocity.y = 0;
-			}
-			else if (velocity.y > 0)
-			{
-				velocity.y -= drag;
-				if (velocity.y < 0)
-					velocity.y = 0;
-			}
+			applyDrag(false, true); // vertical
 		}
 	}
 	
@@ -464,7 +436,7 @@ class Player extends Physics
 	
 	private var _shootTime:Float;
 	
-	private var _pickups:Hash<Pickup>;
+	private var _pickups:Hash<PickupType>;
 	
 	private var _maxBubbles:Int;
 	private var _maxLayer:Int;

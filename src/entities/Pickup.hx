@@ -5,7 +5,7 @@ import com.haxepunk.HXP;
 import com.haxepunk.graphics.Image;
 import ui.Announce;
 
-class Powerup extends Interactable
+class Pickup extends Interactable
 {
 
 	public function new(x:Float, y:Float, name:String, room:String) 

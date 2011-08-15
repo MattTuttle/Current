@@ -1,14 +1,14 @@
-package entities;
+package entities.puzzle;
 
-import com.haxepunk.HXP;
+import base.Interactable;
 import com.haxepunk.Entity;
 import com.haxepunk.graphics.Spritemap;
-import worlds.Game;
+import entities.Player;
 
-class Door extends Entity
+class LockedDoor extends Interactable
 {
 
-	public function new(x:Float, y:Float)
+	public function new(x:Float, y:Float, color:String) 
 	{
 		super(x, y);
 		_sprite = new Spritemap(GfxDoor, 32, 64, onAnimEnd);
@@ -16,7 +16,8 @@ class Door extends Entity
 		_sprite.add("open", [1, 2, 3], 12);
 		_sprite.play("closed");
 		graphic = _sprite;
-		type = "door";
+		
+		_colorType = color;
 		setHitbox(16, 64, -8);
 		layer = 30;
 	}
@@ -25,16 +26,19 @@ class Door extends Entity
 	{
 		if (_sprite.currentAnim == "open")
 		{
-			cast(_world, Game).openedDoor();
 			_world.remove(this);
 		}
 	}
 	
-	public function open()
+	public override function activate(player:Player)
 	{
-		_sprite.play("open");
+		if (player.hasPickup(_colorType + "Key"))
+		{
+			_sprite.play("open");
+		}
 	}
 	
 	private var _sprite:Spritemap;
+	private var _colorType:String;
 	
 }

@@ -27,6 +27,43 @@ class Physics extends Being
 		dead = false;
 	}
 	
+	private function applyDrag(horizontal:Bool, vertical:Bool)
+	{
+		// Horizontal drag (rest at zero)
+		if (horizontal)
+		{
+			if (velocity.x < 0)
+			{
+				velocity.x += drag;
+				if (velocity.x > 0)
+					velocity.x = 0;
+			}
+			else if (velocity.x > 0)
+			{
+				velocity.x -= drag;
+				if (velocity.x < 0)
+					velocity.x = 0;
+			}
+		}
+		
+		// Vertical drag (rest at zero)
+		if (vertical)
+		{
+			if (velocity.y < 0)
+			{
+				velocity.y += drag;
+				if (velocity.y > 0)
+					velocity.y = 0;
+			}
+			else if (velocity.y > 0)
+			{
+				velocity.y -= drag;
+				if (velocity.y < 0)
+					velocity.y = 0;
+			}
+		}
+	}
+	
 	public override function update()
 	{
 		var change:Float, delta:Int;

@@ -12,6 +12,8 @@ import com.haxepunk.utils.Data;
 import com.haxepunk.World;
 import com.haxepunk.Tween;
 import base.Physics;
+import entities.Pickup;
+import entities.Player;
 import flash.display.BitmapData;
 import flash.utils.ByteArray;
 import haxe.xml.Fast;
@@ -316,12 +318,15 @@ class Game extends World
 				case "sheol": add(new entities.enemies.Sheol(x, y, player));
 				
 				// gem panel
-				case "gem": if (!doorOpen()) add(new entities.Gem(x, y));
-				case "door": if (!doorOpen()) add(new entities.Door(x, y));
-				case "panel": add(new entities.GemPanel(x, y, doorOpen()));
+				case "gem": if (!doorOpen()) add(new entities.puzzle.Gem(x, y));
+				case "door": if (!doorOpen()) add(new entities.puzzle.GemDoor(x, y));
+				case "panel": add(new entities.puzzle.GemPanel(x, y, doorOpen()));
+				
+				// keys and doors
+				case "redKey": add(new entities.puzzle.Key(x, y, "red"));
+				case "redDoor": add(new entities.puzzle.LockedDoor(x, y, "red"));
 				
 				// objects
-				case "scroll": add(new entities.Scroll(x, y));
 				case "checkpoint": add(new entities.Checkpoint(x, y));
 				case "vent": add(new entities.ThermalVent(x, y, angle));
 				case "rock": add(new entities.Rock(x, y, obj.name));
@@ -330,7 +335,7 @@ class Game extends World
 				//powerups
 				default:
 					if (!player.hasPickup(obj.name, _level) && obj.name != "player")
-						add(new Powerup(x, y, obj.name, _level));
+						add(new Pickup(x, y, obj.name, _level));
 			}
 		}
 	}
@@ -369,15 +374,19 @@ class Game extends World
 	
 	private function clampCamera()
 	{
-		if (HXP.camera.x < 0)
-			HXP.camera.x = 0;
-		else if (HXP.camera.x > levelWidth - HXP.screen.width)
-			HXP.camera.x = levelWidth - HXP.screen.width;
+		// move camera with player
+		camera.x = player.x - HXP.screen.width / 2;
+		camera.y = player.y - HXP.screen.height / 2;
+		
+		if (camera.x < 0)
+			camera.x = 0;
+		else if (camera.x > levelWidth - HXP.screen.width)
+			camera.x = levelWidth - HXP.screen.width;
 			
-		if (HXP.camera.y < 0)
-			HXP.camera.y = 0;
-		else if (HXP.camera.y > levelHeight - HXP.screen.height)
-			HXP.camera.y = levelHeight - HXP.screen.height;
+		if (camera.y < 0)
+			camera.y = 0;
+		else if (camera.y > levelHeight - HXP.screen.height)
+			camera.y = levelHeight - HXP.screen.height;
 	}
 	
 	public override function update()

@@ -1,4 +1,4 @@
-package entities;
+package entities.puzzle;
 
 import base.Physics;
 import com.haxepunk.HXP;
@@ -21,6 +21,7 @@ class Gem extends Physics
 		type = "gem";
 		_shimmerTime = 0;
 		layer = 24;
+		drag = 4;
 	}
 	
 	private function onAnimEnd()
@@ -36,10 +37,8 @@ class Gem extends Physics
 			_sprite.play("shimmer");
 			_shimmerTime = Math.random() * 2 + 2;
 		}
-		
-		if (onWall || onFloor)
-			velocity.x = velocity.y = 0;
 		super.update();
+		applyDrag(true, true);
 	}
 	
 	private var _shimmerTime:Float;

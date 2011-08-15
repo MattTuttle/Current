@@ -1,4 +1,4 @@
-package entities;
+package entities.puzzle;
 
 import com.haxepunk.graphics.Spritemap;
 import com.haxepunk.HXP;
@@ -22,7 +22,7 @@ class GemPanel extends Entity
 			_sprite.play("closed");
 		
 		setHitbox(64, 64);
-		layer = 25;
+		layer = 60;
 		_gem = null;
 		_offsetX = x + 32;
 		_offsetY = y + 32;
@@ -43,7 +43,7 @@ class GemPanel extends Entity
 				_world.getType("door", doors);
 				for (e in doors)
 				{
-					cast(e, Door).open();
+					cast(e, GemDoor).open();
 				}
 			}
 		}

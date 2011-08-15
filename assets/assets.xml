@@ -101,11 +101,11 @@
 		<bin:binary class="LvlR10Data"       import="assets/levels/temple/room10.oel" />
 		<bin:binary class="LvlR11Data"       import="assets/levels/temple/room11.oel" />
 		<bin:binary class="LvlR12Data"       import="assets/levels/temple/room12.oel" />
-		<bin:binary class="LvlR12Data"       import="assets/levels/temple/room13.oel" />
-		<bin:binary class="LvlR12Data"       import="assets/levels/temple/room14.oel" />
-		<bin:binary class="LvlR12Data"       import="assets/levels/temple/room15.oel" />
-		<bin:binary class="LvlR12Data"       import="assets/levels/temple/room16.oel" />
-		<bin:binary class="LvlR12Data"       import="assets/levels/temple/room19.oel" />
+		<bin:binary class="LvlR13Data"       import="assets/levels/temple/room13.oel" />
+		<bin:binary class="LvlR14Data"       import="assets/levels/temple/room14.oel" />
+		<bin:binary class="LvlR15Data"       import="assets/levels/temple/room15.oel" />
+		<bin:binary class="LvlR16Data"       import="assets/levels/temple/room16.oel" />
+		<bin:binary class="LvlR19Data"       import="assets/levels/temple/room19.oel" />
 		<bin:binary class="LvlBossData"       import="assets/levels/temple/boss.oel" />
 		
 		<bin:binary class="PbjWater" import="assets/shader/water.pbj" />
