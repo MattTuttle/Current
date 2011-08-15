@@ -12,20 +12,6 @@ import com.haxepunk.utils.Data;
 import com.haxepunk.World;
 import com.haxepunk.Tween;
 import base.Physics;
-import entities.Door;
-import entities.enemies.Coral;
-import entities.enemies.Piranha;
-import entities.enemies.Snapper;
-import entities.enemies.Sheol;
-import entities.Checkpoint;
-import entities.enemies.Urchin;
-import entities.Gem;
-import entities.GemPanel;
-import entities.Player;
-import entities.Powerup;
-import entities.Rock;
-import entities.Scroll;
-import entities.ThermalVent;
 import flash.display.BitmapData;
 import flash.utils.ByteArray;
 import haxe.xml.Fast;
@@ -323,23 +309,23 @@ class Game extends World
 			switch (obj.name)
 			{
 				// enemies
-				case "snapper": add(new Snapper(x, y));
-				case "piranha": add(new Piranha(x, y, angle, player));
-				case "coral": add(new Coral(x, y, angle));
-				case "urchin": add(new Urchin(x, y));
-				case "sheol": add(new Sheol(x, y, player));
+				case "snapper": add(new entities.enemies.Snapper(x, y));
+				case "piranha": add(new entities.enemies.Piranha(x, y, angle, player));
+				case "coral": add(new entities.enemies.Coral(x, y, angle));
+				case "urchin": add(new entities.enemies.Urchin(x, y));
+				case "sheol": add(new entities.enemies.Sheol(x, y, player));
 				
 				// gem panel
-				case "gem": if (!doorOpen()) add(new Gem(x, y));
-				case "door": if (!doorOpen()) add(new Door(x, y));
-				case "panel": add(new GemPanel(x, y, doorOpen()));
+				case "gem": if (!doorOpen()) add(new entities.Gem(x, y));
+				case "door": if (!doorOpen()) add(new entities.Door(x, y));
+				case "panel": add(new entities.GemPanel(x, y, doorOpen()));
 				
 				// objects
-				case "scroll": add(new Scroll(x, y));
-				case "checkpoint": add(new Checkpoint(x, y));
-				case "vent": add(new ThermalVent(x, y, angle));
-				case "rock": add(new Rock(x, y, obj.name));
-				case "smallrock": add(new Rock(x, y, obj.name));
+				case "scroll": add(new entities.Scroll(x, y));
+				case "checkpoint": add(new entities.Checkpoint(x, y));
+				case "vent": add(new entities.ThermalVent(x, y, angle));
+				case "rock": add(new entities.Rock(x, y, obj.name));
+				case "smallrock": add(new entities.Rock(x, y, obj.name));
 				
 				//powerups
 				default:
