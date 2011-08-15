@@ -10,7 +10,7 @@
     <coral x="387" y="764" angle="60"/>
     <coral x="416" y="821" angle="90"/>
     <vent x="489" y="1002" angle="30"/>
-    <player x="859" y="1002"/>
+    <player x="849" y="1001"/>
     <smallrock x="637" y="1037"/>
     <smallrock x="785" y="1047"/>
     <rock x="1005" y="389"/>

@@ -3,7 +3,7 @@
   <height>600</height>
   <actors>
     <checkpoint x="380" y="340"/>
-    <player x="380" y="340"/>
+    <player x="527" y="369"/>
   </actors>
   <level>
     <room1 x="0" y="0"/>

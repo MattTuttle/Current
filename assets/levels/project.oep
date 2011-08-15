@@ -37,7 +37,7 @@
 		<folder name="puzzle">
 			<object name="gem" image="../gfx/objects/gem.png" width="35" height="35" imageWidth="35" originX="17" originY="17" limit="1" />
 			<object name="panel" image="../gfx/objects/gempanel.png" width="64" height="64" imageWidth="64" limit="1" />
-			<object name="door" image="../gfx/objects/door.png" width="32" height="64" imageWidth="32" limit="1" />
+			<object name="door" image="../gfx/objects/door.png" width="16" height="64" imageWidth="16" limit="1" />
 		</folder>
 		<folder name="objects">
 			<object name="vent" image="../gfx/objects/thermalvent.png" width="48" height="64" rotatable="true" rotationPrecision="15" originX="24" originY="32" />

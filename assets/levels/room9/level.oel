@@ -67,11 +67,11 @@
     <coral x="888" y="78" angle="-165"/>
     <coral x="921" y="97" angle="-150"/>
     <coral x="959" y="157" angle="-120"/>
-    <snapper x="179" y="583"/>
     <gem x="1008" y="331"/>
     <panel x="198" y="608"/>
-    <door x="64" y="481"/>
+    <door x="81" y="480"/>
     <shoot x="916" y="359"/>
+    <snapper x="180" y="588"/>
   </actors>
   <level>
     <room9 x="0" y="0"/>

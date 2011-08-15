@@ -1,13 +1,8 @@
-<level left="R08" right="R06" top="" bottom="" music="home">
+<level left="R08" right="R06" top="R22" bottom="" music="home">
   <width>800</width>
   <height>800</height>
   <actors>
-    <player x="533" y="467"/>
-    <smallrock x="431" y="87"/>
-    <smallrock x="437" y="57"/>
-    <smallrock x="422" y="30"/>
-    <smallrock x="453" y="33"/>
-    <smallrock x="443" y="11"/>
+    <player x="529" y="465"/>
     <vent x="453" y="507" angle="0"/>
     <checkpoint x="539" y="440"/>
   </actors>
