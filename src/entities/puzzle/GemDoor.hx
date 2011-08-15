@@ -11,13 +11,13 @@ class GemDoor extends Entity
 	public function new(x:Float, y:Float)
 	{
 		super(x, y);
-		_sprite = new Spritemap(GfxDoor, 32, 64, onAnimEnd);
+		_sprite = new Spritemap(GfxDoor, 16, 64, onAnimEnd);
 		_sprite.add("closed", [0]);
 		_sprite.add("open", [1, 2, 3], 12);
 		_sprite.play("closed");
 		graphic = _sprite;
 		type = "door";
-		setHitbox(16, 64, -8);
+		setHitbox(16, 64);
 		layer = 30;
 	}
 	
