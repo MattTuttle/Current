@@ -1,6 +1,10 @@
 <level left="R11" right="" top="" bottom="" music="home">
   <width>640</width>
   <height>608</height>
+  <background set="tiles">
+    <tile tx="32" ty="0" x="384" y="576"/>
+    <tile tx="32" ty="0" x="416" y="576"/>
+  </background>
   <world set="tiles">
     <tile tx="32" ty="0" x="0" y="544"/>
     <tile tx="32" ty="0" x="0" y="512"/>
@@ -266,9 +270,9 @@
     <tile tx="0" ty="0" x="544" y="576"/>
     <tile tx="0" ty="0" x="576" y="576"/>
     <tile tx="0" ty="0" x="608" y="576"/>
-    <rect tx="0" ty="0" x="32" y="0" w="608" h="192"/>
     <tile tx="96" ty="160" x="416" y="576"/>
     <tile tx="64" ty="160" x="384" y="576"/>
+    <rect tx="0" ty="0" x="32" y="0" w="608" h="192"/>
   </world>
   <actors>
     <checkpoint x="486" y="471"/>

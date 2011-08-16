@@ -38,6 +38,18 @@
 			<object name="gem" image="../gfx/objects/gem.png" width="35" height="35" imageWidth="35" originX="17" originY="17" limit="1" />
 			<object name="panel" image="../gfx/objects/gempanel.png" width="64" height="64" imageWidth="64" limit="1" />
 			<object name="door" image="../gfx/objects/door.png" width="16" height="64" imageWidth="16" limit="1" />
+			<object name="bossKey" image="../gfx/objects/boss_key.png" width="32" height="32" imageWidth="32" limit="1" />
+			<folder name="keys">
+				<object name="yellowKey" image="../gfx/objects/key.png" width="28" height="15" imageHeight="15" limit="1" />
+				<object name="redKey" image="../gfx/objects/key.png" width="28" height="15" imageHeight="15" imageOffsetY="15" limit="1" />
+				<object name="blueKey" image="../gfx/objects/key.png" width="28" height="15" imageHeight="15" imageOffsetY="30" limit="1" />
+				<object name="greenKey" image="../gfx/objects/key.png" width="28" height="15" imageHeight="15" imageOffsetY="45" limit="1" />
+				<object name="coloredDoor" image="../gfx/objects/colored_door.png" width="16" height="64" imageWidth="16">
+					<values>
+						<string name="color" />
+					</values>
+				</object>
+			</folder>
 		</folder>
 		<folder name="objects">
 			<object name="vent" image="../gfx/objects/thermalvent.png" width="48" height="64" rotatable="true" rotationPrecision="15" originX="24" originY="32" />

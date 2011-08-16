@@ -34,7 +34,9 @@ class Checkpoint extends Interactable
 		_sprite.play("glow");
 		new Sfx(new SfxSave()).play(0.4); // play sfx
 		cast(HXP.world, Game).save();
-		HXP.world.add(new Announce(HXP.screen.width / 2, 150, "Game Saved", true));
+		var a:Announce = new Announce(HXP.screen.width / 2, 150, "Game Saved");
+		a.centered = true;
+		HXP.world.add(a);
 	}
 	
 	private var _saved:Bool;

@@ -11,8 +11,22 @@ class Pickup extends Interactable
 	public function new(x:Float, y:Float, name:String, room:String) 
 	{
 		super(x, y);
-		graphic = new Image(GfxScroll);
-		setHitbox(32, 32);
+		var _image:Image;
+		// key size
+		HXP.rect.x = HXP.rect.y = 0;
+		HXP.rect.width = 28;
+		HXP.rect.height = 15;
+		switch(name)
+		{
+			case "redKey": HXP.rect.y = 15; _image = new Image(GfxKeys, HXP.rect);
+			case "blueKey": HXP.rect.y = 30; _image = new Image(GfxKeys, HXP.rect);
+			case "greenKey": HXP.rect.y = 45; _image = new Image(GfxKeys, HXP.rect);
+			case "yellowKey": _image = new Image(GfxKeys, HXP.rect);
+			case "bossKey": _image = new Image(GfxBossKey);
+			default: _image = new Image(GfxScroll);
+		}
+		graphic = _image;
+		setHitbox(_image.width, _image.height);
 		_name = name;
 		layer = 5;
 		_floatDir = 0.1;
@@ -31,8 +45,25 @@ class Pickup extends Interactable
 	public override function activate(player:Player)
 	{
 		player.setPickup(_name, _room);
-		var text:String = "You got the ability: " + _name;
-		HXP.world.add(new Announce(HXP.screen.width / 2, 150, text, true));
+		var text:String = "";
+		switch (_name)
+		{
+			case "grab": text = "Grab ability gained.\n\nPress SHIFT to pickup rocks and gems.";
+			case "toss": text = "Toss ability gained.\n\nClick and drag rocks to toss them.";
+			case "shoot": text = "Shoot ability gained.\n\nClick anywhere to shoot bubbles.";
+			case "layer": text = "Gained a bubble layer!\n\nYou can now collect more bubbles.";
+			case "redKey": text = "You got the red key!\n\nUse it to unlock red doors.";
+			case "blueKey": text = "You got the blue key!\n\nUse it to unlock blue doors.";
+			case "greenKey": text = "You got the green key!\n\nUse it to unlock green doors.";
+			case "yellowKey": text = "You got the yellow key!\n\nUse it to unlock yellow doors.";
+			case "bossKey": text = "You got a boss key!";
+		}
+		if (text != "")
+		{
+			var a:Announce = new Announce(HXP.screen.width / 2, 150, text);
+			a.centered = true;
+			HXP.world.add(a);
+		}
 		HXP.world.remove(this);
 	}
 	

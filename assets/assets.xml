@@ -25,6 +25,9 @@
 		<img:image import="assets/gfx/objects/gempanel.png" class="GfxGemPanel" />
 		<img:image import="assets/gfx/objects/gem.png" class="GfxGem" />
 		<img:image import="assets/gfx/objects/door.png" class="GfxDoor" />
+		<img:image import="assets/gfx/objects/colored_door.png" class="GfxColoredDoor" />
+		<img:image import="assets/gfx/objects/key.png" class="GfxKeys" />
+		<img:image import="assets/gfx/objects/boss_key.png" class="GfxBossKey" />
 		<!-- Enemies -->
 		<img:image import="assets/gfx/sheol_boss.png" class="GfxSheol" />
 		<img:image import="assets/gfx/redsnapper.png" class="GfxSnapper" />
@@ -106,9 +109,9 @@
 		<bin:binary class="LvlR15Data"       import="assets/levels/temple/room15.oel" />
 		<bin:binary class="LvlR16Data"       import="assets/levels/temple/room16.oel" />
 		<bin:binary class="LvlR19Data"       import="assets/levels/temple/room19.oel" />
+		<bin:binary class="LvlR19Data"       import="assets/levels/temple/room20.oel" />
+		<bin:binary class="LvlR19Data"       import="assets/levels/temple/room21.oel" />
 		<bin:binary class="LvlBossData"       import="assets/levels/temple/boss.oel" />
-		
-		<bin:binary class="PbjWater" import="assets/shader/water.pbj" />
 		
 		<!-- Sound effects -->
 		<snd:sound import="assets/sfx/pop.mp3" class="SfxBubblePop" />

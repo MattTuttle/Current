@@ -9,12 +9,13 @@ import flash.geom.Matrix;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 import flash.text.TextFormat;
+import flash.text.TextFormatAlign;
 import flash.text.TextLineMetrics;
 
 class Announce extends Entity
 {
 
-	public function new(x:Float, y:Float, text:String, centered:Bool = false)
+	public function new(x:Float, y:Float, text:String)
 	{
 		super(x, y);
 		
@@ -34,11 +35,24 @@ class Announce extends Entity
 		_angle = 0;
 		originX = originY = 0;
 		_waitTime = 0;
-		_displaySpeed = 1 / text.length;
-		_displayHold = _displaySpeed * 10;
 		_matrix = HXP.matrix;
-		_centered = centered;
 		layer = -500;
+		
+		_displaySpeed = 1 / text.length;
+		_displayHold = (1 - _displaySpeed) * 5;
+	}
+	
+	public var centered(getCentered, setCentered):Bool;
+	private function getCentered():Bool { return _centered; }
+	private function setCentered(value:Bool):Bool
+	{
+		_centered = value;
+		if (_centered)
+			_format.align = TextFormatAlign.CENTER;
+		else
+			_format.align = TextFormatAlign.LEFT;
+		_field.setTextFormat(_format);
+		return value;
 	}
 	
 	public var color(getColor, setColor):UInt;
@@ -83,6 +97,7 @@ class Announce extends Entity
 	public override function render()
 	{
 		_matrix.identity();
+//		_matrix.translate(_camera.x, _camera.y);
 		_matrix.translate(x - originX, y - originY);
 		HXP.buffer.draw(_drawable, _matrix);
 		super.render();

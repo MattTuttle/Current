@@ -12,6 +12,8 @@ import com.haxepunk.utils.Input;
 import com.haxepunk.utils.Key;
 import com.haxepunk.utils.Data;
 import flash.geom.Point;
+import haxe.Serializer;
+import haxe.Unserializer;
 import worlds.Game;
 
 enum Gesture
@@ -66,28 +68,17 @@ class Player extends Physics
 		// sets max bubbles as well
 		maxLayer = Data.readInt("maxLayer", 1);
 		// load pickups
-		var numPickups:Int = Data.readInt("numPickups", 0);
-		_pickups = new Hash<PickupType>();
-		for (i in 0 ... numPickups)
-		{
-			var key:String = Data.readString("pickup" + i);
-			_pickups.set(key, { number:Data.readInt(key + "number", 1), rooms:Data.read(key + "rooms", new Array<String>()) });
-		}
+		var p = Data.read("pickups");
+		if (p != null)
+			_pickups = Unserializer.run(p);
+		else
+			_pickups = new Hash<PickupType>();
 	}
 	
 	public function saveData()
 	{
 		Data.write("maxLayer", maxLayer);
-		// save pickups
-		var i:Int = 0;
-		for (key in _pickups.keys())
-		{
-			Data.write("pickup" + i, key);
-			Data.write(key + "number", _pickups.get(key).number);
-			Data.write(key + "rooms", _pickups.get(key).rooms);
-			i += 1;
-		}
-		Data.write("numPickups", i);
+		Data.write("pickups", Serializer.run(_pickups));
 	}
 	
 	public function hasPickup(pickup:String, ?level:String):Bool
@@ -140,6 +131,36 @@ class Player extends Physics
 		}
 		
 		_pickups.set(pickup, p);
+	}
+	
+	public function switchRoom(direction:String)
+	{
+		switch (direction)
+		{
+			case "left":
+				x = Game.levelWidth - 8;
+			case "right":
+				x = 8;
+			case "top":
+				y = Game.levelHeight - 8;
+			case "bottom":
+				y = 8;
+		}
+		// check if we're in a wall
+		if (collideSolid(x, y))
+		{
+			if (direction == "top" || direction == "bottom")
+			{
+				findClosestOpeningHoriz();
+			}
+			else
+			{
+				findClosestOpeningVert();
+			}
+		}
+		frozen = false;
+		velocity.x = velocity.y = 0;
+		resetBubbles();
 	}
 	
 	/**

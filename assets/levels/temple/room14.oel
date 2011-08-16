@@ -837,7 +837,7 @@
     <tile tx="0" ty="0" x="576" y="64"/>
   </world>
   <actors>
-    <door x="16" y="96"/>
+    <door x="4" y="97"/>
     <panel x="661" y="194"/>
     <gem x="208" y="844"/>
     <snapper x="275" y="670"/>
@@ -852,7 +852,6 @@
     <snapper x="484" y="760"/>
     <checkpoint x="648" y="857"/>
     <vent x="606" y="953" angle="0"/>
-    <player x="636" y="893"/>
   </actors>
   <foreground set="tiles">
     <tile tx="256" ty="0" x="192" y="896"/>

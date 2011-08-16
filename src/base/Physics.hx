@@ -137,6 +137,79 @@ class Physics extends Being
 		super.update();
 	}
 	
+	public function collideSolid(x:Float, y:Float):Bool
+	{
+		return (collideTypes(_solidTypes, x, y) != null);
+	}
+	
+	private function findClosestOpeningHoriz(step:Int = 8, segments:Int = 10)
+	{
+		var ox:Float = x; // opening coord
+		var tx:Float; // temp coords
+		var max:Float = x + step * segments;
+		var min:Float = x - step * segments;
+		var len:Float = 0;
+		
+		tx = x;
+		while (tx < max)
+		{
+			if (collideTypes(_solidTypes, x, y) == null)
+			{
+				ox = tx;
+				len = ox - x;
+				break;
+			}
+			tx += step;
+		}
+		
+		tx = x;
+		while (tx > min)
+		{
+			if (collideTypes(_solidTypes, x, y) == null && x - tx < len)
+			{
+				ox = tx;
+				break;
+			}
+			tx -= step;
+		}
+		
+		x = ox;
+	}
+	
+	private function findClosestOpeningVert(step:Int = 8, segments:Int = 10)
+	{
+		var oy:Float = y; // opening coord
+		var ty:Float; // temp coords
+		var max:Float = y + step * segments;
+		var min:Float = y - step * segments;
+		var len:Float = 0;
+		
+		ty = y;
+		while (ty < max)
+		{
+			if (collideTypes(_solidTypes, x, y) == null)
+			{
+				oy = ty;
+				len = oy - y;
+				break;
+			}
+			ty += step;
+		}
+		
+		ty = y;
+		while (ty > min)
+		{
+			if (collideTypes(_solidTypes, x, y) == null && y - ty < len)
+			{
+				oy = ty;
+				break;
+			}
+			ty -= step;
+		}
+		
+		y = oy;
+	}
+	
 	public function toss(x:Float, y:Float)
 	{
 		velocity.x = x * 4;

@@ -75,6 +75,7 @@ class Game extends World
 	public function restart()
 	{
 		player = null;
+		_doors = Data.read("doors", new Array<String>());
 		_nextLevel = Data.readString("level", "R01");
 		_direction = "none"; // fake direction
 		_fadeTween.tween(0, 1, 1);
@@ -321,10 +322,7 @@ class Game extends World
 				case "gem": if (!doorOpen()) add(new entities.puzzle.Gem(x, y));
 				case "door": if (!doorOpen()) add(new entities.puzzle.GemDoor(x, y));
 				case "panel": add(new entities.puzzle.GemPanel(x, y, doorOpen()));
-				
-				// keys and doors
-				case "redKey": add(new entities.puzzle.Key(x, y, "red"));
-				case "redDoor": add(new entities.puzzle.LockedDoor(x, y, "red"));
+				case "coloredDoor": add(new entities.puzzle.LockedDoor(x, y, obj.att.color, player));
 				
 				// objects
 				case "checkpoint": add(new entities.Checkpoint(x, y));
@@ -332,9 +330,11 @@ class Game extends World
 				case "rock": add(new entities.Rock(x, y, obj.name));
 				case "smallrock": add(new entities.Rock(x, y, obj.name));
 				
+				case "player": // do nothing
+				
 				//powerups
 				default:
-					if (!player.hasPickup(obj.name, _level) && obj.name != "player")
+					if (!player.hasPickup(obj.name, _level))
 						add(new Pickup(x, y, obj.name, _level));
 			}
 		}
@@ -356,20 +356,7 @@ class Game extends World
 	private function loadNextLevel()
 	{
 		loadLevel(_nextLevel);
-		switch (_direction)
-		{
-			case "left":
-				player.x = levelWidth - 8;
-			case "right":
-				player.x = 8;
-			case "top":
-				player.y = levelHeight - 8;
-			case "bottom":
-				player.y = 8;
-		}
-		player.frozen = false;
-		player.velocity.x = player.velocity.y = 0;
-		player.resetBubbles();
+		player.switchRoom(_direction);
 	}
 	
 	private function clampCamera()
