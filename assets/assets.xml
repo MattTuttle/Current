@@ -20,6 +20,7 @@
 		<img:image import="assets/gfx/objects/MovableRock_small.png" class="GfxSmallRock" />
 		<img:image import="assets/gfx/objects/ThermalVent.png" class="GfxThermalVent" />
 		<img:image import="assets/gfx/objects/checkpoint_crystal.png" class="GfxCheckpoint" />
+		<img:image import="assets/gfx/objects/breakable_wall.png" class="GfxBreakableWall" />
 		<img:image import="assets/gfx/objects/scroll.png" class="GfxScroll" />
 		<!-- Gem/Door -->
 		<img:image import="assets/gfx/objects/gempanel.png" class="GfxGemPanel" />
@@ -30,13 +31,14 @@
 		<img:image import="assets/gfx/objects/boss_key.png" class="GfxBossKey" />
 		<!-- Enemies -->
 		<img:image import="assets/gfx/sheol_boss.png" class="GfxSheol" />
-		<img:image import="assets/gfx/redsnapper.png" class="GfxSnapper" />
+		<img:image import="assets/gfx/new_fish_anim.png" class="GfxSnapper" />
 		<img:image import="assets/gfx/piranha.png" class="GfxPiranha" />
 		<img:image import="assets/gfx/SpikeCoral.png" class="GfxSpikeCoral" />
 		<img:image import="assets/gfx/urchin.png" class="GfxUrchin" />
 		
 		<img:image class="GfxParallax" import="assets/gfx/Parallax.png" />
 		<img:image class="GfxFarParallax" import="assets/gfx/FarParallax.png" />
+		<img:image class="GfxVignette" import="assets/gfx/current_vignette.png" />
 		
 		<img:image class="GfxTileset"   import="assets/levels/tileset.png" />
 		
@@ -109,8 +111,8 @@
 		<bin:binary class="LvlR15Data"       import="assets/levels/temple/room15.oel" />
 		<bin:binary class="LvlR16Data"       import="assets/levels/temple/room16.oel" />
 		<bin:binary class="LvlR19Data"       import="assets/levels/temple/room19.oel" />
-		<bin:binary class="LvlR19Data"       import="assets/levels/temple/room20.oel" />
-		<bin:binary class="LvlR19Data"       import="assets/levels/temple/room21.oel" />
+		<bin:binary class="LvlR20Data"       import="assets/levels/temple/room20.oel" />
+		<bin:binary class="LvlR21Data"       import="assets/levels/temple/room21.oel" />
 		<bin:binary class="LvlBossData"       import="assets/levels/temple/boss.oel" />
 		
 		<!-- Sound effects -->

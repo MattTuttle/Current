@@ -113,7 +113,7 @@ class Bubble extends Being
 				if (_life < 0) HXP.world.remove(this);
 				
 				// hit map without an owner, POP!
-				if (collide("map", x, y) != null || enemy != null) kill();
+				if (collideTypes(_hitTypes, x, y) != null || enemy != null) kill();
 			case OWNED:
 				_bubble.alpha = 1;
 				_point.x = targetX - x;
@@ -142,12 +142,14 @@ class Bubble extends Being
 					hurt(enemy.attack);
 				}
 				moveBy(targetX, targetY);
+				if (collideTypes(_hitTypes, x, y) != null) kill();
 		}
 		
 		super.update();
 	}
 	
 	private static inline var _enemyTypes:Array<String> = ["fish", "coral"];
+	private static inline var _hitTypes:Array<String> = ["wall", "map", "door"];
 	
 	private var _state:BubbleState;
 	private var _owner:Dynamic;

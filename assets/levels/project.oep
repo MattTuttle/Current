@@ -10,6 +10,7 @@
 		<maxHeight>3000</maxHeight>
 	</settings>
 	<values>
+		<boolean name="vignette" />
 		<string name="left" maxChars="6" />
 		<string name="right" maxChars="6" />
 		<string name="top" maxChars="6" />
@@ -22,7 +23,7 @@
 	<objects>
 		<object name="player" image="../gfx/bubble.png" width="16" height="16" originX="8" originY="8" limit="1" />
 		<folder name="enemies">
-			<object name="snapper" image="../gfx/redsnapper.png" width="59" height="32" imageWidth="59" imageOffsetX="59" />
+			<object name="snapper" image="../gfx/new_fish_anim.png" width="59" height="32" imageWidth="59" imageOffsetX="59" />
 			<object name="piranha" image="../gfx/piranha.png" width="32" height="32" imageWidth="32" imageOffsetX="32" originX="16" originY="16" rotatable="true" />
 			<object name="coral" image="../gfx/SpikeCoral.png" width="64" height="64" rotatable="true" rotationPrecision="15" originX="32" originY="32" />
 			<object name="urchin" image="../gfx/urchin.png" width="48" height="48" originX="24" originY="24" />
@@ -54,6 +55,7 @@
 		<folder name="objects">
 			<object name="vent" image="../gfx/objects/thermalvent.png" width="48" height="64" rotatable="true" rotationPrecision="15" originX="24" originY="32" />
 			<object name="checkpoint" image="../gfx/objects/checkpoint_crystal.png" width="64" height="128" imageWidth="64" limit="1" />
+			<object name="breakableWall" image="../gfx/objects/breakable_wall.png" width="32" height="64" />
 			<object name="rock" image="../gfx/objects/MovableRock.png" width="48" height="39" originX="24" originY="19" />
 			<object name="smallrock" image="../gfx/objects/MovableRock_small.png" width="26" height="23" originX="13" originY="11" />
 		</folder>

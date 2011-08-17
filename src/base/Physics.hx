@@ -216,7 +216,7 @@ class Physics extends Being
 		velocity.y = y * 20;
 	}
 	
-	private static inline var _solidTypes:Array<String> = ["map", "rock", "door"];
+	private static inline var _solidTypes:Array<String> = ["map", "rock", "door", "wall"];
 	private var onFloor:Bool;
 	private var onWall:Bool;
 	

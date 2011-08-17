@@ -202,6 +202,16 @@ class Game extends World
 			var xml:Fast = new Fast(Xml.parse(data.toString()));
 			xml = xml.node.level;
 			
+			_vignette = false;
+			HXP.screen.color = 0x017DD7;
+			if (xml.has.vignette && xml.att.vignette == "true")
+			{
+				_vignette = true;
+				HXP.screen.color = 0x000000;
+				var image:Image = addImage("Vignette", -150);
+				image.scrollX = image.scrollY = 0;
+			}
+			
 			if (xml.has.left)   _exits.set("left", xml.att.left);
 			if (xml.has.right)  _exits.set("right", xml.att.right);
 			if (xml.has.top)    _exits.set("top", xml.att.top);
@@ -327,6 +337,7 @@ class Game extends World
 				// objects
 				case "checkpoint": add(new entities.Checkpoint(x, y));
 				case "vent": add(new entities.ThermalVent(x, y, angle));
+				case "breakableWall": add(new entities.BreakableWall(x, y));
 				case "rock": add(new entities.Rock(x, y, obj.name));
 				case "smallrock": add(new entities.Rock(x, y, obj.name));
 				
@@ -368,15 +379,19 @@ class Game extends World
 			camera.y = player.y - HXP.screen.height / 2;
 		}
 		
-		if (camera.x < 0)
-			camera.x = 0;
-		else if (camera.x > levelWidth - HXP.screen.width)
-			camera.x = levelWidth - HXP.screen.width;
-			
-		if (camera.y < 0)
-			camera.y = 0;
-		else if (camera.y > levelHeight - HXP.screen.height)
-			camera.y = levelHeight - HXP.screen.height;
+		// Vignette needs to follow the player exactly
+		if (!_vignette)
+		{
+			if (camera.x < 0)
+				camera.x = 0;
+			else if (camera.x > levelWidth - HXP.screen.width)
+				camera.x = levelWidth - HXP.screen.width;
+				
+			if (camera.y < 0)
+				camera.y = 0;
+			else if (camera.y > levelHeight - HXP.screen.height)
+				camera.y = levelHeight - HXP.screen.height;
+		}
 	}
 	
 	public override function update()
@@ -407,6 +422,7 @@ class Game extends World
 	// lighting
 	private var _alphaTween:NumTween;
 	private var _lighting:Image;
+	private var _vignette:Bool;
 	
 	// fade to black
 	private var _fadeTween:NumTween;

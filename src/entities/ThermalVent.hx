@@ -21,7 +21,7 @@ class ThermalVent extends Entity
 	private function spawnBubble()
 	{
 		HXP.world.add(new Bubble(x + Math.random() * 16, y, 2));
-		_spawnTime = Math.random();
+		_spawnTime = Math.random() * 0.5;
 	}
 	
 	public override function update()

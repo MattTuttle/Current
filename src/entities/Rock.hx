@@ -1,5 +1,6 @@
 package entities;
 
+import base.Being;
 import base.Physics;
 import com.haxepunk.HXP;
 import com.haxepunk.Entity;
@@ -36,6 +37,16 @@ class Rock extends Physics
 	public override function update()
 	{
 		velocity.y += 4; // gravity
+		
+		var hit:Entity = collideTypes(_hitTypes, x + HXP.sign(velocity.x) * 3, y + HXP.sign(velocity.y) * 3);
+		if (hit != null)
+		{
+			if (Std.is(hit, Being))
+				cast(hit, Being).hurt(attack);
+			else
+				HXP.world.remove(hit);
+		}
+		
 		super.update();
 		
 		if (onFloor)
@@ -46,17 +57,9 @@ class Rock extends Physics
 		{
 			velocity.y = 0;
 		}
-		else
-		{
-			var enemy:Entity = collideTypes(_hitTypes, x, y);
-			if (enemy != null)
-			{
-				HXP.world.remove(enemy);
-			}
-		}
 	}
 	
-	private static inline var _hitTypes:Array<String> = ["fish", "sheol"];
+	private static inline var _hitTypes:Array<String> = ["fish", "sheol", "wall"];
 	private var _image:Image;
 	
 }

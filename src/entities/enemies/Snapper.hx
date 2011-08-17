@@ -15,7 +15,7 @@ class Snapper extends Being
 		super(x, y);
 		
 		_fish = new Spritemap(GfxSnapper, 59, 32);
-		_fish.add("swim", [0, 1, 2, 1], 4);
+		_fish.add("swim", [0, 1, 2, 3, 4, 5], 6);
 		_fish.play("swim");
 		graphic = _fish;
 		
