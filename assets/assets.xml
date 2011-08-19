@@ -110,10 +110,12 @@
 		<bin:binary class="LvlR14Data"       import="assets/levels/temple/room14.oel" />
 		<bin:binary class="LvlR15Data"       import="assets/levels/temple/room15.oel" />
 		<bin:binary class="LvlR16Data"       import="assets/levels/temple/room16.oel" />
+		<bin:binary class="LvlR17Data"       import="assets/levels/temple/room17.oel" />
 		<bin:binary class="LvlR19Data"       import="assets/levels/temple/room19.oel" />
 		<bin:binary class="LvlR20Data"       import="assets/levels/temple/room20.oel" />
 		<bin:binary class="LvlR21Data"       import="assets/levels/temple/room21.oel" />
-		<bin:binary class="LvlBossData"       import="assets/levels/temple/boss.oel" />
+		<bin:binary class="LvlR23Data"       import="assets/levels/temple/room23.oel" />
+		<bin:binary class="LvlR18Data"       import="assets/levels/temple/boss.oel" />
 		
 		<!-- Sound effects -->
 		<snd:sound import="assets/sfx/pop.mp3" class="SfxBubblePop" />

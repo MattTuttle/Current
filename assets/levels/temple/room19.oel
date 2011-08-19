@@ -1,4 +1,4 @@
-<level left="R20" right="R21" top="" bottom="R16" music="home">
+<level vignette="false" left="R20" right="R21" top="" bottom="R16" music="home">
   <width>800</width>
   <height>2080</height>
   <background set="tiles">
@@ -1696,13 +1696,13 @@
     <urchin x="516" y="897"/>
     <urchin x="517" y="749"/>
     <urchin x="513" y="248"/>
-    <snapper x="554" y="817"/>
+    <snapper x="544" y="818"/>
     <snapper x="432" y="976"/>
     <snapper x="420" y="666"/>
     <urchin x="512" y="610"/>
-    <piranha x="434" y="400" angle="0"/>
-    <piranha x="438" y="493" angle="0"/>
-    <piranha x="584" y="400" angle="0"/>
+    <piranha x="439" y="399" angle="0"/>
+    <piranha x="437" y="497" angle="0"/>
+    <piranha x="585" y="401" angle="0"/>
     <piranha x="589" y="496" angle="0"/>
     <gem x="720" y="1870"/>
     <panel x="60" y="33"/>

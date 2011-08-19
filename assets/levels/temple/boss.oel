@@ -1,30 +1,42 @@
-<level left="" right="R09" top="" bottom="" music="boss">
+<level vignette="false" left="" right="R09" top="" bottom="" music="boss">
   <width>1024</width>
-  <height>640</height>
+  <height>800</height>
   <background set="tiles">
-    <rect tx="32" ty="0" x="736" y="384" w="288" h="128"/>
-    <rect tx="32" ty="0" x="64" y="64" w="672" h="480"/>
+    <rect tx="128" ty="0" x="64" y="64" w="672" h="32"/>
+    <rect tx="32" ty="0" x="64" y="96" w="672" h="608"/>
   </background>
   <world set="tiles">
-    <tile tx="0" ty="0" x="1024" y="608"/>
-    <tile tx="0" ty="0" x="1024" y="64"/>
-    <rect tx="0" ty="0" x="736" y="0" w="288" h="384"/>
-    <rect tx="0" ty="0" x="736" y="512" w="288" h="32"/>
-    <rect tx="0" ty="0" x="0" y="544" w="1024" h="96"/>
-    <rect tx="0" ty="0" x="0" y="0" w="736" h="64"/>
-    <rect tx="0" ty="0" x="0" y="64" w="64" h="480"/>
+    <rect tx="0" ty="0" x="768" y="544" w="256" h="256"/>
+    <rect tx="192" ty="128" x="736" y="544" w="32" h="32"/>
+    <rect tx="0" ty="0" x="736" y="576" w="32" h="224"/>
+    <rect tx="0" ty="0" x="768" y="0" w="256" h="480"/>
+    <rect tx="192" ty="160" x="736" y="448" w="32" h="32"/>
+    <rect tx="0" ty="0" x="0" y="0" w="768" h="64"/>
+    <rect tx="0" ty="0" x="736" y="64" w="32" h="288"/>
+    <rect tx="0" ty="0" x="736" y="416" w="32" h="32"/>
+    <rect tx="0" ty="0" x="0" y="288" w="96" h="416"/>
   </world>
   <actors>
-    <vent x="616" y="519" angle="0"/>
-    <vent x="125" y="521" angle="0"/>
-    <player x="360" y="500"/>
-    <sheol x="204" y="158"/>
+    <vent x="642" y="684" angle="0"/>
+    <vent x="131" y="684" angle="0"/>
+    <player x="846" y="511"/>
+    <sheol x="230" y="189"/>
+    <breakableWall x="64" y="224"/>
+    <breakableWall x="736" y="352"/>
   </actors>
   <walls>
     <rect x="0" y="0" w="1024" h="64"/>
-    <rect x="0" y="64" w="64" h="576"/>
-    <rect x="64" y="544" w="960" h="96"/>
-    <rect x="736" y="64" w="288" h="320"/>
-    <rect x="736" y="512" w="288" h="32"/>
+    <rect x="0" y="64" w="96" h="160"/>
+    <rect x="0" y="224" w="64" h="576"/>
+    <rect x="64" y="288" w="32" h="512"/>
+    <rect x="96" y="704" w="928" h="96"/>
+    <rect x="736" y="64" w="288" h="288"/>
+    <rect x="736" y="416" w="288" h="48"/>
+    <rect x="736" y="568" w="288" h="136"/>
+    <rect x="744" y="464" w="280" h="8"/>
+    <rect x="744" y="552" w="280" h="16"/>
+    <rect x="752" y="472" w="272" h="8"/>
+    <rect x="760" y="544" w="264" h="8"/>
+    <rect x="768" y="352" w="256" h="64"/>
   </walls>
 </level>

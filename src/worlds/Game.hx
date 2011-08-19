@@ -246,7 +246,7 @@ class Game extends World
 		if (music != null && _currentMusic != id)
 		{
 			musicPlayer.stop();
-			musicPlayer.loadSong(music);
+//			musicPlayer.loadSong(music);
 			_currentMusic = id;
 		}
 	}
@@ -332,7 +332,11 @@ class Game extends World
 				case "gem": if (!doorOpen()) add(new entities.puzzle.Gem(x, y));
 				case "door": if (!doorOpen()) add(new entities.puzzle.GemDoor(x, y));
 				case "panel": add(new entities.puzzle.GemPanel(x, y, doorOpen()));
-				case "coloredDoor": add(new entities.puzzle.LockedDoor(x, y, obj.att.color, player));
+				case "coloredDoor": 
+					if (obj.has.color)
+						add(new entities.puzzle.LockedDoor(x, y, obj.att.color, player));
+					else
+						trace("door needs a color");
 				
 				// objects
 				case "checkpoint": add(new entities.Checkpoint(x, y));

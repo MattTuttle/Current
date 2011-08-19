@@ -1,4 +1,4 @@
-<level left="" right="R19" top="" bottom="" music="home">
+<level vignette="false" left="" right="R19" top="" bottom="" music="home">
   <width>1024</width>
   <height>2080</height>
   <background set="tiles">
@@ -40,7 +40,6 @@
     <tile tx="32" ty="0" x="128" y="1984"/>
     <tile tx="32" ty="0" x="160" y="1984"/>
     <tile tx="32" ty="0" x="192" y="1984"/>
-    <tile tx="32" ty="0" x="224" y="1984"/>
     <tile tx="32" ty="0" x="256" y="1984"/>
     <tile tx="32" ty="0" x="32" y="1888"/>
     <tile tx="32" ty="0" x="64" y="1888"/>
@@ -278,6 +277,7 @@
     <tile tx="128" ty="0" x="576" y="1728"/>
     <tile tx="288" ty="160" x="928" y="1920"/>
     <tile tx="128" ty="0" x="992" y="1984"/>
+    <tile tx="32" ty="0" x="224" y="1984"/>
   </background>
   <world set="tiles">
     <tile tx="0" ty="0" x="992" y="2048"/>
@@ -645,7 +645,7 @@
   <actors>
     <layer x="128" y="1851"/>
     <piranha x="61" y="1932" angle="0"/>
-    <piranha x="228" y="1995" angle="0"/>
+    <piranha x="239" y="2009" angle="0"/>
     <coral x="655" y="1810" angle="-135"/>
     <coral x="591" y="1746" angle="-135"/>
     <coral x="880" y="1874" angle="-150"/>
