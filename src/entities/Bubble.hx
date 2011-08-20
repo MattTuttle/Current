@@ -51,10 +51,8 @@ class Bubble extends Being
 			if (Reflect.hasField(_owner, "removeBubble"))
 				_owner.removeBubble(this);
 		}
-		if (onCamera)
-		{
+		if (_state == OWNED || _state == SHOOT)
 			new Sfx(new SfxBubblePop()).play();
-		}
 		HXP.world.remove(this);
 		super.kill();
 	}

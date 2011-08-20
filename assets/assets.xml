@@ -126,6 +126,7 @@
 		<!-- Sound effects -->
 		<snd:sound import="assets/sfx/pop.mp3" class="SfxBubblePop" />
 		<snd:sound import="assets/sfx/save.mp3" class="SfxSave" />
+		<snd:sound import="assets/sfx/powerup.mp3" class="SfxPowerup" />
 		
 		<!-- Music -->
 		<bin:binary import="assets/music/boss.xm" class="ModBoss" />

@@ -3,6 +3,7 @@ package entities;
 import base.Interactable;
 import com.haxepunk.HXP;
 import com.haxepunk.graphics.Image;
+import com.haxepunk.Sfx;
 import ui.Announce;
 
 class Pickup extends Interactable
@@ -64,6 +65,8 @@ class Pickup extends Interactable
 			a.centered = true;
 			HXP.world.add(a);
 		}
+		var sfx:Sfx = new Sfx(new SfxPowerup());
+		sfx.play(0.9);
 		HXP.world.remove(this);
 	}
 	
