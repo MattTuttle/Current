@@ -12,6 +12,12 @@
 		<font:ttf import="assets/fonts/bubblesstandard.ttf" name="FontBubble" />
 	</shx:frame>
 	<shx:frame>
+		<!-- Menu -->
+		<img:image import="assets/gfx/menu/about.png" class="GfxMenuAbout" />
+		<img:image import="assets/gfx/menu/new_game.png" class="GfxMenuNewGame" />
+		<img:image import="assets/gfx/menu/continue.png" class="GfxMenuContinue" />
+		<img:image import="assets/gfx/menu/logo.png" class="GfxMenuLogo" />
+		<img:image import="assets/gfx/menu/backdrop.png" class="GfxMenuBackdrop" />
 		<!-- Sprites -->
 		<img:image import="assets/gfx/bubble.png" class="GfxBubble" />
 		<img:image import="assets/gfx/bubble_small.png" class="GfxSmallBubble" />
@@ -123,9 +129,9 @@
 		
 		<!-- Music -->
 		<bin:binary import="assets/music/boss.xm" class="ModBoss" />
-		<bin:binary import="assets/music/city.xm" class="ModHome" />
+		<bin:binary import="assets/music/home.xm" class="ModHome" />
 		<bin:binary import="assets/music/heartbeat.xm" class="ModHeartbeat" />
-		<bin:binary import="assets/music/home.xm" class="ModCity" />
+		<bin:binary import="assets/music/city.xm" class="ModCity" />
 		<bin:binary import="assets/music/title.xm" class="ModTitle" />
 		<bin:binary import="assets/music/storm.xm" class="ModStorm" />
 	</shx:frame>

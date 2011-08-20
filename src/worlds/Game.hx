@@ -7,6 +7,7 @@ import com.haxepunk.HXP;
 import com.haxepunk.masks.Grid;
 import com.haxepunk.masks.Pixelmask;
 import com.haxepunk.tweens.misc.NumTween;
+import com.haxepunk.tweens.sound.Fader;
 import com.haxepunk.utils.Input;
 import com.haxepunk.utils.Data;
 import com.haxepunk.World;
@@ -43,6 +44,9 @@ class Game extends World
 		_music.set("city", new ModCity());
 		_music.set("title", new ModTitle());
 		_music.set("storm", new ModStorm());
+		
+		_soundFader = new Fader(soundFadeComplete);
+		addTween(_soundFader, false);
 	}
 	
 	private function fadeComplete()
@@ -70,6 +74,8 @@ class Game extends World
 		_fadeTween = new NumTween(fadeComplete);
 		addTween(_fadeTween);
 		_fadeTween.tween(1, 0, 2);
+		
+		_soundFader.start();
 	}
 	
 	public function restart()
@@ -240,13 +246,21 @@ class Game extends World
 		}
 	}
 	
-	private function changeMusic(id:String)
+	private function soundFadeComplete()
 	{
-		var music:ByteArray = _music.get(id);
-		if (music != null && _currentMusic != id)
+		if (HXP.volume == 0)
 		{
 			musicPlayer.stop();
-//			musicPlayer.loadSong(music);
+			musicPlayer.loadSong(_music.get(_currentMusic));
+			_soundFader.fadeTo(1, 4);
+		}
+	}
+	
+	private function changeMusic(id:String)
+	{
+		if (_currentMusic != id && _music.exists(id))
+		{
+			_soundFader.fadeTo(0, 1);
 			_currentMusic = id;
 		}
 	}
@@ -414,6 +428,7 @@ class Game extends World
 	// music
 	private var _currentMusic:String;
 	private var _music:Hash<ByteArray>;
+	private var _soundFader:Fader;
 	
 	// level info
 	private var _doors:Array<String>;

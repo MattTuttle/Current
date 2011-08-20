@@ -2,6 +2,7 @@ import flash.system.Capabilities;
 import com.haxepunk.Engine;
 import com.haxepunk.HXP;
 import worlds.Game;
+import worlds.MainMenu;
 
 class Main extends Engine 
 {
@@ -23,7 +24,7 @@ class Main extends Engine
 	{
 		if (Capabilities.isDebugger)
 			HXP.console.enable();
-		HXP.world = new Game();
+		HXP.world = new MainMenu();
 	}
 	
 	static function main()
