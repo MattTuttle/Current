@@ -1034,6 +1034,9 @@
     <tile tx="0" ty="0" x="192" y="352"/>
     <tile tx="0" ty="0" x="64" y="672"/>
   </world>
+  <actors>
+    <coloredDoor x="393" y="864" color="boss"/>
+  </actors>
   <foreground set="tiles">
     <tile tx="352" ty="96" x="224" y="352"/>
     <tile tx="352" ty="96" x="256" y="352"/>

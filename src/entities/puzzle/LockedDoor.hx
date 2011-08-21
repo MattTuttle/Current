@@ -23,6 +23,7 @@ class LockedDoor extends Entity
 			case "green": _sprite.color = 0x00FF00;
 			case "blue": _sprite.color = 0x0000FF;
 			case "yellow": _sprite.color = 0xFFFF00;
+			case "boss":
 			default: trace("Locked door needs a color (red, green, blue, yellow)");
 		}
 		
