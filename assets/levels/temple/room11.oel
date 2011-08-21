@@ -1,4 +1,4 @@
-<level left="" right="R12" top="R10" bottom="" music="city">
+<level vignette="false" left="" right="R12" top="R10" bottom="" music="city">
   <width>2080</width>
   <height>608</height>
   <background set="tiles">
@@ -566,6 +566,9 @@
     <tile tx="32" ty="0" x="1632" y="448"/>
     <tile tx="32" ty="0" x="1056" y="160"/>
     <tile tx="32" ty="0" x="1056" y="128"/>
+    <tile tx="32" ty="0" x="1728" y="448"/>
+    <tile tx="32" ty="0" x="1856" y="224"/>
+    <tile tx="128" ty="0" x="160" y="448"/>
     <rect tx="32" ty="160" x="224" y="0" w="32" h="32"/>
     <rect tx="0" ty="192" x="192" y="32" w="32" h="32"/>
     <rect tx="32" ty="192" x="224" y="32" w="32" h="32"/>
@@ -663,9 +666,6 @@
     <rect tx="32" ty="160" x="800" y="352" w="32" h="32"/>
     <rect tx="0" ty="192" x="768" y="384" w="32" h="32"/>
     <rect tx="32" ty="192" x="800" y="384" w="32" h="32"/>
-    <tile tx="32" ty="0" x="1728" y="448"/>
-    <tile tx="32" ty="0" x="1856" y="224"/>
-    <tile tx="128" ty="0" x="160" y="448"/>
   </background>
   <world set="tiles">
     <tile tx="0" ty="0" x="128" y="0"/>
@@ -1334,7 +1334,7 @@
     <coral x="1553" y="549" angle="30"/>
     <piranha x="1935" y="86" angle="0"/>
     <player x="98" y="511"/>
-    <layer x="1985" y="472"/>
+    <grab x="1984" y="471"/>
   </actors>
   <foreground set="tiles">
     <tile tx="352" ty="64" x="480" y="288"/>

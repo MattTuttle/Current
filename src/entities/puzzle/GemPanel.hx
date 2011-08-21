@@ -4,6 +4,7 @@ import com.haxepunk.graphics.Spritemap;
 import com.haxepunk.HXP;
 import com.haxepunk.Entity;
 import com.haxepunk.graphics.Image;
+import com.haxepunk.Sfx;
 
 class GemPanel extends Entity
 {
@@ -43,6 +44,7 @@ class GemPanel extends Entity
 				_world.getType("door", doors);
 				for (e in doors)
 				{
+					new Sfx(new SfxOpen()).play();
 					cast(e, GemDoor).open();
 				}
 			}

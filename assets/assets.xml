@@ -44,7 +44,7 @@
 		
 		<img:image class="GfxParallax" import="assets/gfx/Parallax.png" />
 		<img:image class="GfxFarParallax" import="assets/gfx/FarParallax.png" />
-		<img:image class="GfxVignette" import="assets/gfx/current_vignette.png" />
+		<img:image class="GfxVignette" import="assets/gfx/current_vignette2.png" />
 		
 		<img:image class="GfxTileset"   import="assets/levels/tileset.png" />
 		
@@ -102,12 +102,6 @@
 		<img:image  class="GfxR09Decor"      import="assets/levels/room9/decor.png" />
 		<img:image  class="GfxR09Lighting"   import="assets/levels/room9/lighting.png" />
 		<bin:binary class="LvlR09Data"       import="assets/levels/room9/level.oel" />
-		<!-- Room 22 -->
-		<img:image  class="GfxR22Walls"      import="assets/levels/room22/walls.png" />
-		<img:image  class="GfxR22Background" import="assets/levels/room22/immediatebg.png" />
-		<img:image  class="GfxR22Decor"      import="assets/levels/room22/decor.png" />
-		<img:image  class="GfxR22Lighting"   import="assets/levels/room22/lighting.png" />
-		<bin:binary class="LvlR22Data"       import="assets/levels/room22/level.oel" />
 		<!-- Temple -->
 		<bin:binary class="LvlR10Data"       import="assets/levels/temple/room10.oel" />
 		<bin:binary class="LvlR11Data"       import="assets/levels/temple/room11.oel" />
@@ -117,16 +111,34 @@
 		<bin:binary class="LvlR15Data"       import="assets/levels/temple/room15.oel" />
 		<bin:binary class="LvlR16Data"       import="assets/levels/temple/room16.oel" />
 		<bin:binary class="LvlR17Data"       import="assets/levels/temple/room17.oel" />
+		<bin:binary class="LvlR18Data"       import="assets/levels/temple/room18.oel" />
 		<bin:binary class="LvlR19Data"       import="assets/levels/temple/room19.oel" />
 		<bin:binary class="LvlR20Data"       import="assets/levels/temple/room20.oel" />
 		<bin:binary class="LvlR21Data"       import="assets/levels/temple/room21.oel" />
+		<!-- Room 22 -->
+		<img:image  class="GfxR22Walls"      import="assets/levels/room22/walls.png" />
+		<img:image  class="GfxR22Background" import="assets/levels/room22/immediatebg.png" />
+		<img:image  class="GfxR22Decor"      import="assets/levels/room22/decor.png" />
+		<img:image  class="GfxR22Lighting"   import="assets/levels/room22/lighting.png" />
+		<bin:binary class="LvlR22Data"       import="assets/levels/room22/level.oel" />
+		<!-- More temple -->
 		<bin:binary class="LvlR23Data"       import="assets/levels/temple/room23.oel" />
-		<bin:binary class="LvlR18Data"       import="assets/levels/temple/boss.oel" />
+		<bin:binary class="LvlR24Data"       import="assets/levels/temple/room24.oel" />
+		<bin:binary class="LvlR25Data"       import="assets/levels/temple/room25.oel" />
+		<bin:binary class="LvlR26Data"       import="assets/levels/temple/room26.oel" />
+		<bin:binary class="LvlR27Data"       import="assets/levels/temple/room27.oel" />
+		<bin:binary class="LvlR28Data"       import="assets/levels/temple/room28.oel" />
+		<bin:binary class="LvlR29Data"       import="assets/levels/temple/room29.oel" />
+		<bin:binary class="LvlR30Data"       import="assets/levels/temple/room30.oel" />
+		<bin:binary class="LvlR31Data"       import="assets/levels/temple/room31.oel" />
+		<bin:binary class="LvlR32Data"       import="assets/levels/temple/room32.oel" />
+		<bin:binary class="LvlR99Data"       import="assets/levels/temple/room99.oel" />
 		
 		<!-- Sound effects -->
 		<snd:sound import="assets/sfx/pop.mp3" class="SfxBubblePop" />
 		<snd:sound import="assets/sfx/save.mp3" class="SfxSave" />
 		<snd:sound import="assets/sfx/powerup.mp3" class="SfxPowerup" />
+		<snd:sound import="assets/sfx/open.mp3" class="SfxOpen" />
 		
 		<!-- Music -->
 		<bin:binary import="assets/music/boss.xm" class="ModBoss" />

@@ -11,7 +11,7 @@ class LockedDoor extends Entity
 	public function new(x:Float, y:Float, color:String, target:Player) 
 	{
 		super(x, y);
-		_sprite = new Spritemap(GfxDoor, 16, 64, onAnimEnd);
+		_sprite = new Spritemap(GfxColoredDoor, 16, 64, onAnimEnd);
 		_sprite.add("closed", [0]);
 		_sprite.add("open", [1, 2, 3], 12);
 		_sprite.play("closed");

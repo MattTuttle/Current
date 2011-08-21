@@ -5,6 +5,7 @@ import com.haxepunk.Entity;
 import com.haxepunk.graphics.Text;
 import flash.display.BlendMode;
 import flash.display.Sprite;
+import flash.geom.ColorTransform;
 import flash.geom.Matrix;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
@@ -14,8 +15,11 @@ import flash.text.TextLineMetrics;
 
 class Announce extends Entity
 {
+	
+	public var displaySpeed:Float;
+	public var displayHold:Float;
 
-	public function new(x:Float, y:Float, text:String)
+	public function new(x:Float, y:Float, text:String, ?complete:Void->Void)
 	{
 		super(x, y);
 		
@@ -30,6 +34,8 @@ class Announce extends Entity
 		_drawable.blendMode = BlendMode.LAYER;
 		_drawable.addChild(_field);
 		
+		_complete = complete;
+		
 		_text = text;
 		_index = 0;
 		_angle = 0;
@@ -38,8 +44,8 @@ class Announce extends Entity
 		_matrix = HXP.matrix;
 		layer = -500;
 		
-		_displaySpeed = 1 / text.length;
-		_displayHold = (1 - _displaySpeed) * 5;
+		displaySpeed = 1 / text.length;
+		displayHold = (1 - displaySpeed) * 5;
 	}
 	
 	public var centered(getCentered, setCentered):Bool;
@@ -55,11 +61,21 @@ class Announce extends Entity
 		return value;
 	}
 	
-	public var color(getColor, setColor):UInt;
-	private function getColor():UInt { return _field.textColor; }
-	private function setColor(value:UInt):UInt
+	public var color(getColor, setColor):Int;
+	private function getColor():Int { return _format.color; }
+	private function setColor(value:Int):Int
 	{
-		_field.textColor = value;
+		_format.color = value;
+		_field.setTextFormat(_format);
+		return value;
+	}
+	
+	public var size(getSize, setSize):Float;
+	private function getSize():Float { return _format.size; }
+	private function setSize(value:Float):Float
+	{
+		_format.size = value;
+		_field.setTextFormat(_format);
 		return value;
 	}
 	
@@ -80,15 +96,19 @@ class Announce extends Entity
 				_index += 1;
 				// fully shown text, wait a few seconds
 				if (_index == _text.length)
-					_waitTime = _displayHold;
+					_waitTime = displayHold;
 				else
-					_waitTime = _displaySpeed;
+					_waitTime = displaySpeed;
 			}
 			else
 			{
 				_field.alpha -= 0.01;
 				if (_field.alpha < 0)
+				{
+					if (_complete != null)
+						_complete();
 					HXP.world.remove(this);
+				}
 			}
 		}
 		super.update();
@@ -103,8 +123,7 @@ class Announce extends Entity
 		super.render();
 	}
 	
-	private var _displaySpeed:Float;
-	private var _displayHold:Float;
+	private var _complete:Void->Void;
 	private var _centered:Bool;
 	private var _angle:Float;
 	private var _matrix:Matrix;

@@ -1,4 +1,4 @@
-<level left="" right="" top="" bottom="R07" music="storm">
+<level vignette="false" left="" right="" top="" bottom="R07" music="storm">
   <width>800</width>
   <height>640</height>
   <world set="tiles">
@@ -15,7 +15,31 @@
     <tile tx="192" ty="0" x="192" y="544"/>
     <tile tx="192" ty="0" x="192" y="576"/>
     <tile tx="224" ty="0" x="192" y="448"/>
+    <tile tx="0" ty="0" x="224" y="320"/>
+    <tile tx="0" ty="0" x="192" y="320"/>
+    <tile tx="0" ty="0" x="160" y="320"/>
+    <tile tx="0" ty="0" x="128" y="320"/>
+    <tile tx="0" ty="0" x="96" y="320"/>
+    <tile tx="0" ty="0" x="64" y="320"/>
+    <tile tx="0" ty="0" x="32" y="320"/>
+    <tile tx="0" ty="0" x="0" y="320"/>
+    <tile tx="256" ty="64" x="128" y="256"/>
+    <tile tx="288" ty="64" x="128" y="288"/>
+    <tile tx="0" ty="32" x="96" y="352"/>
+    <tile tx="0" ty="0" x="64" y="352"/>
+    <tile tx="0" ty="0" x="32" y="352"/>
+    <tile tx="0" ty="0" x="0" y="352"/>
+    <tile tx="0" ty="0" x="0" y="384"/>
+    <tile tx="0" ty="0" x="32" y="384"/>
+    <tile tx="0" ty="0" x="64" y="384"/>
+    <tile tx="96" ty="0" x="96" y="384"/>
   </world>
+  <actors>
+    <panel x="197" y="256"/>
+    <gem x="143" y="231"/>
+    <door x="240" y="352"/>
+    <layer x="176" y="366"/>
+  </actors>
   <level>
     <room22 x="0" y="0"/>
   </level>
@@ -32,8 +56,14 @@
     <rect x="0" y="168" w="112" h="112"/>
     <rect x="0" y="280" w="104" h="360"/>
     <rect x="104" y="296" w="8" h="344"/>
-    <rect x="112" y="416" w="144" h="32"/>
-    <rect x="112" y="448" w="24" h="192"/>
+    <rect x="112" y="320" w="144" h="32"/>
+    <rect x="112" y="352" w="16" h="8"/>
+    <rect x="112" y="360" w="8" h="24"/>
+    <rect x="112" y="392" w="8" h="248"/>
+    <rect x="120" y="376" w="8" h="8"/>
+    <rect x="120" y="400" w="8" h="240"/>
+    <rect x="128" y="416" w="128" h="32"/>
+    <rect x="128" y="448" w="8" h="192"/>
     <rect x="136" y="456" w="8" h="184"/>
     <rect x="144" y="464" w="8" h="176"/>
     <rect x="152" y="472" w="8" h="168"/>

@@ -22,6 +22,7 @@
 	</tilesets>
 	<objects>
 		<object name="player" image="../gfx/bubble.png" width="16" height="16" originX="8" originY="8" limit="1" />
+		<object name="exit" image="../gfx/exit.png" width="32" height="32" resizableX="true" resizableY="true" tile="true" />
 		<folder name="enemies">
 			<object name="snapper" image="../gfx/new_fish_anim.png" width="59" height="32" imageWidth="59" imageOffsetX="59" />
 			<object name="piranha" image="../gfx/piranha.png" width="32" height="32" imageWidth="32" imageOffsetX="32" originX="16" originY="16" rotatable="true" />

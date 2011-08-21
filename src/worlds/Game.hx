@@ -7,8 +7,10 @@ import com.haxepunk.HXP;
 import com.haxepunk.masks.Grid;
 import com.haxepunk.masks.Pixelmask;
 import com.haxepunk.tweens.misc.NumTween;
+import com.haxepunk.tweens.misc.VarTween;
 import com.haxepunk.tweens.sound.Fader;
 import com.haxepunk.utils.Input;
+import com.haxepunk.utils.Key;
 import com.haxepunk.utils.Data;
 import com.haxepunk.World;
 import com.haxepunk.Tween;
@@ -19,6 +21,7 @@ import flash.display.BitmapData;
 import flash.utils.ByteArray;
 import haxe.xml.Fast;
 import hxmikmod.MikModPlayer;
+import ui.Announce;
 
 class Game extends World
 {
@@ -42,19 +45,24 @@ class Game extends World
 		_music.set("boss", new ModBoss());
 		_music.set("home", new ModHome());
 		_music.set("city", new ModCity());
-		_music.set("title", new ModTitle());
 		_music.set("storm", new ModStorm());
 		
 		_soundFader = new Fader(soundFadeComplete);
 		addTween(_soundFader, false);
+		_muted = false;
 	}
 	
 	private function fadeComplete()
 	{
 		if (_fadeTween.value == 1)
 		{
-			loadNextLevel();
+			// load next level
+			loadLevel(_nextLevel);
 			_fadeTween.tween(1, 0, 0.5);
+		}
+		else
+		{
+			player.switchRoom(_direction);
 		}
 	}
 	
@@ -180,19 +188,22 @@ class Game extends World
 				remove(entity);
 		}
 		
-		// parallax image
-		var parallax:Image;
-		parallax = addImage("FarParallax", 110);
-		parallax.scrollX = 0.8;
-		parallax.scrollY = 0.6;
-		parallax.x -= 200;
-		parallax = addImage("Parallax", 100);
-		parallax.scrollX = 0.9;
-		parallax.scrollY = 0.7;
-		
 		addImage(id + "Background", 90);
 		var walls:Image = addImage(id + "Walls", 30);
 		addImage(id + "Decor", 20);
+		
+		// parallax image, only for hand drawn levels
+		if (walls != null)
+		{
+			var parallax:Image;
+			parallax = addImage("FarParallax", 110);
+			parallax.scrollX = 0.8;
+			parallax.scrollY = 0.6;
+			parallax.x -= 200;
+			parallax = addImage("Parallax", 100);
+			parallax.scrollX = 0.9;
+			parallax.scrollY = 0.7;
+		}
 		
 		addImage(id + "Front", -90);
 		_lighting = addImage(id + "Lighting", -100);
@@ -251,8 +262,10 @@ class Game extends World
 		if (HXP.volume == 0)
 		{
 			musicPlayer.stop();
-			musicPlayer.loadSong(_music.get(_currentMusic));
-			_soundFader.fadeTo(1, 4);
+			if (_music.exists(_currentMusic))
+				musicPlayer.loadSong(_music.get(_currentMusic));
+			if (!_muted)
+				_soundFader.fadeTo(1, 4);
 		}
 	}
 	
@@ -359,6 +372,7 @@ class Game extends World
 				case "rock": add(new entities.Rock(x, y, obj.name));
 				case "smallrock": add(new entities.Rock(x, y, obj.name));
 				
+				case "exit": add(new entities.Exit(x, y, Std.parseInt(obj.att.width), Std.parseInt(obj.att.height)));
 				case "player": // do nothing
 				
 				//powerups
@@ -367,6 +381,33 @@ class Game extends World
 						add(new Pickup(x, y, obj.name, _level));
 			}
 		}
+	}
+	
+	public function finishGame()
+	{
+		var white:Image = Image.createRect(HXP.screen.width, HXP.screen.height);
+		white.alpha = white.scrollX = white.scrollY = 0;
+		addGraphic(white).layer = -10000;
+		var whiteout:VarTween = new VarTween(finalWhiteOut, TweenType.OneShot);
+		whiteout.tween(white, "alpha", 1, 2);
+		addTween(whiteout);
+		
+		_currentMusic = ""; // clear out music
+		_soundFader.fadeTo(0, 1);
+	}
+	
+	private function finalWhiteOut()
+	{
+		var text:String = "The path of life leads upward\nfor the prudent, that he may turn\naway from Sheol beneath.\n\nProverbs 15:24";
+		var a:Announce = new Announce(HXP.screen.width / 2, HXP.screen.height / 2, text, function() {
+			HXP.world = new MainMenu();
+		});
+		a.centered = true;
+		a.color = 0x000000;
+		a.size = 24;
+		a.displaySpeed = 0.05;
+		a.displayHold = 8;
+		add(a).layer = -10001;
 	}
 	
 	public function switchLevel(direction:String)
@@ -380,12 +421,6 @@ class Game extends World
 		}
 		player.frozen = true; // don't let player move
 		_fadeTween.tween(0, 1, 0.3);
-	}
-	
-	private function loadNextLevel()
-	{
-		loadLevel(_nextLevel);
-		player.switchRoom(_direction);
 	}
 	
 	private function clampCamera()
@@ -419,6 +454,15 @@ class Game extends World
 		// shift the alpha on the lighting layer, if it exists
 		if (_lighting != null)
 			_lighting.alpha = _alphaTween.value;
+			
+		if (Input.pressed(Key.M))
+		{
+			_muted = !_muted;
+			if (_muted)
+				HXP.volume = 0;
+			else
+				HXP.volume = 1;
+		}
 		
 		super.update();
 		clampCamera();
@@ -429,6 +473,7 @@ class Game extends World
 	private var _currentMusic:String;
 	private var _music:Hash<ByteArray>;
 	private var _soundFader:Fader;
+	private var _muted:Bool;
 	
 	// level info
 	private var _doors:Array<String>;

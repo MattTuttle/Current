@@ -18,12 +18,24 @@ class MainMenu extends World
 	{
 		super();
 		
-		addGraphic(new Image(GfxMenuBackdrop), 100);
+		HXP.volume = 1;
 		Game.musicPlayer.loadSong(new ModTitle());
+		
+		HXP.camera.x = HXP.camera.y = 0; // reset camera
 	}
 	
 	public override function begin()
 	{
+		// fade from white
+		var white:Image = Image.createRect(HXP.screen.width, HXP.screen.height);
+		addGraphic(white).layer = -1000;
+		var whiteout:VarTween = new VarTween(null, TweenType.OneShot);
+		whiteout.tween(white, "alpha", 0, 1);
+		addTween(whiteout);
+		
+		addGraphic(new Image(GfxMenuBackdrop), 100);
+		
+		// menu logo
 		var logoGraphic = new Image(GfxMenuLogo);
 		logoGraphic.alpha = 0;
 		var logo = addGraphic(logoGraphic, 50, Std.int(HXP.screen.width / 2 - 250), -300);
@@ -42,7 +54,7 @@ class MainMenu extends World
 		var hw:Float = HXP.screen.width / 2;
 		add(new Button(hw, 280, GfxMenuNewGame, onNewGame));
 		add(new Button(hw, 330, GfxMenuContinue, onContinue));
-		add(new Button(hw, 380, GfxMenuAbout, onAbout));
+//		add(new Button(hw, 380, GfxMenuAbout, onAbout));
 	}
 	
 	private function onNewGame()

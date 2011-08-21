@@ -220,6 +220,12 @@ class Player extends Physics
 		if (interact != null)
 			interact.activate(this);
 		
+		if (collide("exit", x, y) != null)
+		{
+			cast(_world, Game).finishGame();
+			frozen = true;
+		}
+		
 		// check if player heads off screen
 		var game:Game = cast(HXP.world, Game);
 		if (dead)

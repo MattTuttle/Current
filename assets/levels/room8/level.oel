@@ -1,4 +1,4 @@
-<level left="" right="R07" top="" bottom="" music="storm">
+<level vignette="false" left="" right="R07" top="" bottom="" music="storm">
   <width>640</width>
   <height>800</height>
   <world set="tiles">
@@ -13,7 +13,7 @@
     <tile tx="256" ty="0" x="128" y="448"/>
   </world>
   <actors>
-    <grab x="143" y="301"/>
+    <greenKey x="149" y="319"/>
   </actors>
   <level>
     <room8 x="0" y="0"/>
