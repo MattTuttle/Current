@@ -1,9 +1,8 @@
-<level left="" right="" top="R02" bottom="" music="home">
+<level vignette="false" left="" right="" top="R02" bottom="" music="home">
   <width>800</width>
   <height>600</height>
   <actors>
-    <checkpoint x="380" y="340"/>
-    <player x="527" y="369"/>
+    <player x="446" y="363"/>
   </actors>
   <level>
     <room1 x="0" y="0"/>

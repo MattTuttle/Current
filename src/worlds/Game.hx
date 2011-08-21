@@ -59,9 +59,6 @@ class Game extends World
 			// load next level
 			loadLevel(_nextLevel);
 			_fadeTween.tween(1, 0, 0.5);
-		}
-		else
-		{
 			player.switchRoom(_direction);
 		}
 	}
@@ -372,7 +369,7 @@ class Game extends World
 				case "rock": add(new entities.Rock(x, y, obj.name));
 				case "smallrock": add(new entities.Rock(x, y, obj.name));
 				
-				case "exit": add(new entities.Exit(x, y, Std.parseInt(obj.att.width), Std.parseInt(obj.att.height)));
+				case "exit": //add(new entities.Exit(x, y, Std.parseInt(obj.att.width), Std.parseInt(obj.att.height)));
 				case "player": // do nothing
 				
 				//powerups
@@ -414,12 +411,13 @@ class Game extends World
 	{
 		_direction = direction;
 		_nextLevel = _exits.get(direction);
+		player.frozen = true; // don't let player move
 		if (_nextLevel == "")
 		{
-			trace("No level to switch to");
+//			trace("No level to switch to");
+			finishGame();
 			return;
 		}
-		player.frozen = true; // don't let player move
 		_fadeTween.tween(0, 1, 0.3);
 	}
 	

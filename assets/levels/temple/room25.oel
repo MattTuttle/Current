@@ -1,4 +1,4 @@
-<level vignette="true" left="R26" right="R27" top="R24" bottom="" music="city">
+<level vignette="true" left="R28" right="R27" top="R24" bottom="" music="city">
   <width>1024</width>
   <height>1024</height>
   <background set="tiles">
@@ -1032,6 +1032,7 @@
   <actors>
     <checkpoint x="124" y="54"/>
     <player x="94" y="98"/>
+    <coloredDoor x="24" y="864" color="red"/>
   </actors>
   <walls>
     <rect x="0" y="0" w="64" h="192"/>

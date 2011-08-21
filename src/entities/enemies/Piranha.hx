@@ -100,6 +100,10 @@ class Piranha extends Physics
 					switchState(IDLE);
 					_waitTime = Math.random();
 				}
+				else
+				{
+					faceAngle(Math.atan2(velocity.y, velocity.x) * HXP.DEG);
+				}
 		}
 		super.update();
 	}

@@ -1,4 +1,4 @@
-<level vignette="true" left="R24" right="R26" top="" bottom="" music="home">
+<level vignette="true" left="R24" right="R26" top="" bottom="" music="city">
   <width>1024</width>
   <height>800</height>
   <background set="tiles">
@@ -795,13 +795,13 @@
     <rect x="0" y="416" w="96" h="32"/>
     <rect x="0" y="448" w="32" h="32"/>
     <rect x="0" y="576" w="32" h="224"/>
-    <rect x="32" y="608" w="192" h="192"/>
-    <rect x="224" y="640" w="32" h="160"/>
+    <rect x="32" y="608" w="224" h="192"/>
+    <rect x="224" y="480" w="32" h="128"/>
     <rect x="256" y="672" w="768" h="128"/>
     <rect x="448" y="320" w="576" h="32"/>
-    <rect x="448" y="640" w="576" h="32"/>
+    <rect x="448" y="512" w="32" h="160"/>
     <rect x="480" y="352" w="544" h="32"/>
-    <rect x="480" y="608" w="544" h="32"/>
+    <rect x="480" y="608" w="544" h="64"/>
     <rect x="672" y="384" w="352" h="32"/>
     <rect x="704" y="416" w="320" h="32"/>
     <rect x="704" y="576" w="320" h="32"/>

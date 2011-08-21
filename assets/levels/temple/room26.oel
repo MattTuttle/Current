@@ -1,4 +1,4 @@
-<level vignette="false" left="R15" right="R18" top="" bottom="" music="home">
+<level vignette="false" left="R18" right="R15" top="" bottom="" music="city">
   <width>800</width>
   <height>800</height>
   <background set="tiles">
@@ -61,7 +61,6 @@
     <tile tx="160" ty="0" x="640" y="512"/>
     <tile tx="160" ty="0" x="608" y="576"/>
     <tile tx="160" ty="0" x="64" y="576"/>
-    <tile tx="160" ty="0" x="0" y="512"/>
     <tile tx="128" ty="0" x="0" y="480"/>
     <tile tx="128" ty="0" x="32" y="416"/>
     <tile tx="128" ty="0" x="704" y="416"/>
@@ -139,10 +138,8 @@
     <tile tx="32" ty="0" x="160" y="448"/>
     <tile tx="32" ty="0" x="32" y="448"/>
     <tile tx="32" ty="0" x="32" y="480"/>
-    <tile tx="32" ty="0" x="32" y="512"/>
     <tile tx="32" ty="0" x="32" y="544"/>
     <tile tx="32" ty="0" x="64" y="544"/>
-    <tile tx="32" ty="0" x="64" y="512"/>
     <tile tx="32" ty="0" x="64" y="480"/>
     <tile tx="32" ty="0" x="64" y="448"/>
     <tile tx="32" ty="0" x="256" y="544"/>
@@ -178,6 +175,10 @@
     <tile tx="32" ty="0" x="672" y="608"/>
     <tile tx="32" ty="0" x="64" y="608"/>
     <tile tx="128" ty="0" x="736" y="480"/>
+    <tile tx="128" ty="0" x="32" y="512"/>
+    <tile tx="128" ty="0" x="0" y="512"/>
+    <tile tx="128" ty="0" x="64" y="512"/>
+    <tile tx="32" ty="0" x="0" y="544"/>
   </background>
   <world set="tiles">
     <tile tx="0" ty="0" x="768" y="768"/>
@@ -212,9 +213,6 @@
     <tile tx="0" ty="0" x="192" y="352"/>
     <tile tx="0" ty="0" x="224" y="352"/>
     <tile tx="0" ty="0" x="32" y="384"/>
-    <tile tx="0" ty="0" x="32" y="576"/>
-    <tile tx="0" ty="0" x="0" y="544"/>
-    <tile tx="0" ty="0" x="0" y="448"/>
     <tile tx="0" ty="0" x="0" y="416"/>
     <tile tx="0" ty="0" x="704" y="608"/>
     <tile tx="0" ty="0" x="672" y="640"/>
@@ -266,11 +264,6 @@
     <tile tx="0" ty="0" x="128" y="672"/>
     <tile tx="0" ty="0" x="160" y="672"/>
     <tile tx="0" ty="0" x="192" y="672"/>
-    <tile tx="192" ty="96" x="32" y="544"/>
-    <tile tx="192" ty="64" x="32" y="512"/>
-    <tile tx="192" ty="64" x="32" y="480"/>
-    <tile tx="192" ty="64" x="32" y="448"/>
-    <tile tx="256" ty="64" x="32" y="416"/>
     <tile tx="192" ty="96" x="704" y="544"/>
     <tile tx="224" ty="96" x="704" y="512"/>
     <tile tx="224" ty="64" x="704" y="480"/>
@@ -644,6 +637,18 @@
     <tile tx="0" ty="0" x="96" y="256"/>
     <tile tx="0" ty="0" x="64" y="352"/>
     <tile tx="0" ty="0" x="96" y="352"/>
+    <tile tx="0" ty="0" x="64" y="608"/>
+    <tile tx="0" ty="0" x="32" y="576"/>
+    <tile tx="0" ty="0" x="64" y="384"/>
+    <tile tx="0" ty="0" x="64" y="416"/>
+    <tile tx="0" ty="0" x="64" y="448"/>
+    <tile tx="0" ty="0" x="64" y="480"/>
+    <tile tx="0" ty="0" x="0" y="480"/>
+    <tile tx="0" ty="0" x="32" y="480"/>
+    <tile tx="0" ty="0" x="32" y="448"/>
+    <tile tx="0" ty="0" x="0" y="448"/>
+    <tile tx="0" ty="0" x="64" y="576"/>
+    <tile tx="0" ty="0" x="32" y="416"/>
   </world>
   <actors>
     <piranha x="160" y="608" angle="0"/>
@@ -652,7 +657,8 @@
     <rock x="249" y="627"/>
     <smallrock x="452" y="629"/>
     <smallrock x="489" y="629"/>
-    <breakableWall x="0" y="480"/>
+    <breakableWall x="64" y="512"/>
+    <smallrock x="36" y="567"/>
   </actors>
   <foreground set="tiles">
     <tile tx="128" ty="288" x="128" y="640"/>
@@ -919,11 +925,9 @@
   </foreground>
   <walls>
     <rect x="0" y="0" w="800" h="384"/>
-    <rect x="0" y="384" w="64" h="32"/>
-    <rect x="0" y="416" w="32" h="64"/>
-    <rect x="0" y="544" w="32" h="256"/>
-    <rect x="32" y="576" w="32" h="224"/>
-    <rect x="64" y="640" w="736" h="160"/>
+    <rect x="0" y="384" w="96" h="128"/>
+    <rect x="0" y="576" w="96" h="224"/>
+    <rect x="96" y="640" w="704" h="160"/>
     <rect x="704" y="384" w="96" h="32"/>
     <rect x="704" y="576" w="96" h="64"/>
     <rect x="736" y="416" w="64" h="64"/>

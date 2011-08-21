@@ -10,13 +10,14 @@ import worlds.Game;
 class Snapper extends Being
 {
 
-	public function new(x:Float, y:Float) 
+	public function new(x:Float, y:Float, flipped:Bool = false) 
 	{
 		super(x, y);
 		
 		_fish = new Spritemap(GfxSnapper, 59, 32);
 		_fish.add("swim", [0, 1, 2, 3, 4, 5], 6);
 		_fish.play("swim");
+		_fish.flipped = flipped;
 		graphic = _fish;
 		
 		setHitbox(59, 32);

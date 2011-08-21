@@ -1,4 +1,4 @@
-<level left="R16" right="" top="" bottom="R13" music="city">
+<level vignette="false" left="R16" right="" top="" bottom="R13" music="city">
   <width>800</width>
   <height>1024</height>
   <background set="tiles">
@@ -852,6 +852,7 @@
     <snapper x="484" y="760"/>
     <checkpoint x="648" y="857"/>
     <vent x="606" y="953" angle="0"/>
+    <player x="635" y="890"/>
   </actors>
   <foreground set="tiles">
     <tile tx="256" ty="0" x="192" y="896"/>

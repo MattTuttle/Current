@@ -5,17 +5,12 @@ import base.Physics;
 import com.haxepunk.HXP;
 import com.haxepunk.Entity;
 import com.haxepunk.graphics.Image;
+import com.haxepunk.tweens.misc.VarTween;
 import entities.Player;
 import flash.geom.Point;
+import worlds.Game;
 
-enum SheolState
-{
-	FOLLOW;
-	PULL;
-	PUSH;
-}
-
-class Sheol extends Being
+class Sheol extends Physics
 {
 
 	public function new(x:Float, y:Float, target:Player) 
@@ -24,17 +19,37 @@ class Sheol extends Being
 		_image = new Image(GfxSheol);
 		_image.centerOO();
 		graphic = _image;
-		_state = FOLLOW;
+		
+		_spawnTime = 0;
 		_target = target;
-		layer = 60;
-		_bubbleTime = _spawnTime = 1;
+		layer = 76;
+		setHitbox(128, 128, 64, 64);
+		_scaleTween = new VarTween(doneTween);
+		addTween(_scaleTween);
+		_scaleTime = 0.5;
+		_provokeTime = 5;
 	}
 	
-	private function spawnRock()
+	private function doneTween()
 	{
-		if (_spawnTime > 0) return;
-		HXP.world.add(new Rock(x, y, Math.random() < 0.5 ? "smallrock" : "rock"));
-		_spawnTime = 10;
+		if (_image.scale == 1)
+		{
+			// spawn fish
+			if (Math.random() > 0.5)
+			{
+				_world.add(new Piranha(x, y, 0, _target));
+			}
+			else
+			{
+				_world.add(new Snapper(x, y, (Math.random() < 0.5) ? true : false));
+			}
+			
+			_scaleTween.tween(_image, "scale", 0, _scaleTime); // hide
+		}
+		else
+		{
+//			_spawnTime = Math.random() * 3 + 2; // 2-5
+		}
 	}
 	
 	private function pullBubbles()
@@ -73,31 +88,28 @@ class Sheol extends Being
 	
 	public override function update()
 	{
-		_spawnTime -= HXP.elapsed;
-		pullBubbles();
-		switch(_state)
+		if (_provokeTime > 0)
 		{
-			case FOLLOW:
-				_point.x = _target.x - x;
-				_point.y = _target.y - y;
-				if (_point.length < 250)
-					spawnRock(); // _state = PULL;
-				_point.normalize(20);
-				x += (_point.x + Math.random() * 12 - 6) * HXP.elapsed;
-				y += (_point.y + Math.random() * 12 - 6) * HXP.elapsed;
-			case PULL:
-				var entities:Array<Entity> = new Array<Entity>();
-				HXP.world.getType("keep", entities);
-				for (entity in entities)
-				{
-					_point.x = x - entity.x;
-					_point.y = y - entity.y;
-					_point.normalize(20);
-					entity.x += _point.x * HXP.elapsed;
-					entity.y += _point.y * HXP.elapsed;
-				}
-			case PUSH:
-				
+			_provokeTime -= HXP.elapsed;
+			// wiggle
+			x += Math.random() * 2 - 1;
+			y += Math.random() * 2 - 1;
+			// attack!
+			if (_provokeTime < 1)
+				_scaleTween.tween(_image, "scale", 0, _scaleTime);
+		}
+		else
+		{
+			_spawnTime -= HXP.elapsed;
+			if (_spawnTime < 0)
+			{
+				x = _target.x + Math.random() * 60 - 30;
+				y = _target.y - 100;
+				if (collide("wall", x, y) != null)
+					x = Game.levelWidth / 2;
+				_scaleTween.tween(_image, "scale", 1, _scaleTime); // show
+				_spawnTime = Math.random() * 3 + 2; // 2-5
+			}
 		}
 		super.update();
 	}
@@ -106,9 +118,11 @@ class Sheol extends Being
 	private var _bubble:Bubble;
 	private var _bubbleTime:Float;
 	
+	private var _provokeTime:Float;
+	private var _scaleTime:Float;
+	private var _scaleTween:VarTween;
 	private var _target:Player;
 	private var _spawnTime:Float;
 	private var _image:Image;
-	private var _state:SheolState;
 	
 }

@@ -1,4 +1,4 @@
-<level vignette="false" left="R25" right="R29" top="" bottom="" music="home">
+<level vignette="false" left="R29" right="R25" top="" bottom="" music="city">
   <width>2080</width>
   <height>1024</height>
   <background set="tiles">
@@ -916,6 +916,7 @@
     <tile tx="0" ty="0" x="32" y="608"/>
     <tile tx="0" ty="0" x="0" y="608"/>
     <tile tx="0" ty="0" x="0" y="960"/>
+    <tile tx="0" ty="320" x="448" y="768"/>
   </world>
   <actors>
     <checkpoint x="1892" y="856"/>
@@ -1065,12 +1066,6 @@
     <tile tx="320" ty="96" x="1984" y="768"/>
     <tile tx="320" ty="96" x="1952" y="736"/>
     <tile tx="320" ty="96" x="1920" y="704"/>
-    <rect tx="352" ty="64" x="0" y="0" w="2080" h="672"/>
-    <rect tx="288" ty="128" x="2016" y="960" w="32" h="32"/>
-    <rect tx="320" ty="32" x="2016" y="928" w="32" h="32"/>
-    <rect tx="320" ty="32" x="1984" y="960" w="32" h="32"/>
-    <rect tx="320" ty="64" x="1984" y="992" w="32" h="32"/>
-    <rect tx="352" ty="32" x="2048" y="928" w="32" h="32"/>
     <tile tx="352" ty="32" x="0" y="960"/>
     <tile tx="384" ty="64" x="32" y="992"/>
     <tile tx="384" ty="32" x="32" y="960"/>
@@ -1087,6 +1082,12 @@
     <tile tx="128" ty="224" x="960" y="896"/>
     <tile tx="128" ty="192" x="960" y="864"/>
     <tile tx="160" ty="192" x="992" y="864"/>
+    <rect tx="352" ty="64" x="0" y="0" w="2080" h="672"/>
+    <rect tx="288" ty="128" x="2016" y="960" w="32" h="32"/>
+    <rect tx="320" ty="32" x="2016" y="928" w="32" h="32"/>
+    <rect tx="320" ty="32" x="1984" y="960" w="32" h="32"/>
+    <rect tx="320" ty="64" x="1984" y="992" w="32" h="32"/>
+    <rect tx="352" ty="32" x="2048" y="928" w="32" h="32"/>
   </foreground>
   <walls>
     <rect x="0" y="0" w="2080" h="704"/>
@@ -1103,6 +1104,10 @@
     <rect x="32" y="960" w="968" h="64"/>
     <rect x="160" y="800" w="32" h="160"/>
     <rect x="352" y="800" w="32" h="160"/>
+    <rect x="464" y="704" w="32" h="56"/>
+    <rect x="464" y="760" w="24" h="16"/>
+    <rect x="472" y="776" w="16" h="16"/>
+    <rect x="472" y="792" w="8" h="8"/>
     <rect x="544" y="832" w="32" h="128"/>
     <rect x="624" y="704" w="32" h="48"/>
     <rect x="632" y="752" w="24" h="16"/>

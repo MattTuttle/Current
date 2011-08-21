@@ -3023,7 +3023,7 @@
   <actors>
     <checkpoint x="120" y="2837"/>
     <player x="212" y="2842"/>
-    <sheol x="144" y="2268"/>
+    <sheol x="536" y="2472"/>
     <exit x="320" y="0" width="417" height="32"/>
   </actors>
   <foreground set="tiles">
