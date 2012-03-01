@@ -9,31 +9,31 @@ import com.haxepunk.Sfx;
 class GemPanel extends Entity
 {
 
-	public function new(x:Float, y:Float, open:Bool) 
+	public function new(x:Float, y:Float, open:Bool)
 	{
 		super(x, y);
 		// set graphic
-		graphic = _sprite = new Spritemap(GfxGemPanel, 64, 64);
+		graphic = _sprite = new Spritemap("gfx/objects/gempanel.png", 64, 64);
 		_sprite.add("closed", [0]);
 		_sprite.add("open", [1]);
-		
+
 		if (open)
 			_sprite.play("open");
 		else
 			_sprite.play("closed");
-		
+
 		setHitbox(64, 64);
 		layer = 60;
 		_gem = null;
 		_offsetX = x + 32;
 		_offsetY = y + 32;
 	}
-	
+
 	public override function update()
 	{
 		super.update();
 		if (_sprite.currentAnim == "open") return;
-		
+
 		if (_gem == null)
 		{
 			var gem:Entity = collide("gem", x, y);
@@ -44,7 +44,7 @@ class GemPanel extends Entity
 				_world.getType("door", doors);
 				for (e in doors)
 				{
-					new Sfx(new SfxOpen()).play();
+					new Sfx("sfx/save").play();
 					cast(e, GemDoor).open();
 				}
 			}
@@ -66,10 +66,10 @@ class GemPanel extends Entity
 			}
 		}
 	}
-	
+
 	private var _offsetX:Float;
 	private var _offsetY:Float;
 	private var _gem:Entity;
 	private var _sprite:Spritemap;
-	
+
 }

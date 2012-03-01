@@ -12,10 +12,10 @@ import worlds.Game;
 class Checkpoint extends Interactable
 {
 
-	public function new(x:Float, y:Float) 
+	public function new(x:Float, y:Float)
 	{
 		super(x, y);
-		_sprite = new Spritemap(GfxCheckpoint, 64, 128);
+		_sprite = new Spritemap("gfx/objects/checkpoint_crystal.png", 64, 128);
 		_sprite.add("idle", [0]);
 		_sprite.add("glow", [1]);
 		_sprite.play("idle");
@@ -24,22 +24,22 @@ class Checkpoint extends Interactable
 		setHitbox(64, 128);
 		_saved = false;
 	}
-	
+
 	public override function activate(player:Player)
 	{
 		// if we've already saved, don't save again
 		if (_saved) return;
 		_saved = true;
-		
+
 		_sprite.play("glow");
-		new Sfx(new SfxSave()).play(0.4); // play sfx
+		new Sfx("sfx/save").play(0.4); // play sfx
 		cast(HXP.world, Game).save();
 		var a:Announce = new Announce(HXP.screen.width / 2, 150, "Game Saved");
 		a.centered = true;
 		HXP.world.add(a);
 	}
-	
+
 	private var _saved:Bool;
 	private var _sprite:Spritemap;
-	
+
 }

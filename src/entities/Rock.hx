@@ -14,11 +14,11 @@ class Rock extends Physics
 	public function new(x:Float, y:Float, imageType:String)
 	{
 		super(x, y);
-		var image:Class<Dynamic> = null;
+		var image:String = "";
 		switch (imageType)
 		{
-			case "rock": image = GfxRock;
-			case "smallrock": image = GfxSmallRock;
+			case "rock": image = "gfx/objects/MovableRock.png";
+			case "smallrock": image = "gfx/objects/MovableRock_small.png";
 		}
 		graphic = _image = new Image(image);
 		_image.centerOO();
@@ -27,17 +27,17 @@ class Rock extends Physics
 		layer = 10;
 		maxSpeed = 450;
 	}
-	
+
 	public override function kill()
 	{
 		HXP.world.remove(this);
 		super.kill();
 	}
-	
+
 	public override function update()
 	{
 		velocity.y += 4; // gravity
-		
+
 		var hit:Entity = collideTypes(_hitTypes, x + HXP.sign(velocity.x) * 3, y + HXP.sign(velocity.y) * 3);
 		if (hit != null)
 		{
@@ -46,9 +46,9 @@ class Rock extends Physics
 			else
 				HXP.world.remove(hit);
 		}
-		
+
 		super.update();
-		
+
 		if (onFloor)
 		{
 			velocity.x = 0;
@@ -58,8 +58,8 @@ class Rock extends Physics
 			velocity.y = 0;
 		}
 	}
-	
+
 	private static inline var _hitTypes:Array<String> = ["fish", "sheol", "wall"];
 	private var _image:Image;
-	
+
 }

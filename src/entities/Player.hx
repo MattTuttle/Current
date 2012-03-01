@@ -35,34 +35,34 @@ typedef PickupType = {
 
 class Player extends Physics
 {
-	
+
 	public var following:Int; // bubbles following
 	public var frozen:Bool;
-	
-	public function new(x:Float, y:Float) 
+
+	public function new(x:Float, y:Float)
 	{
 		super(x, y);
-		var image:Image = new Image(GfxBubble);
+		var image:Image = new Image("gfx/bubble.png");
 		image.centerOO();
 		graphic = image;
-		mask = new Pixelmask(GfxBubble, -8, -8);
-		
+		mask = new Pixelmask("gfx/bubble.png", -8, -8);
+
 		following = 0;
 		bounce = 2;
 		_bubbles = new Array<Bubble>();
 		_bubbleAngle = 0;
 		_shootTime = 0;
-		
+
 		type = "keep";
 		frozen = false;
-		
+
 		Input.define("up", [Key.W, Key.UP]);
 		Input.define("down", [Key.S, Key.DOWN]);
 		Input.define("left", [Key.A, Key.LEFT]);
 		Input.define("right", [Key.D, Key.RIGHT]);
 		Input.define("grab", [Key.SPACE, Key.SHIFT]);
 	}
-	
+
 	public function loadData()
 	{
 		// sets max bubbles as well
@@ -74,13 +74,13 @@ class Player extends Physics
 		else
 			_pickups = new Hash<PickupType>();
 	}
-	
+
 	public function saveData()
 	{
 		Data.write("maxLayer", maxLayer);
 		Data.write("pickups", Serializer.run(_pickups));
 	}
-	
+
 	public function hasPickup(pickup:String, ?level:String):Bool
 	{
 		if (_pickups.exists(pickup))
@@ -102,14 +102,14 @@ class Player extends Physics
 		}
 		return false;
 	}
-	
+
 	public function getPickup(pickup:String):Int
 	{
 		if (_pickups.exists(pickup))
 			return _pickups.get(pickup).number;
 		return 0;
 	}
-	
+
 	public function setPickup(pickup:String, room:String)
 	{
 		var p:PickupType;
@@ -123,16 +123,16 @@ class Player extends Physics
 			p = { number: 1, rooms:new Array<String>() };
 		}
 		p.rooms.push(room);
-		
+
 		// special cases
 		switch (pickup)
 		{
 			case "layer": maxLayer = p.number + 1;
 		}
-		
+
 		_pickups.set(pickup, p);
 	}
-	
+
 	public function switchRoom(direction:String)
 	{
 		switch (direction)
@@ -162,7 +162,7 @@ class Player extends Physics
 		velocity.x = velocity.y = 0;
 		resetBubbles();
 	}
-	
+
 	/**
 	 * Sets how many bubble layers we can have
 	 */
@@ -181,22 +181,22 @@ class Player extends Physics
 		}
 		return value;
 	}
-	
+
 	public override function kill()
 	{
 		HXP.world.remove(this);
-		var pop:Sfx = new Sfx(new SfxBubblePop());
+		var pop:Sfx = new Sfx("sfx/pop");
 		pop.play();
 		super.kill();
 	}
-	
+
 	public function lastBubble():Bubble
 	{
 		if (_bubbles.length != 0)
 			_bubbles[_bubbles.length - 1];
 		return null;
 	}
-	
+
 	public override function update()
 	{
 		if (frozen) return;
@@ -204,9 +204,9 @@ class Player extends Physics
 		handleGrab();
 		handleToss();
 		handleShoot();
-		
+
 		super.update();
-		
+
 		var e:Entity = collideTypes(_enemyTypes, x, y);
 		if (e != null && _bubbles.length == 0)
 		{
@@ -215,17 +215,17 @@ class Player extends Physics
 			else
 				hurt(1);
 		}
-		
+
 		var interact:Interactable = cast(collide("interact", x, y), Interactable);
 		if (interact != null)
 			interact.activate(this);
-		
+
 		if (collide("exit", x, y) != null)
 		{
 			cast(_world, Game).finishGame();
 			frozen = true;
 		}
-		
+
 		// check if player heads off screen
 		var game:Game = cast(HXP.world, Game);
 		if (dead)
@@ -242,14 +242,14 @@ class Player extends Physics
 				game.switchLevel("top");
 			else if (y > Game.levelHeight)
 				game.switchLevel("bottom");
-			
+
 			// rotate bubbles
 			_bubbleAngle += 1;
 			for (i in 0 ... _bubbles.length)
 			{
 				moveBubble(i);
 			}
-			
+
 			var bubble:Bubble = cast(collide("bubble", x, y), Bubble);
 			if (bubble != null)
 			{
@@ -257,7 +257,7 @@ class Player extends Physics
 			}
 		}
 	}
-	
+
 	public function resetBubbles()
 	{
 		for (i in 0 ... _bubbles.length)
@@ -266,13 +266,13 @@ class Player extends Physics
 			_bubbles[i].reset = true;
 		}
 	}
-	
+
 	private function moveBubble(index:Int)
 	{
 		var layer:Int = -1;
 		var numOnLayer:Int = 0;
 		var angleIndex:Int = index;
-		
+
 		var total:Int = 0;
 		for (i in 0 ... _bubbleLayers.length)
 		{
@@ -285,18 +285,18 @@ class Player extends Physics
 			}
 			angleIndex -= _bubbleLayers[i];
 		}
-		
+
 		// this bubble is on an undefined layer
 		if (layer == -1) return;
-		
+
 		var offsetAngle:Float = (angleIndex % numOnLayer) * 360 / numOnLayer;
 		var offsetRadius:Float = layer * 12 + width;
 		var angle:Float = (_bubbleAngle + offsetAngle) * HXP.RAD;
-		
+
 		_bubbles[index].targetX = Math.cos(angle) * offsetRadius + x;
 		_bubbles[index].targetY = Math.sin(angle) * offsetRadius + y;
 	}
-	
+
 	public function removeBubble(?bubble:Bubble)
 	{
 		if (bubble == null)
@@ -309,7 +309,7 @@ class Player extends Physics
 			_bubbles.remove(bubble);
 		}
 	}
-	
+
 	private function addBubble(bubble:Bubble)
 	{
 		if (bubble.owned || _bubbles.length >= _maxBubbles) return;
@@ -317,7 +317,7 @@ class Player extends Physics
 		bubble.owner = this;
 		moveBubble(_bubbles.length - 1);
 	}
-	
+
 	private function handleMovement()
 	{
 		// Horizontal movement
@@ -333,7 +333,7 @@ class Player extends Physics
 		{
 			applyDrag(true, false); // horizontal
 		}
-		
+
 		// Vertical movement
 		if (Input.check("up"))
 		{
@@ -348,11 +348,11 @@ class Player extends Physics
 			applyDrag(false, true); // vertical
 		}
 	}
-	
+
 	private function handleShoot()
 	{
 		if (!hasPickup("shoot") || _tossObject != null) return;
-		
+
 		_shootTime -= HXP.elapsed;
 		if (Input.mouseDown && _bubbles.length > 0 && _shootTime < 0)
 		{
@@ -361,11 +361,11 @@ class Player extends Physics
 			_shootTime = 0.2; // shoot cooldown
 		}
 	}
-	
+
 	private function handleGrab()
 	{
 		if (!hasPickup("grab")) return;
-		
+
 		if (Input.check("grab") && _bubbles.length > 0)
 		{
 			if (_grabObject == null)
@@ -412,11 +412,11 @@ class Player extends Physics
 			_grabObject = null;
 		}
 	}
-	
+
 	private function handleToss()
 	{
 		if (!hasPickup("toss")) return;
-		
+
 		if (Input.mousePressed)
 		{
 			_tossObject = null;
@@ -446,28 +446,28 @@ class Player extends Physics
 			}
 		}
 	}
-	
+
 	private static inline var _enemyTypes:Array<String> = ["fish", "coral"];
 	private static inline var _grabTypes:Array<String> = ["rock", "gem"];
 	private static inline var _tossTypes:Array<String> = ["rock"];
 	private static inline var _bubbleLayers:Array<Int> = [6, 12, 18, 24];
-	
+
 	private var _grabTime:Float;
 	private var _grabObject:Physics;
-	
+
 	// drag objects
 	private var _tossX:Float;
 	private var _tossY:Float;
 	private var _tossTime:Float;
 	private var _tossObject:Physics;
-	
+
 	private var _shootTime:Float;
-	
+
 	private var _pickups:Hash<PickupType>;
-	
+
 	private var _maxBubbles:Int;
 	private var _maxLayer:Int;
 	private var _bubbles:Array<Bubble>;
 	private var _bubbleAngle:Float;
-	
+
 }

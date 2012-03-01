@@ -11,43 +11,42 @@ import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
-import flash.text.TextLineMetrics;
 
 class Announce extends Entity
 {
-	
+
 	public var displaySpeed:Float;
 	public var displayHold:Float;
 
 	public function new(x:Float, y:Float, text:String, ?complete:Void->Void)
 	{
 		super(x, y);
-		
+
 		_field = new TextField();
 		_field.embedFonts = true;
 		_field.multiline = true;
 		_field.defaultTextFormat = _format = new TextFormat("FontBubble", 24, 0xFFFFFF);
 		_field.text = "";
 		_field.autoSize = TextFieldAutoSize.LEFT;
-		
+
 		_drawable = new Sprite();
 		_drawable.blendMode = BlendMode.LAYER;
 		_drawable.addChild(_field);
-		
+
 		_complete = complete;
-		
+
 		_text = text;
 		_index = 0;
 		_angle = 0;
 		originX = originY = 0;
 		_waitTime = 0;
 		_matrix = HXP.matrix;
-		layer = -500;
-		
+		layer = 5;
+
 		displaySpeed = 1 / text.length;
 		displayHold = (1 - displaySpeed) * 5;
 	}
-	
+
 	public var centered(getCentered, setCentered):Bool;
 	private function getCentered():Bool { return _centered; }
 	private function setCentered(value:Bool):Bool
@@ -60,7 +59,7 @@ class Announce extends Entity
 		_field.setTextFormat(_format);
 		return value;
 	}
-	
+
 	public var color(getColor, setColor):Int;
 	private function getColor():Int { return _format.color; }
 	private function setColor(value:Int):Int
@@ -69,7 +68,7 @@ class Announce extends Entity
 		_field.setTextFormat(_format);
 		return value;
 	}
-	
+
 	public var size(getSize, setSize):Float;
 	private function getSize():Float { return _format.size; }
 	private function setSize(value:Float):Float
@@ -78,7 +77,7 @@ class Announce extends Entity
 		_field.setTextFormat(_format);
 		return value;
 	}
-	
+
 	public override function update()
 	{
 		_waitTime -= HXP.elapsed;
@@ -113,7 +112,7 @@ class Announce extends Entity
 		}
 		super.update();
 	}
-	
+
 	public override function render()
 	{
 		_matrix.identity();
@@ -122,7 +121,7 @@ class Announce extends Entity
 		HXP.buffer.draw(_drawable, _matrix);
 		super.render();
 	}
-	
+
 	private var _complete:Void->Void;
 	private var _centered:Bool;
 	private var _angle:Float;
@@ -133,5 +132,5 @@ class Announce extends Entity
 	private var _field:TextField;
 	private var _drawable:Sprite;
 	private var _format:TextFormat;
-	
+
 }

@@ -18,23 +18,23 @@ enum BubbleState
 
 class Bubble extends Being
 {
-	
+
 	public var speed:Float;
 	public var targetX:Float;
 	public var targetY:Float;
 	public var reset:Bool;
 
-	public function new(x:Float, y:Float, ?life:Float) 
+	public function new(x:Float, y:Float, ?life:Float)
 	{
 		super(x, y);
-		_bubble = new Spritemap(GfxSmallBubble, 8, 8);
+		_bubble = new Spritemap("gfx/bubble_small.png", 8, 8);
 		_bubble.add("grow", [0, 1, 2, 3], 12, false);
 		_bubble.play("grow");
 		_bubble.centerOO();
 		graphic = _bubble;
-		
+
 		setHitbox(8, 8, 4, 4);
-		layer = -5;
+		layer = 5;
 		type = "bubble";
 		speed = 3;
 		if (life != null)
@@ -43,7 +43,7 @@ class Bubble extends Being
 			_life = 4 + Math.random() * 2;
 		_state = FLOAT;
 	}
-	
+
 	public override function kill()
 	{
 		if (_owner != null)
@@ -52,14 +52,14 @@ class Bubble extends Being
 				_owner.removeBubble(this);
 		}
 		if (_state == OWNED || _state == SHOOT)
-			new Sfx(new SfxBubblePop()).play();
+			new Sfx("sfx/pop").play();
 		HXP.world.remove(this);
 		super.kill();
 	}
-	
+
 	public var owned(getOwned, null):Bool;
 	private function getOwned():Bool { return (_owner != null); }
-	
+
 	public var owner(null, setOwner):Dynamic;
 	private function setOwner(value:Dynamic):Dynamic
 	{
@@ -68,14 +68,14 @@ class Bubble extends Being
 			// if we're owned try to remove the bubble
 			if (_owner != null && Reflect.hasField(_owner, "removeBubble"))
 				_owner.removeBubble(this);
-			
+
 			_owner = value;
 			_state = OWNED;
 			type = "keep";
 		}
 		return value;
 	}
-	
+
 	public function shoot(wx:Float, wy:Float)
 	{
 		_state = SHOOT;
@@ -87,29 +87,29 @@ class Bubble extends Being
 		_owner = null;
 		type = "dead";
 	}
-	
+
 	public override function update()
 	{
 		if (dead) return;
 		// always check if we are colliding with something
 		var enemy:Being = cast(collideTypes(_enemyTypes, x, y), Being);
-		
+
 		switch (_state)
 		{
 			case FLOAT:
 				// move upward in the water
 				x += Math.random() - 0.5;
 				y += Math.random() - 1.5;
-				
+
 				// without an owner we have a limited lifespan
 				_life -= HXP.elapsed;
-				if (_life < 1) 
+				if (_life < 1)
 				{
 					_bubble.alpha = _life;
 					if (_world != null) type = "dead"; // check _world to prevent crash...
 				}
 				if (_life < 0) HXP.world.remove(this);
-				
+
 				// hit map without an owner, POP!
 				if (collideTypes(_hitTypes, x, y) != null || enemy != null) kill();
 			case OWNED:
@@ -130,7 +130,7 @@ class Bubble extends Being
 					x += _point.x;
 					y += _point.y;
 				}
-				
+
 				// pop if we hit something
 				if (enemy != null) hurt(1);
 			case SHOOT:
@@ -142,16 +142,16 @@ class Bubble extends Being
 				moveBy(targetX, targetY);
 				if (collideTypes(_hitTypes, x, y) != null) kill();
 		}
-		
+
 		super.update();
 	}
-	
+
 	private static inline var _enemyTypes:Array<String> = ["fish", "coral"];
 	private static inline var _hitTypes:Array<String> = ["wall", "map", "door"];
-	
+
 	private var _state:BubbleState;
 	private var _owner:Dynamic;
 	private var _life:Float;
 	private var _bubble:Spritemap;
-	
+
 }

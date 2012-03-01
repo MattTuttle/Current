@@ -9,18 +9,18 @@ import com.haxepunk.tweens.misc.VarTween;
 class Gem extends Physics
 {
 
-	public function new(x:Float, y:Float) 
+	public function new(x:Float, y:Float)
 	{
 		super(x, y);
 		_originX = x;
 		_originY = y;
-		
-		_sprite = new Spritemap(GfxGem, 35, 35, onAnimEnd);
+
+		_sprite = new Spritemap("gfx/objects/gem.png", 35, 35, onAnimEnd);
 		_sprite.add("idle", [0]);
 		_sprite.add("shimmer", [1, 2, 3], 12);
 		_sprite.centerOO();
 		graphic = _sprite;
-		
+
 		setHitbox(35, 35, 17, 17);
 		type = "gem";
 		_shimmerTime = 0;
@@ -31,12 +31,12 @@ class Gem extends Physics
 		_alphaTween = new VarTween(tweenComplete);
 		addTween(_alphaTween);
 	}
-	
+
 	private function onAnimEnd()
 	{
 		_sprite.play("idle");
 	}
-	
+
 	private function tweenComplete()
 	{
 		if (_sprite.alpha == 0)
@@ -46,7 +46,7 @@ class Gem extends Physics
 			_alphaTween.tween(_sprite, "alpha", 1, 0.5);
 		}
 	}
-	
+
 	public override function update()
 	{
 		_shimmerTime -= HXP.elapsed;
@@ -55,7 +55,7 @@ class Gem extends Physics
 			_sprite.play("shimmer");
 			_shimmerTime = Math.random() * 2 + 2;
 		}
-		
+
 		// we're moving
 		if (velocity.x > 0 || velocity.y > 0)
 		{
@@ -78,14 +78,14 @@ class Gem extends Physics
 		super.update();
 		applyDrag(true, true);
 	}
-	
+
 	private var _alphaTween:VarTween;
 	private var _startVelocity:Bool;
 	private var _velocityTime:Float;
-	
+
 	private var _originX:Float;
 	private var _originY:Float;
 	private var _shimmerTime:Float;
 	private var _sprite:Spritemap;
-	
+
 }

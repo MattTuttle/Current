@@ -20,38 +20,37 @@ import entities.Player;
 import flash.display.BitmapData;
 import flash.utils.ByteArray;
 import haxe.xml.Fast;
-import hxmikmod.MikModPlayer;
 import ui.Announce;
+import nme.Assets;
 
 class Game extends World
 {
-	
+
 //	public var shader:WaterShader;
 	public var player:Player;
 	public static var levelWidth:Int;
 	public static var levelHeight:Int;
-	public static var musicPlayer:MikModPlayer = new MikModPlayer();
 
 	public function new()
 	{
 		super();
-		
+
 //		shader = new WaterShader();
 		_exits = new Hash<String>();
-		
+
 		_currentMusic = "";
 		_music = new Hash<ByteArray>();
-		_music.set("heartbeat", new ModHeartbeat());
-		_music.set("boss", new ModBoss());
-		_music.set("home", new ModHome());
-		_music.set("city", new ModCity());
-		_music.set("storm", new ModStorm());
-		
+//		_music.set("heartbeat", new ModHeartbeat());
+//		_music.set("boss", new ModBoss());
+//		_music.set("home", new ModHome());
+//		_music.set("city", new ModCity());
+//		_music.set("storm", new ModStorm());
+
 		_soundFader = new Fader(soundFadeComplete);
 		addTween(_soundFader, false);
 		_muted = false;
 	}
-	
+
 	private function fadeComplete()
 	{
 		if (_fadeTween.value == 1)
@@ -62,27 +61,27 @@ class Game extends World
 			player.switchRoom(_direction);
 		}
 	}
-	
+
 	public override function begin()
 	{
 		load();
-		
+
 		// lighting alpha tween
 		_alphaTween = new NumTween(alphaComplete, TweenType.Looping);
 		addTween(_alphaTween, true);
 		alphaComplete();
-		
+
 		// fade to black
 		_fade = Image.createRect(HXP.screen.width, HXP.screen.height, 0);
 		_fade.scrollX = _fade.scrollY = 0;
-		addGraphic(_fade, -1000).type = "keep";
+		addGraphic(_fade, 0).type = "keep";
 		_fadeTween = new NumTween(fadeComplete);
 		addTween(_fadeTween);
 		_fadeTween.tween(1, 0, 2);
-		
+
 		_soundFader.start();
 	}
-	
+
 	public function restart()
 	{
 		player = null;
@@ -91,16 +90,16 @@ class Game extends World
 		_direction = "none"; // fake direction
 		_fadeTween.tween(0, 1, 1);
 	}
-	
+
 	public function load()
 	{
 		Data.load("Current");
 		_doors = Data.read("doors", new Array<String>());
-		
+
 		_level = Data.readString("level", "R01");
 		loadLevel(_level);
 	}
-	
+
 	public function save()
 	{
 		Data.write("doors", _doors);
@@ -108,12 +107,12 @@ class Game extends World
 		player.saveData();
 		Data.save("Current");
 	}
-	
+
 	public function openedDoor()
 	{
 		_doors.push(_level);
 	}
-	
+
 	private function doorOpen():Bool
 	{
 		for (room in _doors)
@@ -123,7 +122,7 @@ class Game extends World
 		}
 		return false;
 	}
-	
+
 	private function alphaComplete()
 	{
 		var rand:Float = Math.random() * 5 + 10;
@@ -136,47 +135,47 @@ class Game extends World
 			_alphaTween.tween(0.5, 1.0, rand);
 		}
 	}
-	
+
 	private function addImage(id:String, layer:Int):Image
 	{
-		var c:Class<Dynamic> = Type.resolveClass("Gfx" + id);
-		if (c != null)
-		{
-			var image:Image = new Image(HXP.getBitmap(c));
+		var image:Image;
+		try {
+			image = new Image(id);
 			addGraphic(image).layer = layer;
-			return image;
+		} catch (msg:String) {
+			return null;
 		}
-		return null;
+		return image;
 	}
-	
+
 	private function addForeground(id:String, layer:Int):Image
 	{
-		var c:Class<Dynamic> = Type.resolveClass("Gfx" + id);
-		if (c != null)
-		{
-			var image:BitmapData = HXP.getBitmap(c);
-			var mask:Pixelmask = new Pixelmask(image);
-			mask.threshold = 250; // pass through shadows
-			var ent:Entity = new Entity(0, 0, new Image(image), mask);
-			ent.type = "map";
-			ent.layer = layer;
-			add(ent);
-			return cast(ent.graphic, Image);
+		var image:Image;
+		try {
+			image = new Image("levels/" + id);
+		} catch (msg:String) {
+			return null;
 		}
-		return null;
+		var mask:Pixelmask = new Pixelmask(image);
+		mask.threshold = 250; // pass through shadows
+		var ent:Entity = new Entity(0, 0, image, mask);
+		ent.type = "map";
+		ent.layer = layer;
+		add(ent);
+		return image;
 	}
-	
-	private function getLevelData(id:String):ByteArray
+
+	private function getLevelData(id:String):String
 	{
-		var c:Class<Dynamic> = Type.resolveClass("Lvl" + id + "Data");
-		if (c != null)
-			return Type.createInstance(c, []);
-		return null;
+		var level:String = Assets.getText("levels/" + id + "/level.oel");
+		if (level != null)
+			return level;
+		return Assets.getText("levels/temple/" + id + ".oel");
 	}
-	
+
 	private function loadLevel(id:String)
 	{
-		_level = id;
+		_level = StringTools.replace(id, "R", "room");
 		var entities:Array<Entity> = new Array<Entity>();
 		getAll(entities);
 		for (entity in entities)
@@ -184,61 +183,61 @@ class Game extends World
 			if (entity.type != "keep")
 				remove(entity);
 		}
-		
-		addImage(id + "Background", 90);
-		var walls:Image = addImage(id + "Walls", 30);
-		addImage(id + "Decor", 20);
-		
+
+		addImage("levels/" + _level + "/immediatebg.png", 90);
+		var walls:Image = addImage("levels/" + _level + "/walls.png", 30);
+		addImage("levels/" + _level + "/decor.png", 20);
+
 		// parallax image, only for hand drawn levels
 		if (walls != null)
 		{
 			var parallax:Image;
-			parallax = addImage("FarParallax", 110);
+			parallax = addImage("gfx/FarParallax.png", 110);
 			parallax.scrollX = 0.8;
 			parallax.scrollY = 0.6;
 			parallax.x -= 200;
-			parallax = addImage("Parallax", 100);
+			parallax = addImage("gfx/Parallax.png", 100);
 			parallax.scrollX = 0.9;
 			parallax.scrollY = 0.7;
 		}
-		
-		addImage(id + "Front", -90);
-		_lighting = addImage(id + "Lighting", -100);
-		
+
+		addImage("levels/" + _level + "/front.png", 1);
+		_lighting = addImage("levels/" + _level + "/lighting.png", 0);
+
 		// load level specific data
-		var data:ByteArray = getLevelData(id);
+		var data:String = getLevelData(_level);
 		if (data == null)
 		{
-			trace("Level data does not exist for " + id);
+			trace("Level data does not exist for " + _level);
 		}
 		else
 		{
-			var xml:Fast = new Fast(Xml.parse(data.toString()));
+			var xml:Fast = new Fast(Xml.parse(data));
 			xml = xml.node.level;
-			
+
 			_vignette = false;
 			HXP.screen.color = 0x017DD7;
 			if (xml.has.vignette && xml.att.vignette == "true")
 			{
 				_vignette = true;
 				HXP.screen.color = 0x000000;
-				var image:Image = addImage("Vignette", -150);
+				var image:Image = addImage("gfx/current_vignette.png", 0);
 				image.scrollX = image.scrollY = 0;
 			}
-			
+
 			if (xml.has.left)   _exits.set("left", xml.att.left);
 			if (xml.has.right)  _exits.set("right", xml.att.right);
 			if (xml.has.top)    _exits.set("top", xml.att.top);
 			if (xml.has.bottom) _exits.set("bottom", xml.att.bottom);
-			
+
 			// set the level dimensions
 			levelWidth = Std.parseInt(xml.node.width.innerData);
 			levelHeight = Std.parseInt(xml.node.height.innerData);
-			
+
 			// change music
-			if (xml.has.music)
-				changeMusic(xml.att.music);
-			
+//			if (xml.has.music)
+//				changeMusic(xml.att.music);
+
 			// load objects
 			if (xml.hasNode.actors)
 				loadObjects(xml.node.actors);
@@ -253,19 +252,19 @@ class Game extends World
 				loadWalls(xml.node.walls);
 		}
 	}
-	
+
 	private function soundFadeComplete()
 	{
 		if (HXP.volume == 0)
 		{
-			musicPlayer.stop();
-			if (_music.exists(_currentMusic))
-				musicPlayer.loadSong(_music.get(_currentMusic));
+//			musicPlayer.stop();
+//			if (_music.exists(_currentMusic))
+//				musicPlayer.loadSong(_music.get(_currentMusic));
 			if (!_muted)
 				_soundFader.fadeTo(1, 4);
 		}
 	}
-	
+
 	private function changeMusic(id:String)
 	{
 		if (_currentMusic != id && _music.exists(id))
@@ -274,11 +273,11 @@ class Game extends World
 			_currentMusic = id;
 		}
 	}
-	
+
 	private function loadTilemap(group:Fast, layer:Int)
 	{
 		var size:Int = 32;
-		var map:Tilemap = new Tilemap(GfxTileset, levelWidth, levelHeight, size, size);
+		var map:Tilemap = new Tilemap(HXP.getBitmap("levels/tileset.png"), levelWidth, levelHeight, size, size);
 		map.usePositions = true;
 		for (obj in group.elements)
 		{
@@ -298,7 +297,7 @@ class Game extends World
 		}
 		addGraphic(map, layer);
 	}
-	
+
 	private function loadWalls(group:Fast)
 	{
 		var size:Int = 8;
@@ -313,11 +312,11 @@ class Game extends World
 		}
 		addMask(grid, "map");
 	}
-	
+
 	private function loadObjects(group:Fast)
 	{
 		var x:Float, y:Float, angle:Float;
-		
+
 		// only add the player if we're starting the game
 		if (player == null)
 		{
@@ -337,7 +336,7 @@ class Game extends World
 			player.loadData();
 			add(player);
 		}
-		
+
 		for (obj in group.elements)
 		{
 			x = Std.parseFloat(obj.att.x);
@@ -351,27 +350,27 @@ class Game extends World
 				case "coral": add(new entities.enemies.Coral(x, y, angle));
 				case "urchin": add(new entities.enemies.Urchin(x, y));
 				case "sheol": add(new entities.enemies.Sheol(x, y, player));
-				
+
 				// gem panel
 				case "gem": if (!doorOpen()) add(new entities.puzzle.Gem(x, y));
 				case "door": if (!doorOpen()) add(new entities.puzzle.GemDoor(x, y));
 				case "panel": add(new entities.puzzle.GemPanel(x, y, doorOpen()));
-				case "coloredDoor": 
+				case "coloredDoor":
 					if (obj.has.color)
 						add(new entities.puzzle.LockedDoor(x, y, obj.att.color, player));
 					else
 						trace("door needs a color");
-				
+
 				// objects
 				case "checkpoint": add(new entities.Checkpoint(x, y));
 				case "vent": add(new entities.ThermalVent(x, y, angle));
 				case "breakableWall": add(new entities.BreakableWall(x, y));
 				case "rock": add(new entities.Rock(x, y, obj.name));
 				case "smallrock": add(new entities.Rock(x, y, obj.name));
-				
+
 				case "exit": //add(new entities.Exit(x, y, Std.parseInt(obj.att.width), Std.parseInt(obj.att.height)));
 				case "player": // do nothing
-				
+
 				//powerups
 				default:
 					if (!player.hasPickup(obj.name, _level))
@@ -379,20 +378,20 @@ class Game extends World
 			}
 		}
 	}
-	
+
 	public function finishGame()
 	{
 		var white:Image = Image.createRect(HXP.screen.width, HXP.screen.height);
 		white.alpha = white.scrollX = white.scrollY = 0;
-		addGraphic(white).layer = -10000;
+		addGraphic(white).layer = 1;
 		var whiteout:VarTween = new VarTween(finalWhiteOut, TweenType.OneShot);
 		whiteout.tween(white, "alpha", 1, 2);
 		addTween(whiteout);
-		
+
 		_currentMusic = ""; // clear out music
 		_soundFader.fadeTo(0, 1);
 	}
-	
+
 	private function finalWhiteOut()
 	{
 		var text:String = "The path of life leads upward\nfor the prudent, that he may turn\naway from Sheol beneath.\n\nProverbs 15:24";
@@ -404,9 +403,9 @@ class Game extends World
 		a.size = 24;
 		a.displaySpeed = 0.05;
 		a.displayHold = 8;
-		add(a).layer = -10001;
+		add(a).layer = 0;
 	}
-	
+
 	public function switchLevel(direction:String)
 	{
 		_direction = direction;
@@ -420,7 +419,7 @@ class Game extends World
 		}
 		_fadeTween.tween(0, 1, 0.3);
 	}
-	
+
 	private function clampCamera()
 	{
 		// move camera with player
@@ -429,7 +428,7 @@ class Game extends World
 			camera.x = player.x - HXP.screen.width / 2;
 			camera.y = player.y - HXP.screen.height / 2;
 		}
-		
+
 		// Vignette needs to follow the player exactly
 		if (!_vignette)
 		{
@@ -437,22 +436,23 @@ class Game extends World
 				camera.x = 0;
 			else if (camera.x > levelWidth - HXP.screen.width)
 				camera.x = levelWidth - HXP.screen.width;
-				
+
 			if (camera.y < 0)
 				camera.y = 0;
 			else if (camera.y > levelHeight - HXP.screen.height)
 				camera.y = levelHeight - HXP.screen.height;
 		}
 	}
-	
+
 	public override function update()
 	{
-		_fade.alpha = _fadeTween.value;
-		
+		if (_fadeTween != null)
+			_fade.alpha = _fadeTween.value;
+
 		// shift the alpha on the lighting layer, if it exists
 		if (_lighting != null)
 			_lighting.alpha = _alphaTween.value;
-			
+
 		if (Input.pressed(Key.M))
 		{
 			_muted = !_muted;
@@ -461,18 +461,18 @@ class Game extends World
 			else
 				HXP.volume = 1;
 		}
-		
+
 		super.update();
 		clampCamera();
 //		shader.update();
 	}
-	
+
 	// music
 	private var _currentMusic:String;
 	private var _music:Hash<ByteArray>;
 	private var _soundFader:Fader;
 	private var _muted:Bool;
-	
+
 	// level info
 	private var _doors:Array<String>;
 	private var _level:String;
@@ -480,14 +480,14 @@ class Game extends World
 	private var _exits:Hash<String>;
 	private var _nextLevel:String;
 	private var _direction:String;
-	
+
 	// lighting
 	private var _alphaTween:NumTween;
 	private var _lighting:Image;
 	private var _vignette:Bool;
-	
+
 	// fade to black
 	private var _fadeTween:NumTween;
 	private var _fade:Image;
-	
+
 }

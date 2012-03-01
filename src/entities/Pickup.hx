@@ -9,7 +9,7 @@ import ui.Announce;
 class Pickup extends Interactable
 {
 
-	public function new(x:Float, y:Float, name:String, room:String) 
+	public function new(x:Float, y:Float, name:String, room:String)
 	{
 		super(x, y);
 		var _image:Image;
@@ -19,12 +19,12 @@ class Pickup extends Interactable
 		HXP.rect.height = 15;
 		switch(name)
 		{
-			case "redKey": HXP.rect.y = 15; _image = new Image(GfxKeys, HXP.rect);
-			case "blueKey": HXP.rect.y = 30; _image = new Image(GfxKeys, HXP.rect);
-			case "greenKey": HXP.rect.y = 45; _image = new Image(GfxKeys, HXP.rect);
-			case "yellowKey": _image = new Image(GfxKeys, HXP.rect);
-			case "bossKey": _image = new Image(GfxBossKey);
-			default: _image = new Image(GfxScroll);
+			case "redKey": HXP.rect.y = 15; _image = new Image("gfx/objects/key.png", HXP.rect);
+			case "blueKey": HXP.rect.y = 30; _image = new Image("gfx/objects/key.png", HXP.rect);
+			case "greenKey": HXP.rect.y = 45; _image = new Image("gfx/objects/key.png", HXP.rect);
+			case "yellowKey": _image = new Image("gfx/objects/key.png", HXP.rect);
+			case "bossKey": _image = new Image("gfx/objects/boss_key.png");
+			default: _image = new Image("gfx/objects/scroll.png");
 		}
 		graphic = _image;
 		setHitbox(_image.width, _image.height);
@@ -34,7 +34,7 @@ class Pickup extends Interactable
 		_startY = y;
 		_room = room;
 	}
-	
+
 	public override function update()
 	{
 		y += _floatDir;
@@ -42,7 +42,7 @@ class Pickup extends Interactable
 			_floatDir = -_floatDir;
 		super.update();
 	}
-	
+
 	public override function activate(player:Player)
 	{
 		player.setPickup(_name, _room);
@@ -65,14 +65,14 @@ class Pickup extends Interactable
 			a.centered = true;
 			HXP.world.add(a);
 		}
-		var sfx:Sfx = new Sfx(new SfxPowerup());
+		var sfx:Sfx = new Sfx("sfx/powerup");
 		sfx.play(0.9);
 		HXP.world.remove(this);
 	}
-	
+
 	private var _startY:Float;
 	private var _floatDir:Float;
 	private var _name:String;
 	private var _room:String;
-	
+
 }

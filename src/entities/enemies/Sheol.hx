@@ -13,13 +13,13 @@ import worlds.Game;
 class Sheol extends Physics
 {
 
-	public function new(x:Float, y:Float, target:Player) 
+	public function new(x:Float, y:Float, target:Player)
 	{
 		super(x, y);
-		_image = new Image(GfxSheol);
+		_image = new Image("gfx/sheol_boss.png");
 		_image.centerOO();
 		graphic = _image;
-		
+
 		_spawnTime = 0;
 		_target = target;
 		layer = 76;
@@ -29,7 +29,7 @@ class Sheol extends Physics
 		_scaleTime = 0.5;
 		_provokeTime = 5;
 	}
-	
+
 	private function doneTween()
 	{
 		if (_image.scale == 1)
@@ -43,7 +43,7 @@ class Sheol extends Physics
 			{
 				_world.add(new Snapper(x, y, (Math.random() < 0.5) ? true : false));
 			}
-			
+
 			_scaleTween.tween(_image, "scale", 0, _scaleTime); // hide
 		}
 		else
@@ -51,11 +51,11 @@ class Sheol extends Physics
 //			_spawnTime = Math.random() * 3 + 2; // 2-5
 		}
 	}
-	
+
 	private function pullBubbles()
 	{
 		_bubbleTime -= HXP.elapsed;
-		
+
 		if (_bubble == null)
 		{
 			if (_bubbleTime > 0) return;
@@ -85,7 +85,7 @@ class Sheol extends Physics
 			}
 		}
 	}
-	
+
 	public override function update()
 	{
 		if (_provokeTime > 0)
@@ -113,16 +113,16 @@ class Sheol extends Physics
 		}
 		super.update();
 	}
-	
+
 	// pull off bubbles
 	private var _bubble:Bubble;
 	private var _bubbleTime:Float;
-	
+
 	private var _provokeTime:Float;
 	private var _scaleTime:Float;
 	private var _scaleTween:VarTween;
 	private var _target:Player;
 	private var _spawnTime:Float;
 	private var _image:Image;
-	
+
 }

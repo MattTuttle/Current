@@ -8,17 +8,17 @@ import com.haxepunk.graphics.Image;
 class BreakableWall extends Being
 {
 
-	public function new(x:Float, y:Float) 
+	public function new(x:Float, y:Float)
 	{
 		super(x, y);
-		graphic = new Image(GfxBreakableWall);
+		graphic = new Image("gfx/objects/breakable_wall.png");
 		type = "wall";
 		setHitbox(32, 64);
 	}
-	
+
 	public override function kill()
 	{
 		HXP.world.remove(this);
 	}
-	
+
 }

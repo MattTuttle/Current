@@ -15,16 +15,16 @@ enum PiranhaState
 class Piranha extends Physics
 {
 
-	public function new(x:Float, y:Float, angle:Float, target:Entity) 
+	public function new(x:Float, y:Float, angle:Float, target:Entity)
 	{
 		super(x, y);
-		_sprite = new Spritemap(GfxPiranha, 32, 32);
+		_sprite = new Spritemap("gfx/piranha.png", 32, 32);
 		_sprite.add("idle", [0]);
 		_sprite.add("watch", [1]);
 		_sprite.add("nom", [0, 1], 12);
 		_sprite.centerOO();
 		graphic = _sprite;
-		
+
 		setHitbox(24, 24, 12, 12);
 		type = "fish";
 		_state = IDLE;
@@ -33,12 +33,12 @@ class Piranha extends Physics
 		speed = 20;
 		faceAngle(angle);
 	}
-	
+
 	public override function kill()
 	{
 		_world.remove(this);
 	}
-	
+
 	private function faceAngle(angle:Float)
 	{
 		_sprite.angle = angle;
@@ -49,7 +49,7 @@ class Piranha extends Physics
 			_sprite.angle -= 180;
 		}
 	}
-	
+
 	private function switchState(state:PiranhaState)
 	{
 		switch (state)
@@ -63,7 +63,7 @@ class Piranha extends Physics
 		}
 		_state = state;
 	}
-	
+
 	public override function update()
 	{
 		_waitTime -= HXP.elapsed;
@@ -107,10 +107,10 @@ class Piranha extends Physics
 		}
 		super.update();
 	}
-	
+
 	private var _target:Entity;
 	private var _waitTime:Float;
 	private var _state:PiranhaState;
 	private var _sprite:Spritemap;
-	
+
 }
