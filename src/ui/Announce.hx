@@ -25,7 +25,8 @@ class Announce extends Entity
 		_field = new TextField();
 		_field.embedFonts = true;
 		_field.multiline = true;
-		_field.defaultTextFormat = _format = new TextFormat("FontBubble", 24, 0xFFFFFF);
+		var font = nme.Assets.getFont(HXP.defaultFont);
+		_field.defaultTextFormat = _format = new TextFormat(font.fontName, 24, 0xFFFFFF);
 		_field.text = "";
 		_field.autoSize = TextFieldAutoSize.LEFT;
 

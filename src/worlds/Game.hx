@@ -247,7 +247,7 @@ class Game extends World
 			if (xml.hasNode.world)
 				loadTilemap(xml.node.world, 75);
 			if (xml.hasNode.foreground)
-				loadTilemap(xml.node.foreground, -30);
+				loadTilemap(xml.node.foreground, 6);
 			if (xml.hasNode.walls)
 				loadWalls(xml.node.walls);
 		}

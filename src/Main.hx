@@ -23,12 +23,9 @@ class Main extends Engine
 
 	override public function init()
 	{
-#if flash
-		if (Capabilities.isDebugger)
+#if debug
+		HXP.console.enable();
 #end
-		{
-			HXP.console.enable();
-		}
 		HXP.world = new MainMenu();
 	}
 
