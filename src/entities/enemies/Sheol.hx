@@ -8,7 +8,7 @@ import com.haxepunk.graphics.Image;
 import com.haxepunk.tweens.misc.VarTween;
 import entities.Player;
 import flash.geom.Point;
-import worlds.Game;
+import scenes.Game;
 
 class Sheol extends Physics
 {
@@ -17,7 +17,7 @@ class Sheol extends Physics
 	{
 		super(x, y);
 		_image = new Image("gfx/sheol_boss.png");
-		_image.centerOO();
+		_image.centerOrigin();
 		graphic = _image;
 
 		_spawnTime = 0;
@@ -30,18 +30,18 @@ class Sheol extends Physics
 		_provokeTime = 5;
 	}
 
-	private function doneTween()
+	private function doneTween(_)
 	{
 		if (_image.scale == 1)
 		{
 			// spawn fish
 			if (Math.random() > 0.5)
 			{
-				_world.add(new Piranha(x, y, 0, _target));
+				scene.add(new Piranha(x, y, 0, _target));
 			}
 			else
 			{
-				_world.add(new Snapper(x, y, (Math.random() < 0.5) ? true : false));
+				scene.add(new Snapper(x, y, (Math.random() < 0.5) ? true : false));
 			}
 
 			_scaleTween.tween(_image, "scale", 0, _scaleTime); // hide

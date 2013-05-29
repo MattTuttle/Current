@@ -7,7 +7,7 @@ import com.haxepunk.graphics.Spritemap;
 import com.haxepunk.Sfx;
 import com.haxepunk.utils.Data;
 import ui.Announce;
-import worlds.Game;
+import scenes.Game;
 
 class Checkpoint extends Interactable
 {
@@ -32,11 +32,11 @@ class Checkpoint extends Interactable
 		_saved = true;
 
 		_sprite.play("glow");
-		new Sfx("sfx/save").play(0.4); // play sfx
-		cast(HXP.world, Game).save();
+		new Sfx("sfx/save" + #if flash ".mp3" #else ".wav" #end).play(0.4); // play sfx
+		cast(HXP.scene, Game).save();
 		var a:Announce = new Announce(HXP.screen.width / 2, 150, "Game Saved");
 		a.centered = true;
-		HXP.world.add(a);
+		HXP.scene.add(a);
 	}
 
 	private var _saved:Bool;

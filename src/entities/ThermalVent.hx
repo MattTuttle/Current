@@ -11,7 +11,7 @@ class ThermalVent extends Entity
 	{
 		super(x, y);
 		graphic = _image = new Image("gfx/objects/ThermalVent.png");
-		_image.centerOO();
+		_image.centerOrigin();
 		_image.angle = angle;
 		layer = 15;
 		_spawnTime = 2;
@@ -20,7 +20,7 @@ class ThermalVent extends Entity
 
 	private function spawnBubble()
 	{
-		HXP.world.add(new Bubble(x + Math.random() * 16, y, 2));
+		HXP.scene.add(new Bubble(x + Math.random() * 16, y, 2));
 		_spawnTime = Math.random() * 0.5;
 	}
 

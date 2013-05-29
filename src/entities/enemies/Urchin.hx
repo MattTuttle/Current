@@ -12,7 +12,7 @@ class Urchin extends Being
 		super(x, y);
 		var _image:Image;
 		graphic = _image = new Image("gfx/urchin.png");
-		_image.centerOO();
+		_image.centerOrigin();
 		setHitbox(48, 48, 24, 24);
 		layer = 50;
 		type = "fish";
@@ -20,7 +20,7 @@ class Urchin extends Being
 
 	public override function kill()
 	{
-		_world.remove(this);
+		scene.remove(this);
 	}
 
 }

@@ -18,7 +18,7 @@ class Gem extends Physics
 		_sprite = new Spritemap("gfx/objects/gem.png", 35, 35, onAnimEnd);
 		_sprite.add("idle", [0]);
 		_sprite.add("shimmer", [1, 2, 3], 12);
-		_sprite.centerOO();
+		_sprite.centerOrigin();
 		graphic = _sprite;
 
 		setHitbox(35, 35, 17, 17);
@@ -37,7 +37,7 @@ class Gem extends Physics
 		_sprite.play("idle");
 	}
 
-	private function tweenComplete()
+	private function tweenComplete(_)
 	{
 		if (_sprite.alpha == 0)
 		{

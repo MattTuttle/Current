@@ -3,7 +3,7 @@ package entities.puzzle;
 import com.haxepunk.HXP;
 import com.haxepunk.Entity;
 import com.haxepunk.graphics.Spritemap;
-import worlds.Game;
+import scenes.Game;
 
 class GemDoor extends Entity
 {
@@ -25,8 +25,8 @@ class GemDoor extends Entity
 	{
 		if (_sprite.currentAnim == "open")
 		{
-			cast(_world, Game).openedDoor();
-			_world.remove(this);
+			cast(scene, Game).openedDoor();
+			scene.remove(this);
 		}
 	}
 

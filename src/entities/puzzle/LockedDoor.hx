@@ -38,7 +38,7 @@ class LockedDoor extends Entity
 	{
 		if (_sprite.currentAnim == "open")
 		{
-			_world.remove(this);
+			scene.remove(this);
 		}
 	}
 

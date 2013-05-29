@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+  <meta title="Current" package="com.matttuttle.current" version="1.0.0" company="Matt Tuttle" />
+
+  <app file="Current" main="Main" path="bin" />
+
+  <window fps="60" resizable="true" background="0x017DD7" />
+  <window width="1280" height="800" unless="mobile" />
+  <window fullscreen="true" if="mobile" />
+
+  <source path="src" />
+
+  <haxelib name="nme" />
+  <haxelib name="HaxePunk" />
+
+  <assets path="assets/graphics" rename="gfx" include="*.png|*.jpg" />
+  <assets path="assets/audio" rename="sfx" include="*.mp3" if="flash" />
+  <assets path="assets/audio" rename="sfx" include="*.wav|*.ogg" unless="flash" />
+  <assets path="assets/font" rename="font" include="*.ttf" />
+  <assets path="assets/levels" rename="levels" include="*.png" type="image" />
+  <assets path="assets/levels" rename="levels" include="*.oel" type="text" />
+
+  <icon path="assets/HaxePunk.svg" size="256" />
+</project>

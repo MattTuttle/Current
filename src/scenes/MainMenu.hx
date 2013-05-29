@@ -1,4 +1,4 @@
-package worlds;
+package scenes;
 
 import com.haxepunk.HXP;
 import com.haxepunk.Entity;
@@ -8,10 +8,10 @@ import com.haxepunk.tweens.misc.VarTween;
 import com.haxepunk.tweens.sound.Fader;
 import com.haxepunk.utils.Ease;
 import com.haxepunk.utils.Data;
-import com.haxepunk.World;
+import com.haxepunk.Scene;
 import ui.Button;
 
-class MainMenu extends World
+class MainMenu extends Scene
 {
 
 	public function new()
@@ -49,7 +49,7 @@ class MainMenu extends World
 		addTween(logoAlphaTween);
 	}
 
-	private function logoComplete()
+	private function logoComplete(_)
 	{
 		var hw:Float = HXP.screen.width / 2;
 		add(new Button(hw, 280, "gfx/menu/new_game.png", onNewGame));
@@ -83,9 +83,9 @@ class MainMenu extends World
 	{
 	}
 
-	private function fadeComplete()
+	private function fadeComplete(_)
 	{
-		HXP.world = new Game();
+		HXP.scene = new Game();
 	}
 
 }

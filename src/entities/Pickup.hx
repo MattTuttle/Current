@@ -63,16 +63,15 @@ class Pickup extends Interactable
 		{
 			var a:Announce = new Announce(HXP.screen.width / 2, 150, text);
 			a.centered = true;
-			HXP.world.add(a);
+			HXP.scene.add(a);
 		}
-		var sfx:Sfx = new Sfx("sfx/powerup");
+		var sfx:Sfx = new Sfx("sfx/powerup" + #if flash ".mp3" #else ".wav" #end);
 		sfx.play(0.9);
-		HXP.world.remove(this);
+		HXP.scene.remove(this);
 	}
 
 	private var _startY:Float;
 	private var _floatDir:Float;
-	private var _name:String;
 	private var _room:String;
 
 }

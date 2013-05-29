@@ -5,7 +5,7 @@ import com.haxepunk.graphics.Image;
 import com.haxepunk.graphics.Spritemap;
 import com.haxepunk.HXP;
 import com.haxepunk.Entity;
-import worlds.Game;
+import scenes.Game;
 
 class Snapper extends Being
 {
@@ -28,8 +28,8 @@ class Snapper extends Being
 
 	public override function kill()
 	{
-		if (_world != null)
-			_world.remove(this);
+		if (scene != null)
+			scene.remove(this);
 	}
 
 	private function spawnBubbles()
@@ -37,7 +37,7 @@ class Snapper extends Being
 		_spawnTime -= HXP.elapsed;
 		if (_spawnTime > 0) return;
 
-		HXP.world.add(new Bubble(x, y - 16));
+		HXP.scene.add(new Bubble(x, y - 16));
 
 		_spawnTime = HXP.random * 2 + 2;
 	}

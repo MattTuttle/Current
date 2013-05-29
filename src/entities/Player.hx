@@ -6,15 +6,16 @@ import base.Physics;
 import com.haxepunk.HXP;
 import com.haxepunk.Entity;
 import com.haxepunk.graphics.Image;
-import com.haxepunk.masks.Pixelmask;
+import com.haxepunk.masks.Circle;
 import com.haxepunk.Sfx;
 import com.haxepunk.utils.Input;
 import com.haxepunk.utils.Key;
 import com.haxepunk.utils.Data;
+import com.haxepunk.utils.Touch;
 import flash.geom.Point;
 import haxe.Serializer;
 import haxe.Unserializer;
-import worlds.Game;
+import scenes.Game;
 
 enum Gesture
 {
@@ -43,9 +44,9 @@ class Player extends Physics
 	{
 		super(x, y);
 		var image:Image = new Image("gfx/bubble.png");
-		image.centerOO();
+		image.centerOrigin();
 		graphic = image;
-		mask = new Pixelmask("gfx/bubble.png", -8, -8);
+		mask = new Circle(8, -8, -8);
 
 		following = 0;
 		bounce = 2;
@@ -61,6 +62,14 @@ class Player extends Physics
 		Input.define("left", [Key.A, Key.LEFT]);
 		Input.define("right", [Key.D, Key.RIGHT]);
 		Input.define("grab", [Key.SPACE, Key.SHIFT]);
+
+		if (_enemyTypes == null)
+		{
+			_enemyTypes = ["fish", "coral"];
+			_grabTypes = ["rock", "gem"];
+			_tossTypes = ["rock"];
+			_bubbleLayers = [6, 12, 18, 24];
+		}
 	}
 
 	public function loadData()
@@ -72,7 +81,7 @@ class Player extends Physics
 		if (p != null)
 			_pickups = Unserializer.run(p);
 		else
-			_pickups = new Hash<PickupType>();
+			_pickups = new Map<String,PickupType>();
 	}
 
 	public function saveData()
@@ -166,9 +175,9 @@ class Player extends Physics
 	/**
 	 * Sets how many bubble layers we can have
 	 */
-	public var maxLayer(getMaxLayer, setMaxLayer):Int;
-	private function getMaxLayer():Int { return _maxLayer; }
-	private function setMaxLayer(value:Int):Int
+	public var maxLayer(get_maxLayer, set_maxLayer):Int;
+	private function get_maxLayer():Int { return _maxLayer; }
+	private function set_maxLayer(value:Int):Int
 	{
 		// clamp to max layers
 		if (value > _bubbleLayers.length)
@@ -184,8 +193,8 @@ class Player extends Physics
 
 	public override function kill()
 	{
-		HXP.world.remove(this);
-		var pop:Sfx = new Sfx("sfx/pop");
+		HXP.scene.remove(this);
+		var pop:Sfx = new Sfx("sfx/pop" + #if flash ".mp3" #else ".wav" #end);
 		pop.play();
 		super.kill();
 	}
@@ -216,18 +225,22 @@ class Player extends Physics
 				hurt(1);
 		}
 
-		var interact:Interactable = cast(collide("interact", x, y), Interactable);
-		if (interact != null)
-			interact.activate(this);
+		var e:Entity = collide("interact", x, y);
+		if (e != null)
+		{
+			var interact:Interactable = cast(e, Interactable);
+			if (interact != null)
+				interact.activate(this);
+		}
 
 		if (collide("exit", x, y) != null)
 		{
-			cast(_world, Game).finishGame();
+			cast(scene, Game).finishGame();
 			frozen = true;
 		}
 
 		// check if player heads off screen
-		var game:Game = cast(HXP.world, Game);
+		var game:Game = cast(HXP.scene, Game);
 		if (dead)
 		{
 			game.restart();
@@ -250,10 +263,14 @@ class Player extends Physics
 				moveBubble(i);
 			}
 
-			var bubble:Bubble = cast(collide("bubble", x, y), Bubble);
-			if (bubble != null)
+			e = collide("bubble", x, y);
+			if (e != null)
 			{
-				addBubble(bubble);
+				var bubble:Bubble = cast(e, Bubble);
+				if (bubble != null)
+				{
+					addBubble(bubble);
+				}
 			}
 		}
 	}
@@ -320,32 +337,51 @@ class Player extends Physics
 
 	private function handleMovement()
 	{
-		// Horizontal movement
-		if (Input.check("left"))
+		if (Input.multiTouchSupported)
 		{
-			acceleration.x = -speed;
-		}
-		else if (Input.check("right"))
-		{
-			acceleration.x = speed;
+			var touchCount:Int = 0;
+			for (touch in Input.touches)
+			{
+				//trace(touch.sceneX + ", " + touch.sceneY);
+				acceleration.x = touch.sceneX - x;
+				acceleration.y = touch.sceneY - y;
+				acceleration.normalize(speed);
+				touchCount += 1;
+			}
+			if (touchCount == 0)
+			{
+				applyDrag(true, true);
+			}
 		}
 		else
 		{
-			applyDrag(true, false); // horizontal
-		}
+			// Horizontal movement
+			if (Input.check("left"))
+			{
+				acceleration.x = -speed;
+			}
+			else if (Input.check("right"))
+			{
+				acceleration.x = speed;
+			}
+			else
+			{
+				applyDrag(true, false); // horizontal
+			}
 
-		// Vertical movement
-		if (Input.check("up"))
-		{
-			acceleration.y = -speed;
-		}
-		else if (Input.check("down"))
-		{
-			acceleration.y = speed;
-		}
-		else
-		{
-			applyDrag(false, true); // vertical
+			// Vertical movement
+			if (Input.check("up"))
+			{
+				acceleration.y = -speed;
+			}
+			else if (Input.check("down"))
+			{
+				acceleration.y = speed;
+			}
+			else
+			{
+				applyDrag(false, true); // vertical
+			}
 		}
 	}
 
@@ -357,7 +393,7 @@ class Player extends Physics
 		if (Input.mouseDown && _bubbles.length > 0 && _shootTime < 0)
 		{
 			var bubble:Bubble = _bubbles.pop();
-			bubble.shoot(_world.mouseX, _world.mouseY);
+			bubble.shoot(scene.mouseX, scene.mouseY);
 			_shootTime = 0.2; // shoot cooldown
 		}
 	}
@@ -373,7 +409,7 @@ class Player extends Physics
 				var i:Int = 0;
 				while (_grabObject == null && i < _grabTypes.length)
 				{
-					var e:Entity = HXP.world.nearestToEntity(_grabTypes[i], this);
+					var e:Entity = HXP.scene.nearestToEntity(_grabTypes[i], this);
 					if (e != null && HXP.distance(e.x, e.y, x, y) < 100 && Std.is(e, Physics))
 						_grabObject = cast(e, Physics);
 					i += 1;
@@ -425,15 +461,15 @@ class Player extends Physics
 				var i:Int = 0;
 				while (_tossObject == null && i < _tossTypes.length)
 				{
-					var e:Entity = _world.collidePoint(_tossTypes[i], _world.mouseX, _world.mouseY);
+					var e:Entity = scene.collidePoint(_tossTypes[i], scene.mouseX, scene.mouseY);
 					if (e != null && Std.is(e, Physics))
 						_tossObject = cast(e, Physics);
 					i += 1;
 				}
 				if (_tossObject != null)
 				{
-					_tossX = _world.mouseX;
-					_tossY = _world.mouseY;
+					_tossX = scene.mouseX;
+					_tossY = scene.mouseY;
 				}
 			}
 		}
@@ -442,15 +478,15 @@ class Player extends Physics
 			if (_tossObject != null)
 			{
 				removeBubble();
-				_tossObject.toss(_world.mouseX - _tossX, _world.mouseY - _tossY);
+				_tossObject.toss(scene.mouseX - _tossX, scene.mouseY - _tossY);
 			}
 		}
 	}
 
-	private static inline var _enemyTypes:Array<String> = ["fish", "coral"];
-	private static inline var _grabTypes:Array<String> = ["rock", "gem"];
-	private static inline var _tossTypes:Array<String> = ["rock"];
-	private static inline var _bubbleLayers:Array<Int> = [6, 12, 18, 24];
+	private static var _enemyTypes:Array<String>;
+	private static var _grabTypes:Array<String>;
+	private static var _tossTypes:Array<String>;
+	private static var _bubbleLayers:Array<Int>;
 
 	private var _grabTime:Float;
 	private var _grabObject:Physics;
@@ -463,7 +499,7 @@ class Player extends Physics
 
 	private var _shootTime:Float;
 
-	private var _pickups:Hash<PickupType>;
+	private var _pickups:Map<String,PickupType>;
 
 	private var _maxBubbles:Int;
 	private var _maxLayer:Int;

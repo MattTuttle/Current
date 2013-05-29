@@ -7,7 +7,7 @@ import com.haxepunk.Entity;
 import com.haxepunk.graphics.Image;
 import com.haxepunk.Sfx;
 import flash.geom.Point;
-import worlds.Game;
+import scenes.Game;
 
 enum BubbleState
 {
@@ -24,14 +24,20 @@ class Bubble extends Being
 	public var targetY:Float;
 	public var reset:Bool;
 
-	public function new(x:Float, y:Float, ?life:Float)
+	public function new(x:Float, y:Float, ?life:Float = 5)
 	{
 		super(x, y);
 		_bubble = new Spritemap("gfx/bubble_small.png", 8, 8);
 		_bubble.add("grow", [0, 1, 2, 3], 12, false);
 		_bubble.play("grow");
-		_bubble.centerOO();
+		_bubble.centerOrigin();
 		graphic = _bubble;
+
+		if (_enemyTypes == null)
+		{
+			_enemyTypes = ["fish", "coral"];
+			_hitTypes = ["wall", "map", "door"];
+		}
 
 		setHitbox(8, 8, 4, 4);
 		layer = 5;
@@ -52,16 +58,16 @@ class Bubble extends Being
 				_owner.removeBubble(this);
 		}
 		if (_state == OWNED || _state == SHOOT)
-			new Sfx("sfx/pop").play();
-		HXP.world.remove(this);
+			new Sfx("sfx/pop" + #if flash ".mp3" #else ".wav" #end).play();
+		HXP.scene.remove(this);
 		super.kill();
 	}
 
-	public var owned(getOwned, null):Bool;
-	private function getOwned():Bool { return (_owner != null); }
+	public var owned(get_owned, null):Bool;
+	private function get_owned():Bool { return (_owner != null); }
 
-	public var owner(null, setOwner):Dynamic;
-	private function setOwner(value:Dynamic):Dynamic
+	public var owner(null, set_owner):Dynamic;
+	private function set_owner(value:Dynamic):Dynamic
 	{
 		if (value != _owner && !dead)
 		{
@@ -92,7 +98,10 @@ class Bubble extends Being
 	{
 		if (dead) return;
 		// always check if we are colliding with something
-		var enemy:Being = cast(collideTypes(_enemyTypes, x, y), Being);
+		var e:Entity = collideTypes(_enemyTypes, x, y);
+		var enemy:Being = null;
+		if (e != null)
+			enemy = cast(e, Being);
 
 		switch (_state)
 		{
@@ -106,9 +115,9 @@ class Bubble extends Being
 				if (_life < 1)
 				{
 					_bubble.alpha = _life;
-					if (_world != null) type = "dead"; // check _world to prevent crash...
+					if (scene != null) type = "dead"; // check _scene to prevent crash...
 				}
-				if (_life < 0) HXP.world.remove(this);
+				if (_life < 0) scene.remove(this);
 
 				// hit map without an owner, POP!
 				if (collideTypes(_hitTypes, x, y) != null || enemy != null) kill();
@@ -146,8 +155,8 @@ class Bubble extends Being
 		super.update();
 	}
 
-	private static inline var _enemyTypes:Array<String> = ["fish", "coral"];
-	private static inline var _hitTypes:Array<String> = ["wall", "map", "door"];
+	private static var _enemyTypes:Array<String>;
+	private static var _hitTypes:Array<String>;
 
 	private var _state:BubbleState;
 	private var _owner:Dynamic;

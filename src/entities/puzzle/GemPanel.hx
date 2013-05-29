@@ -41,10 +41,10 @@ class GemPanel extends Entity
 			{
 				_gem = gem;
 				var doors:Array<Entity> = new Array<Entity>();
-				_world.getType("door", doors);
+				scene.getType("door", doors);
 				for (e in doors)
 				{
-					new Sfx("sfx/save").play();
+					new Sfx("sfx/save" + #if flash ".mp3" #else ".wav" #end).play();
 					cast(e, GemDoor).open();
 				}
 			}
@@ -61,7 +61,7 @@ class GemPanel extends Entity
 			}
 			else
 			{
-				HXP.world.remove(_gem);
+				HXP.scene.remove(_gem);
 				_sprite.play("open");
 			}
 		}

@@ -22,7 +22,7 @@ class Piranha extends Physics
 		_sprite.add("idle", [0]);
 		_sprite.add("watch", [1]);
 		_sprite.add("nom", [0, 1], 12);
-		_sprite.centerOO();
+		_sprite.centerOrigin();
 		graphic = _sprite;
 
 		setHitbox(24, 24, 12, 12);
@@ -36,7 +36,7 @@ class Piranha extends Physics
 
 	public override function kill()
 	{
-		_world.remove(this);
+		scene.remove(this);
 	}
 
 	private function faceAngle(angle:Float)

@@ -11,7 +11,7 @@ class Coral extends Being
 	{
 		super(x, y);
 		graphic = _image = new Image("gfx/SpikeCoral.png");
-		_image.centerOO();
+		_image.centerOrigin();
 		_image.angle = angle;
 		setHitbox(32, 32, 16, 16);
 		layer = 70;

@@ -1,18 +1,17 @@
-package worlds;
+package scenes;
 
 import com.haxepunk.Entity;
 import com.haxepunk.graphics.Image;
 import com.haxepunk.graphics.Tilemap;
 import com.haxepunk.HXP;
 import com.haxepunk.masks.Grid;
-import com.haxepunk.masks.Pixelmask;
 import com.haxepunk.tweens.misc.NumTween;
 import com.haxepunk.tweens.misc.VarTween;
 import com.haxepunk.tweens.sound.Fader;
 import com.haxepunk.utils.Input;
 import com.haxepunk.utils.Key;
 import com.haxepunk.utils.Data;
-import com.haxepunk.World;
+import com.haxepunk.Scene;
 import com.haxepunk.Tween;
 import base.Physics;
 import entities.Pickup;
@@ -23,7 +22,7 @@ import haxe.xml.Fast;
 import ui.Announce;
 import nme.Assets;
 
-class Game extends World
+class Game extends Scene
 {
 
 //	public var shader:WaterShader;
@@ -36,10 +35,10 @@ class Game extends World
 		super();
 
 //		shader = new WaterShader();
-		_exits = new Hash<String>();
+		_exits = new Map<String,String>();
 
 		_currentMusic = "";
-		_music = new Hash<ByteArray>();
+		_music = new Map<String,ByteArray>();
 //		_music.set("heartbeat", new ModHeartbeat());
 //		_music.set("boss", new ModBoss());
 //		_music.set("home", new ModHome());
@@ -51,7 +50,7 @@ class Game extends World
 		_muted = false;
 	}
 
-	private function fadeComplete()
+	private function fadeComplete(_)
 	{
 		if (_fadeTween.value == 1)
 		{
@@ -69,7 +68,7 @@ class Game extends World
 		// lighting alpha tween
 		_alphaTween = new NumTween(alphaComplete, TweenType.Looping);
 		addTween(_alphaTween, true);
-		alphaComplete();
+		alphaComplete(null);
 
 		// fade to black
 		_fade = Image.createRect(HXP.screen.width, HXP.screen.height, 0);
@@ -123,7 +122,7 @@ class Game extends World
 		return false;
 	}
 
-	private function alphaComplete()
+	private function alphaComplete(_)
 	{
 		var rand:Float = Math.random() * 5 + 10;
 		if (_alphaTween.value == 1)
@@ -145,23 +144,6 @@ class Game extends World
 		} catch (msg:String) {
 			return null;
 		}
-		return image;
-	}
-
-	private function addForeground(id:String, layer:Int):Image
-	{
-		var image:Image;
-		try {
-			image = new Image("levels/" + id);
-		} catch (msg:String) {
-			return null;
-		}
-		var mask:Pixelmask = new Pixelmask(image);
-		mask.threshold = 250; // pass through shadows
-		var ent:Entity = new Entity(0, 0, image, mask);
-		ent.type = "map";
-		ent.layer = layer;
-		add(ent);
 		return image;
 	}
 
@@ -216,11 +198,9 @@ class Game extends World
 			xml = xml.node.level;
 
 			_vignette = false;
-			HXP.screen.color = 0x017DD7;
 			if (xml.has.vignette && xml.att.vignette == "true")
 			{
 				_vignette = true;
-				HXP.screen.color = 0x000000;
 				var image:Image = addImage("gfx/current_vignette.png", 0);
 				image.scrollX = image.scrollY = 0;
 			}
@@ -244,8 +224,8 @@ class Game extends World
 			// load tilemaps
 			if (xml.hasNode.background)
 				loadTilemap(xml.node.background, 80);
-			if (xml.hasNode.world)
-				loadTilemap(xml.node.world, 75);
+			if (xml.hasNode.scene)
+				loadTilemap(xml.node.scene, 75);
 			if (xml.hasNode.foreground)
 				loadTilemap(xml.node.foreground, 6);
 			if (xml.hasNode.walls)
@@ -253,7 +233,7 @@ class Game extends World
 		}
 	}
 
-	private function soundFadeComplete()
+	private function soundFadeComplete(_)
 	{
 		if (HXP.volume == 0)
 		{
@@ -392,11 +372,11 @@ class Game extends World
 		_soundFader.fadeTo(0, 1);
 	}
 
-	private function finalWhiteOut()
+	private function finalWhiteOut(_)
 	{
 		var text:String = "The path of life leads upward\nfor the prudent, that he may turn\naway from Sheol beneath.\n\nProverbs 15:24";
 		var a:Announce = new Announce(HXP.screen.width / 2, HXP.screen.height / 2, text, function() {
-			HXP.world = new MainMenu();
+			HXP.scene = new MainMenu();
 		});
 		a.centered = true;
 		a.color = 0x000000;
@@ -462,6 +442,11 @@ class Game extends World
 				HXP.volume = 1;
 		}
 
+		if (Input.pressed(Key.F))
+		{
+			HXP.fullscreen = !HXP.fullscreen;
+		}
+
 		super.update();
 		clampCamera();
 //		shader.update();
@@ -469,7 +454,7 @@ class Game extends World
 
 	// music
 	private var _currentMusic:String;
-	private var _music:Hash<ByteArray>;
+	private var _music:Map<String,ByteArray>;
 	private var _soundFader:Fader;
 	private var _muted:Bool;
 
@@ -477,7 +462,7 @@ class Game extends World
 	private var _doors:Array<String>;
 	private var _level:String;
 	// switch level
-	private var _exits:Hash<String>;
+	private var _exits:Map<String,String>;
 	private var _nextLevel:String;
 	private var _direction:String;
 

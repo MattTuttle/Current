@@ -5,7 +5,7 @@ import base.Physics;
 import com.haxepunk.HXP;
 import com.haxepunk.Entity;
 import com.haxepunk.graphics.Image;
-import com.haxepunk.masks.Pixelmask;
+import com.haxepunk.masks.Circle;
 import flash.geom.Point;
 
 class Rock extends Physics
@@ -21,16 +21,21 @@ class Rock extends Physics
 			case "smallrock": image = "gfx/objects/MovableRock_small.png";
 		}
 		graphic = _image = new Image(image);
-		_image.centerOO();
+		_image.centerOrigin();
 		type = "rock";
-		mask = new Pixelmask(image, -Std.int(_image.width / 2), -Std.int(_image.height / 2));
+		mask = new Circle(16, -16, 16);
 		layer = 10;
 		maxSpeed = 450;
+
+		if (_hitTypes == null)
+		{
+			_hitTypes = ["fish", "sheol", "wall"];
+		}
 	}
 
 	public override function kill()
 	{
-		HXP.world.remove(this);
+		HXP.scene.remove(this);
 		super.kill();
 	}
 
@@ -44,7 +49,7 @@ class Rock extends Physics
 			if (Std.is(hit, Being))
 				cast(hit, Being).hurt(attack);
 			else
-				HXP.world.remove(hit);
+				HXP.scene.remove(hit);
 		}
 
 		super.update();
@@ -59,7 +64,7 @@ class Rock extends Physics
 		}
 	}
 
-	private static inline var _hitTypes:Array<String> = ["fish", "sheol", "wall"];
+	private static var _hitTypes:Array<String>;
 	private var _image:Image;
 
 }

@@ -48,9 +48,9 @@ class Announce extends Entity
 		displayHold = (1 - displaySpeed) * 5;
 	}
 
-	public var centered(getCentered, setCentered):Bool;
-	private function getCentered():Bool { return _centered; }
-	private function setCentered(value:Bool):Bool
+	public var centered(get_centered, set_centered):Bool;
+	private function get_centered():Bool { return _centered; }
+	private function set_centered(value:Bool):Bool
 	{
 		_centered = value;
 		if (_centered)
@@ -61,18 +61,18 @@ class Announce extends Entity
 		return value;
 	}
 
-	public var color(getColor, setColor):Int;
-	private function getColor():Int { return _format.color; }
-	private function setColor(value:Int):Int
+	public var color(get_color, set_color):Int;
+	private function get_color():Int { return _format.color; }
+	private function set_color(value:Int):Int
 	{
 		_format.color = value;
 		_field.setTextFormat(_format);
 		return value;
 	}
 
-	public var size(getSize, setSize):Float;
-	private function getSize():Float { return _format.size; }
-	private function setSize(value:Float):Float
+	public var size(get_size, set_size):Float;
+	private function get_size():Float { return _format.size; }
+	private function set_size(value:Float):Float
 	{
 		_format.size = value;
 		_field.setTextFormat(_format);
@@ -107,7 +107,7 @@ class Announce extends Entity
 				{
 					if (_complete != null)
 						_complete();
-					HXP.world.remove(this);
+					HXP.scene.remove(this);
 				}
 			}
 		}
