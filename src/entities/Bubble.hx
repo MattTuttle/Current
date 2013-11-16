@@ -6,6 +6,7 @@ import com.haxepunk.HXP;
 import com.haxepunk.Entity;
 import com.haxepunk.graphics.Image;
 import com.haxepunk.Sfx;
+import com.haxepunk.masks.Circle;
 import flash.geom.Point;
 import scenes.Game;
 
@@ -28,7 +29,7 @@ class Bubble extends Being
 	{
 		super(x, y);
 		_bubble = new Spritemap("gfx/bubble_small.png", 8, 8);
-		_bubble.add("grow", [0, 1, 2, 3], 12, false);
+		_bubble.add("grow", [0, 1, 2], 12, false);
 		_bubble.play("grow");
 		_bubble.centerOrigin();
 		graphic = _bubble;
@@ -39,14 +40,14 @@ class Bubble extends Being
 			_hitTypes = ["wall", "map", "door"];
 		}
 
-		setHitbox(8, 8, 4, 4);
+		mask = new Circle(4, -4, -4);
 		layer = 5;
 		type = "bubble";
 		speed = 3;
 		if (life != null)
 			_life = life;
 		else
-			_life = 4 + Math.random() * 2;
+			_life = Math.random() * 2 + 4;
 		_state = FLOAT;
 	}
 

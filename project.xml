@@ -5,17 +5,20 @@
   <app file="Current" main="Main" path="bin" />
 
   <window fps="60" resizable="true" background="0x017DD7" />
-  <window width="1280" height="800" unless="mobile" />
-  <window fullscreen="true" if="mobile" />
+  <window width="640" height="400" unless="mobile" />
+  <window fullscreen="true" orientation="landscape" if="mobile" />
+  <window orientation="landscape" vsync="true" antialiasing="0" if="cpp" />
 
   <source path="src" />
 
-  <haxelib name="nme" />
+  <haxelib name="openfl" />
   <haxelib name="HaxePunk" />
+  <haxelib name="audaxe" />
 
   <assets path="assets/graphics" rename="gfx" include="*.png|*.jpg" />
   <assets path="assets/audio" rename="sfx" include="*.mp3" if="flash" />
   <assets path="assets/audio" rename="sfx" include="*.wav|*.ogg" unless="flash" />
+  <assets path="assets/music" rename="music" include="*.xm" />
   <assets path="assets/font" rename="font" include="*.ttf" />
   <assets path="assets/levels" rename="levels" include="*.png" type="image" />
   <assets path="assets/levels" rename="levels" include="*.oel" type="text" />

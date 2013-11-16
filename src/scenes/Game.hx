@@ -16,11 +16,10 @@ import com.haxepunk.Tween;
 import base.Physics;
 import entities.Pickup;
 import entities.Player;
-import flash.display.BitmapData;
 import flash.utils.ByteArray;
 import haxe.xml.Fast;
 import ui.Announce;
-import nme.Assets;
+import openfl.Assets;
 
 class Game extends Scene
 {
@@ -38,12 +37,6 @@ class Game extends Scene
 		_exits = new Map<String,String>();
 
 		_currentMusic = "";
-		_music = new Map<String,ByteArray>();
-//		_music.set("heartbeat", new ModHeartbeat());
-//		_music.set("boss", new ModBoss());
-//		_music.set("home", new ModHome());
-//		_music.set("city", new ModCity());
-//		_music.set("storm", new ModStorm());
 
 		_soundFader = new Fader(soundFadeComplete);
 		addTween(_soundFader, false);
@@ -137,13 +130,11 @@ class Game extends Scene
 
 	private function addImage(id:String, layer:Int):Image
 	{
-		var image:Image;
-		try {
-			image = new Image(id);
-			addGraphic(image).layer = layer;
-		} catch (msg:String) {
-			return null;
-		}
+		var data = Assets.getBitmapData(id);
+		if (data == null) return null;
+
+		var image:Image = new Image(id);
+		addGraphic(image, layer);
 		return image;
 	}
 
@@ -201,7 +192,13 @@ class Game extends Scene
 			if (xml.has.vignette && xml.att.vignette == "true")
 			{
 				_vignette = true;
-				var image:Image = addImage("gfx/current_vignette.png", 0);
+				var image:Image = addImage("gfx/black_background.png", 100);
+				image.x = HXP.halfWidth - image.width / 2;
+				image.y = HXP.halfHeight - image.height / 2;
+				image.scrollX = image.scrollY = 0;
+
+				image = addImage("gfx/current_vignette.png", 0);
+				image.y -= 40;
 				image.scrollX = image.scrollY = 0;
 			}
 
@@ -215,8 +212,8 @@ class Game extends Scene
 			levelHeight = Std.parseInt(xml.node.height.innerData);
 
 			// change music
-//			if (xml.has.music)
-//				changeMusic(xml.att.music);
+			if (xml.has.music)
+				changeMusic(xml.att.music);
 
 			// load objects
 			if (xml.hasNode.actors)
@@ -224,8 +221,8 @@ class Game extends Scene
 			// load tilemaps
 			if (xml.hasNode.background)
 				loadTilemap(xml.node.background, 80);
-			if (xml.hasNode.scene)
-				loadTilemap(xml.node.scene, 75);
+			if (xml.hasNode.world)
+				loadTilemap(xml.node.world, 75);
 			if (xml.hasNode.foreground)
 				loadTilemap(xml.node.foreground, 6);
 			if (xml.hasNode.walls)
@@ -237,9 +234,7 @@ class Game extends Scene
 	{
 		if (HXP.volume == 0)
 		{
-//			musicPlayer.stop();
-//			if (_music.exists(_currentMusic))
-//				musicPlayer.loadSong(_music.get(_currentMusic));
+			Main.backgroundMusic.sound = audaxe.Sound.loadTracker("music/" + _currentMusic + ".xm");
 			if (!_muted)
 				_soundFader.fadeTo(1, 4);
 		}
@@ -247,7 +242,7 @@ class Game extends Scene
 
 	private function changeMusic(id:String)
 	{
-		if (_currentMusic != id && _music.exists(id))
+		if (_currentMusic != id)
 		{
 			_soundFader.fadeTo(0, 1);
 			_currentMusic = id;
@@ -257,7 +252,7 @@ class Game extends Scene
 	private function loadTilemap(group:Fast, layer:Int)
 	{
 		var size:Int = 32;
-		var map:Tilemap = new Tilemap(HXP.getBitmap("levels/tileset.png"), levelWidth, levelHeight, size, size);
+		var map:Tilemap = new Tilemap("levels/tileset.png", levelWidth, levelHeight, size, size);
 		map.usePositions = true;
 		for (obj in group.elements)
 		{
@@ -363,7 +358,7 @@ class Game extends Scene
 	{
 		var white:Image = Image.createRect(HXP.screen.width, HXP.screen.height);
 		white.alpha = white.scrollX = white.scrollY = 0;
-		addGraphic(white).layer = 1;
+		addGraphic(white, 1);
 		var whiteout:VarTween = new VarTween(finalWhiteOut, TweenType.OneShot);
 		whiteout.tween(white, "alpha", 1, 2);
 		addTween(whiteout);
@@ -442,11 +437,6 @@ class Game extends Scene
 				HXP.volume = 1;
 		}
 
-		if (Input.pressed(Key.F))
-		{
-			HXP.fullscreen = !HXP.fullscreen;
-		}
-
 		super.update();
 		clampCamera();
 //		shader.update();
@@ -454,7 +444,6 @@ class Game extends Scene
 
 	// music
 	private var _currentMusic:String;
-	private var _music:Map<String,ByteArray>;
 	private var _soundFader:Fader;
 	private var _muted:Bool;
 

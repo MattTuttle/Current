@@ -19,7 +19,6 @@ class MainMenu extends Scene
 		super();
 
 		HXP.volume = 1;
-//		Game.musicPlayer.loadSong(new ModTitle());
 
 		HXP.camera.x = HXP.camera.y = 0; // reset camera
 	}
