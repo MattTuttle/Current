@@ -35,7 +35,6 @@ class Checkpoint extends Interactable
 		new Sfx("sfx/save" + #if flash ".mp3" #else ".wav" #end).play(0.4); // play sfx
 		cast(HXP.scene, Game).save();
 		var a:Announce = new Announce(HXP.screen.width / 2, 150, "Game Saved");
-		a.centered = true;
 		HXP.scene.add(a);
 	}
 

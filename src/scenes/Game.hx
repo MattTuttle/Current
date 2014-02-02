@@ -8,6 +8,7 @@ import com.haxepunk.masks.Grid;
 import com.haxepunk.tweens.misc.NumTween;
 import com.haxepunk.tweens.misc.VarTween;
 import com.haxepunk.tweens.sound.Fader;
+import com.haxepunk.graphics.atlas.AtlasData;
 import com.haxepunk.utils.Input;
 import com.haxepunk.utils.Key;
 import com.haxepunk.utils.Data;
@@ -88,8 +89,7 @@ class Game extends Scene
 		Data.load("Current");
 		_doors = Data.read("doors", new Array<String>());
 
-		_level = Data.readString("level", "R01");
-		loadLevel(_level);
+		loadLevel(Data.readString("level", "R01"));
 	}
 
 	public function save()
@@ -130,7 +130,7 @@ class Game extends Scene
 
 	private function addImage(id:String, layer:Int):Image
 	{
-		var data = Assets.getBitmapData(id);
+		var data = HXP.getBitmap(id);
 		if (data == null) return null;
 
 		var image:Image = new Image(id);
@@ -146,8 +146,24 @@ class Game extends Scene
 		return Assets.getText("levels/temple/" + id + ".oel");
 	}
 
+	private inline function destroyImage(imagePath:String)
+	{
+		var data = AtlasData.getAtlasDataByName(imagePath);
+		if (data != null) data.destroy();
+	}
+
+	private inline function unloadLevel()
+	{
+		destroyImage("levels/" + _level + "/immediatebg.png");
+		destroyImage("levels/" + _level + "/walls.png");
+		destroyImage("levels/" + _level + "/decor.png");
+		destroyImage("levels/" + _level + "/front.png");
+		destroyImage("levels/" + _level + "/lighting.png");
+	}
+
 	private function loadLevel(id:String)
 	{
+		if (_level != null) unloadLevel();
 		_level = StringTools.replace(id, "R", "room");
 		var entities:Array<Entity> = new Array<Entity>();
 		getAll(entities);
@@ -370,12 +386,9 @@ class Game extends Scene
 	private function finalWhiteOut(_)
 	{
 		var text:String = "The path of life leads upward\nfor the prudent, that he may turn\naway from Sheol beneath.\n\nProverbs 15:24";
-		var a:Announce = new Announce(HXP.screen.width / 2, HXP.screen.height / 2, text, function() {
+		var a:Announce = new Announce(HXP.screen.width / 2, HXP.screen.height / 2, text, 0x000000, function() {
 			HXP.scene = new MainMenu();
 		});
-		a.centered = true;
-		a.color = 0x000000;
-		a.size = 24;
 		a.displaySpeed = 0.05;
 		a.displayHold = 8;
 		add(a).layer = 0;

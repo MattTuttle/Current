@@ -14,7 +14,7 @@ class Snapper extends Being
 	{
 		super(x, y);
 
-		_fish = new Spritemap("gfx/new_fish_anim.png", 59, 32);
+		_fish = new Spritemap("gfx/new_fish_anim.png", 59, 35);
 		_fish.add("swim", [0, 1, 2, 3, 4, 5], 6);
 		_fish.play("swim");
 		_fish.flipped = flipped;

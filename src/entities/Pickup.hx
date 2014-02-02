@@ -62,7 +62,6 @@ class Pickup extends Interactable
 		if (text != "")
 		{
 			var a:Announce = new Announce(HXP.screen.width / 2, 150, text);
-			a.centered = true;
 			HXP.scene.add(a);
 		}
 		var sfx:Sfx = new Sfx("sfx/powerup" + #if flash ".mp3" #else ".wav" #end);
