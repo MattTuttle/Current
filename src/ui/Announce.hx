@@ -18,7 +18,8 @@ class Announce extends Entity
 		_text = new Text("", {
 			align: TextFormatAlign.CENTER,
 			color: color,
-			size: 24
+			size: 24,
+			resizable: true
 		});
 		_text.scrollX = _text.scrollY = 0;
 		_text.centerOrigin();
@@ -28,7 +29,7 @@ class Announce extends Entity
 
 		_complete = complete;
 
-		layer = 5;
+		layer = -5;
 
 		displaySpeed = 1 / text.length;
 		displayHold = (1 - displaySpeed) * 5;
