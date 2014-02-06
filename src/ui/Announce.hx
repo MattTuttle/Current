@@ -15,7 +15,7 @@ class Announce extends Entity
 	{
 		super(x, y);
 
-		_text = new Text("", {
+		_text = new Text("", 0, 0, HXP.width, 100, {
 			align: TextFormatAlign.CENTER,
 			color: color,
 			size: 24,
