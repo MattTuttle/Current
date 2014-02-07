@@ -1,7 +1,7 @@
 all: osx
 
 osx:
-	openfl test mac -debug
+	openfl test cpp -debug
 
 ios:
 	openfl update ios
