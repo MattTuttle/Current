@@ -248,7 +248,7 @@ class Game extends Scene
 
 	private function soundFadeComplete(_)
 	{
-		if (HXP.volume == 0)
+		if (HXP.volume == 0 && _currentMusic != "")
 		{
 			Main.backgroundMusic.sound = audaxe.Sound.loadTracker("music/" + _currentMusic + ".xm");
 			if (!_muted)
@@ -386,12 +386,12 @@ class Game extends Scene
 	private function finalWhiteOut(_)
 	{
 		var text:String = "The path of life leads upward\nfor the prudent, that he may turn\naway from Sheol beneath.\n\nProverbs 15:24";
-		var a:Announce = new Announce(HXP.screen.width / 2, HXP.screen.height / 2, text, 0x000000, function() {
+		var a:Announce = new Announce(HXP.screen.width / 2, HXP.screen.height / 2, text, 0xFF000000, function() {
 			HXP.scene = new MainMenu();
 		});
 		a.displaySpeed = 0.05;
 		a.displayHold = 8;
-		add(a).layer = 0;
+		add(a);
 	}
 
 	public function switchLevel(direction:String)

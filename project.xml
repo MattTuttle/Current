@@ -22,6 +22,7 @@
   <assets path="assets/font" rename="font" include="*.ttf" />
   <assets path="assets/levels" rename="levels" include="*.png" type="image" />
   <assets path="assets/levels" rename="levels" include="*.oel" type="text" />
+   <assets path="assets/shaders" rename="shaders" include="*.frag|*.vert" type="text" />
 
   <icon path="assets/HaxePunk.svg" size="256" />
 </project>

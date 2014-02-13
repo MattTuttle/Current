@@ -1,14 +1,17 @@
 package ui;
 
 import com.haxepunk.Entity;
+import com.haxepunk.Graphic;
 import com.haxepunk.graphics.Image;
 import com.haxepunk.tweens.misc.VarTween;
 import com.haxepunk.utils.Input;
 
+typedef ImageType = Dynamic;
+
 class Button extends Entity
 {
 
-	public function new(x:Float, y:Float, image:Dynamic, clicked:Void->Void)
+	public function new(x:Float, y:Float, image:ImageType, clicked:Void->Void)
 	{
 		super(x, y);
 		_image = new Image(image);

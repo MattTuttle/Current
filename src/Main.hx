@@ -38,7 +38,39 @@ class Main extends Engine
 #end
 		HXP.defaultFont = "font/bubblesstandard.ttf";
 		HXP.scene = new MainMenu();
+
+#if !flash
+		ripple = new PostProcess("shaders/ripple.frag");
+		ripple.setUniform("speed", 2.0);
+		ripple.setUniform("density", 1.4);
+		ripple.setUniform("scale", 2.5);
+
+		blur = new PostProcess("shaders/hq2x.frag");
+
+		blur.enable(ripple);
+		ripple.enable();
+#end
 	}
+
+#if !flash
+	override public function resize()
+	{
+		super.resize();
+		if (ripple != null) ripple.rebuild();
+		if (blur != null) blur.rebuild();
+	}
+
+	override public function render()
+	{
+		blur.capture();
+
+		// render to a back buffer
+		super.render();
+	}
+
+	var ripple:PostProcess;
+	var blur:PostProcess;
+#end
 
 	public static function main()
 	{
