@@ -1,0 +1,13 @@
+{
+	"name": "current",
+	"license": "MIT",
+	"description": "Christian Coders speedgame 2011",
+	"contributors": [],
+	"releasenote": "",
+	"version": "1.0.0",
+	"url": "http://matttuttle.com/games/current/",
+	"dependencies": {
+		"haxepunk": "2.5.3",
+		"audaxe": "MattTuttle/audaxe"
+	}
+}

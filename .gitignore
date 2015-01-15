@@ -1,4 +1,5 @@
-bin
+bin/
+libs/
 *.swf
 *.pbj
 Thumbs.db

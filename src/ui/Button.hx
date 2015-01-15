@@ -6,8 +6,6 @@ import com.haxepunk.graphics.Image;
 import com.haxepunk.tweens.misc.VarTween;
 import com.haxepunk.utils.Input;
 
-typedef ImageType = Dynamic;
-
 class Button extends Entity
 {
 

@@ -1,7 +1,7 @@
 all: osx
 
 osx:
-	openfl test cpp -debug
+	lime test cpp -debug
 
 ios:
-	openfl update ios
+	lime update ios
