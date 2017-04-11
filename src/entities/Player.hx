@@ -3,15 +3,16 @@ package entities;
 import base.Being;
 import base.Interactable;
 import base.Physics;
-import com.haxepunk.HXP;
-import com.haxepunk.Entity;
-import com.haxepunk.graphics.Image;
-import com.haxepunk.masks.Circle;
-import com.haxepunk.Sfx;
-import com.haxepunk.utils.Input;
-import com.haxepunk.utils.Key;
-import com.haxepunk.utils.Data;
-import com.haxepunk.utils.Touch;
+import haxepunk.HXP;
+import haxepunk.Entity;
+import haxepunk.graphics.Image;
+import haxepunk.masks.Circle;
+import haxepunk.Sfx;
+import haxepunk.input.Input;
+import haxepunk.input.Key;
+import haxepunk.input.Touch;
+import haxepunk.utils.Data;
+import haxepunk.utils.MathUtil;
 import flash.geom.Point;
 import haxe.Serializer;
 import haxe.Unserializer;
@@ -308,7 +309,7 @@ class Player extends Physics
 
 		var offsetAngle:Float = (angleIndex % numOnLayer) * 360 / numOnLayer;
 		var offsetRadius:Float = layer * 12 + width;
-		var angle:Float = (_bubbleAngle + offsetAngle) * HXP.RAD;
+		var angle:Float = (_bubbleAngle + offsetAngle) * MathUtil.RAD;
 
 		_bubbles[index].targetX = Math.cos(angle) * offsetRadius + x;
 		_bubbles[index].targetY = Math.sin(angle) * offsetRadius + y;
@@ -410,7 +411,7 @@ class Player extends Physics
 				while (_grabObject == null && i < _grabTypes.length)
 				{
 					var e:Entity = HXP.scene.nearestToEntity(_grabTypes[i], this);
-					if (e != null && HXP.distance(e.x, e.y, x, y) < 100 && Std.is(e, Physics))
+					if (e != null && MathUtil.distance(e.x, e.y, x, y) < 100 && Std.is(e, Physics))
 						_grabObject = cast(e, Physics);
 					i += 1;
 				}

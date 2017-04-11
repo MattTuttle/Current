@@ -1,11 +1,11 @@
 package entities;
 
 import base.Interactable;
-import com.haxepunk.HXP;
-import com.haxepunk.Entity;
-import com.haxepunk.graphics.Spritemap;
-import com.haxepunk.Sfx;
-import com.haxepunk.utils.Data;
+import haxepunk.HXP;
+import haxepunk.Entity;
+import haxepunk.graphics.Spritemap;
+import haxepunk.Sfx;
+import haxepunk.utils.Data;
 import ui.Announce;
 import scenes.Game;
 

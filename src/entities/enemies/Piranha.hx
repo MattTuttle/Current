@@ -1,9 +1,10 @@
 package entities.enemies;
 
 import base.Physics;
-import com.haxepunk.Entity;
-import com.haxepunk.HXP;
-import com.haxepunk.graphics.Spritemap;
+import haxepunk.Entity;
+import haxepunk.HXP;
+import haxepunk.graphics.Spritemap;
+import haxepunk.utils.MathUtil;
 
 enum PiranhaState
 {
@@ -85,16 +86,16 @@ class Piranha extends Physics
 				{
 					var angle:Float = _sprite.angle;
 					if (_sprite.flipped) angle += 180;
-					angle *= HXP.RAD;
+					angle *= MathUtil.RAD;
 					acceleration.x = Math.cos(angle) * speed;
 					acceleration.y = Math.sin(angle) * speed;
 					switchState(ATTACK);
 				}
-				faceAngle(Math.atan2(_point.y, _point.x) * HXP.DEG); // face player
+				faceAngle(Math.atan2(_point.y, _point.x) * MathUtil.DEG); // face player
 			case ATTACK:
 				if (onWall || onFloor)
 				{
-					faceAngle(Math.atan2(_point.y, _point.x) * HXP.DEG); // face player
+					faceAngle(Math.atan2(_point.y, _point.x) * MathUtil.DEG); // face player
 					acceleration.x = acceleration.y = 0;
 					velocity.x = velocity.y = 0;
 					switchState(IDLE);
@@ -102,7 +103,7 @@ class Piranha extends Physics
 				}
 				else
 				{
-					faceAngle(Math.atan2(velocity.y, velocity.x) * HXP.DEG);
+					faceAngle(Math.atan2(velocity.y, velocity.x) * MathUtil.DEG);
 				}
 		}
 		super.update();

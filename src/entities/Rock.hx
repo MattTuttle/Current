@@ -2,10 +2,11 @@ package entities;
 
 import base.Being;
 import base.Physics;
-import com.haxepunk.HXP;
-import com.haxepunk.Entity;
-import com.haxepunk.graphics.Image;
-import com.haxepunk.masks.Circle;
+import haxepunk.HXP;
+import haxepunk.Entity;
+import haxepunk.graphics.Image;
+import haxepunk.masks.Circle;
+import haxepunk.utils.MathUtil;
 import flash.geom.Point;
 
 class Rock extends Physics
@@ -43,7 +44,7 @@ class Rock extends Physics
 	{
 		velocity.y += 4; // gravity
 
-		var hit:Entity = collideTypes(_hitTypes, x + HXP.sign(velocity.x) * 3, y + HXP.sign(velocity.y) * 3);
+		var hit:Entity = collideTypes(_hitTypes, x + MathUtil.sign(velocity.x) * 3, y + MathUtil.sign(velocity.y) * 3);
 		if (hit != null)
 		{
 			if (Std.is(hit, Being))

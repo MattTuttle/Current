@@ -1,12 +1,12 @@
 package entities;
 
 import base.Being;
-import com.haxepunk.graphics.Spritemap;
-import com.haxepunk.HXP;
-import com.haxepunk.Entity;
-import com.haxepunk.graphics.Image;
-import com.haxepunk.Sfx;
-import com.haxepunk.masks.Circle;
+import haxepunk.graphics.Spritemap;
+import haxepunk.HXP;
+import haxepunk.Entity;
+import haxepunk.graphics.Image;
+import haxepunk.Sfx;
+import haxepunk.masks.Circle;
 import flash.geom.Point;
 import scenes.Game;
 

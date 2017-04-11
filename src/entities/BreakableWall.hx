@@ -1,9 +1,9 @@
 package entities;
 
 import base.Being;
-import com.haxepunk.HXP;
-import com.haxepunk.Entity;
-import com.haxepunk.graphics.Image;
+import haxepunk.HXP;
+import haxepunk.Entity;
+import haxepunk.graphics.Image;
 
 class BreakableWall extends Being
 {

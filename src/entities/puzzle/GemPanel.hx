@@ -1,10 +1,10 @@
 package entities.puzzle;
 
-import com.haxepunk.graphics.Spritemap;
-import com.haxepunk.HXP;
-import com.haxepunk.Entity;
-import com.haxepunk.graphics.Image;
-import com.haxepunk.Sfx;
+import haxepunk.graphics.Spritemap;
+import haxepunk.HXP;
+import haxepunk.Entity;
+import haxepunk.graphics.Image;
+import haxepunk.Sfx;
 
 class GemPanel extends Entity
 {

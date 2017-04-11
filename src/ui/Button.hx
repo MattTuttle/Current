@@ -1,10 +1,10 @@
 package ui;
 
-import com.haxepunk.Entity;
-import com.haxepunk.Graphic;
-import com.haxepunk.graphics.Image;
-import com.haxepunk.tweens.misc.VarTween;
-import com.haxepunk.utils.Input;
+import haxepunk.Entity;
+import haxepunk.Graphic;
+import haxepunk.graphics.Image;
+import haxepunk.tweens.misc.VarTween;
+import haxepunk.input.Input;
 
 class Button extends Entity
 {
@@ -27,7 +27,7 @@ class Button extends Entity
 	{
 		var showTween:VarTween = new VarTween(tweenComplete);
 		showTween.tween(_image, "scale", 1, 1);
-		scene.addTween(showTween);
+		scene.addTween(showTween, true);
 		_scaleDir = 0.02;
 	}
 

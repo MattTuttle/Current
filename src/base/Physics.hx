@@ -1,7 +1,8 @@
 package base;
 
-import com.haxepunk.HXP;
-import com.haxepunk.Entity;
+import haxepunk.HXP;
+import haxepunk.Entity;
+import haxepunk.utils.MathUtil;
 import flash.geom.Point;
 
 class Physics extends Being
@@ -77,9 +78,9 @@ class Physics extends Being
 
 		// clamp to max speed
 		if (Math.abs(velocity.x) > maxSpeed)
-			velocity.x = maxSpeed * HXP.sign(velocity.x);
+			velocity.x = maxSpeed * MathUtil.sign(velocity.x);
 		if (Math.abs(velocity.y) > maxSpeed)
-			velocity.y = maxSpeed * HXP.sign(velocity.y);
+			velocity.y = maxSpeed * MathUtil.sign(velocity.y);
 
 		// change in horizontal
 		onWall = false;
@@ -93,9 +94,9 @@ class Physics extends Being
 			delta = Std.int(change);
 			for (i in 0 ... Std.int(Math.abs(delta)))
 			{
-				if (collideTypes(_solidTypes, x + HXP.sign(delta), y) == null)
+				if (collideTypes(_solidTypes, x + MathUtil.sign(delta), y) == null)
 				{
-					x += HXP.sign(delta);
+					x += MathUtil.sign(delta);
 				}
 				else
 				{
@@ -122,9 +123,9 @@ class Physics extends Being
 			delta = Std.int(change);
 			for (i in 0 ... Std.int(Math.abs(delta)))
 			{
-				if (collideTypes(_solidTypes, x, y + HXP.sign(delta)) == null)
+				if (collideTypes(_solidTypes, x, y + MathUtil.sign(delta)) == null)
 				{
-					y += HXP.sign(delta);
+					y += MathUtil.sign(delta);
 				}
 				else
 				{

@@ -1,14 +1,14 @@
 package scenes;
 
-import com.haxepunk.HXP;
-import com.haxepunk.Entity;
-import com.haxepunk.Tween;
-import com.haxepunk.graphics.Image;
-import com.haxepunk.tweens.misc.VarTween;
-import com.haxepunk.tweens.sound.Fader;
-import com.haxepunk.utils.Ease;
-import com.haxepunk.utils.Data;
-import com.haxepunk.Scene;
+import haxepunk.HXP;
+import haxepunk.Entity;
+import haxepunk.Tween;
+import haxepunk.graphics.Image;
+import haxepunk.tweens.misc.VarTween;
+import haxepunk.tweens.sound.Fader;
+import haxepunk.utils.Ease;
+import haxepunk.utils.Data;
+import haxepunk.Scene;
 import ui.Button;
 
 class MainMenu extends Scene
@@ -30,7 +30,7 @@ class MainMenu extends Scene
 		addGraphic(white).layer = 0;
 		var whiteout:VarTween = new VarTween(null, TweenType.OneShot);
 		whiteout.tween(white, "alpha", 0, 1);
-		addTween(whiteout);
+		addTween(whiteout, true);
 
 		addGraphic(new Image("gfx/menu/backdrop.png"), 100);
 
@@ -41,11 +41,11 @@ class MainMenu extends Scene
 
 		var logoTween:VarTween = new VarTween(logoComplete, TweenType.OneShot);
 		logoTween.tween(logo, "y", -10, 2);
-		addTween(logoTween);
+		addTween(logoTween, true);
 
 		var logoAlphaTween:VarTween = new VarTween(null, TweenType.OneShot);
 		logoAlphaTween.tween(logoGraphic, "alpha", 1, 2, Ease.cubeIn);
-		addTween(logoAlphaTween);
+		addTween(logoAlphaTween, true);
 	}
 
 	private function logoComplete(_)
@@ -71,11 +71,11 @@ class MainMenu extends Scene
 		addGraphic(black);
 		var screenFader = new VarTween();
 		screenFader.tween(black, "alpha", 1, fadeTime);
-		addTween(screenFader);
+		addTween(screenFader, true);
 
 		var fader = new Fader(fadeComplete, TweenType.OneShot);
 		fader.fadeTo(0, fadeTime);
-		addTween(fader);
+		addTween(fader, true);
 	}
 
 	private function onAbout()

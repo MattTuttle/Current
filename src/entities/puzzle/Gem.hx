@@ -1,10 +1,10 @@
 package entities.puzzle;
 
 import base.Physics;
-import com.haxepunk.HXP;
-import com.haxepunk.Entity;
-import com.haxepunk.graphics.Spritemap;
-import com.haxepunk.tweens.misc.VarTween;
+import haxepunk.HXP;
+import haxepunk.Entity;
+import haxepunk.graphics.Spritemap;
+import haxepunk.tweens.misc.VarTween;
 
 class Gem extends Physics
 {
@@ -29,7 +29,7 @@ class Gem extends Physics
 		_velocityTime = 0;
 		_startVelocity = false;
 		_alphaTween = new VarTween(tweenComplete);
-		addTween(_alphaTween);
+		addTween(_alphaTween, true);
 	}
 
 	private function onAnimEnd()

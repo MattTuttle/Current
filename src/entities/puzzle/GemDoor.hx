@@ -1,8 +1,8 @@
 package entities.puzzle;
 
-import com.haxepunk.HXP;
-import com.haxepunk.Entity;
-import com.haxepunk.graphics.Spritemap;
+import haxepunk.HXP;
+import haxepunk.Entity;
+import haxepunk.graphics.Spritemap;
 import scenes.Game;
 
 class GemDoor extends Entity

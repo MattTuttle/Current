@@ -1,8 +1,8 @@
 package entities.enemies;
 
 import base.Being;
-import com.haxepunk.Entity;
-import com.haxepunk.graphics.Image;
+import haxepunk.Entity;
+import haxepunk.graphics.Image;
 
 class Coral extends Being
 {

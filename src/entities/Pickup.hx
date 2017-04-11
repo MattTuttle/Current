@@ -1,9 +1,9 @@
 package entities;
 
 import base.Interactable;
-import com.haxepunk.HXP;
-import com.haxepunk.graphics.Image;
-import com.haxepunk.Sfx;
+import haxepunk.HXP;
+import haxepunk.graphics.Image;
+import haxepunk.Sfx;
 import ui.Announce;
 
 class Pickup extends Interactable

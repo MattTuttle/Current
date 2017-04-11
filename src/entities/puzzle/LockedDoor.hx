@@ -1,8 +1,9 @@
 package entities.puzzle;
 
-import com.haxepunk.HXP;
-import com.haxepunk.Entity;
-import com.haxepunk.graphics.Spritemap;
+import haxepunk.HXP;
+import haxepunk.Entity;
+import haxepunk.graphics.Spritemap;
+import haxepunk.utils.MathUtil;
 import entities.Player;
 
 class LockedDoor extends Entity
@@ -44,7 +45,7 @@ class LockedDoor extends Entity
 
 	public override function update()
 	{
-		if (HXP.distance(_target.x, _target.y, x + 8, y + 32) < 80 &&
+		if (MathUtil.distance(_target.x, _target.y, x + 8, y + 32) < 80 &&
 			_target.hasPickup(_colorType + "Key"))
 		{
 			_sprite.play("open");

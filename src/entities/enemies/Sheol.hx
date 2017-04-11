@@ -2,10 +2,10 @@ package entities.enemies;
 
 import base.Being;
 import base.Physics;
-import com.haxepunk.HXP;
-import com.haxepunk.Entity;
-import com.haxepunk.graphics.Image;
-import com.haxepunk.tweens.misc.VarTween;
+import haxepunk.HXP;
+import haxepunk.Entity;
+import haxepunk.graphics.Image;
+import haxepunk.tweens.misc.VarTween;
 import entities.Player;
 import flash.geom.Point;
 import scenes.Game;
@@ -25,7 +25,7 @@ class Sheol extends Physics
 		layer = 76;
 		setHitbox(128, 128, 64, 64);
 		_scaleTween = new VarTween(doneTween);
-		addTween(_scaleTween);
+		addTween(_scaleTween, true);
 		_scaleTime = 0.5;
 		_provokeTime = 5;
 	}

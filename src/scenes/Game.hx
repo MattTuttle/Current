@@ -1,19 +1,19 @@
 package scenes;
 
-import com.haxepunk.Entity;
-import com.haxepunk.graphics.Image;
-import com.haxepunk.graphics.Tilemap;
-import com.haxepunk.HXP;
-import com.haxepunk.masks.Grid;
-import com.haxepunk.tweens.misc.NumTween;
-import com.haxepunk.tweens.misc.VarTween;
-import com.haxepunk.tweens.sound.Fader;
-import com.haxepunk.graphics.atlas.AtlasData;
-import com.haxepunk.utils.Input;
-import com.haxepunk.utils.Key;
-import com.haxepunk.utils.Data;
-import com.haxepunk.Scene;
-import com.haxepunk.Tween;
+import haxepunk.Entity;
+import haxepunk.graphics.Image;
+import haxepunk.graphics.Tilemap;
+import haxepunk.HXP;
+import haxepunk.masks.Grid;
+import haxepunk.tweens.misc.NumTween;
+import haxepunk.tweens.misc.VarTween;
+import haxepunk.tweens.sound.Fader;
+import haxepunk.graphics.atlas.AtlasData;
+import haxepunk.input.Input;
+import haxepunk.input.Key;
+import haxepunk.utils.Data;
+import haxepunk.Scene;
+import haxepunk.Tween;
 import base.Physics;
 import entities.Pickup;
 import entities.Player;
@@ -69,7 +69,7 @@ class Game extends Scene
 		_fade.scrollX = _fade.scrollY = 0;
 		addGraphic(_fade, 0).type = "keep";
 		_fadeTween = new NumTween(fadeComplete);
-		addTween(_fadeTween);
+		addTween(_fadeTween, true);
 		_fadeTween.tween(1, 0, 2);
 
 		_soundFader.start();
@@ -377,7 +377,7 @@ class Game extends Scene
 		addGraphic(white, 1);
 		var whiteout:VarTween = new VarTween(finalWhiteOut, TweenType.OneShot);
 		whiteout.tween(white, "alpha", 1, 2);
-		addTween(whiteout);
+		addTween(whiteout, true);
 
 		_currentMusic = ""; // clear out music
 		_soundFader.fadeTo(0, 1);

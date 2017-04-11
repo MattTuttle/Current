@@ -1,8 +1,8 @@
 package ui;
 
-import com.haxepunk.HXP;
-import com.haxepunk.Entity;
-import com.haxepunk.graphics.Text;
+import haxepunk.HXP;
+import haxepunk.Entity;
+import haxepunk.graphics.Text;
 import flash.text.TextFormatAlign;
 
 class Announce extends Entity

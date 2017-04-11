@@ -1,10 +1,11 @@
 package entities.enemies;
 
 import base.Being;
-import com.haxepunk.graphics.Image;
-import com.haxepunk.graphics.Spritemap;
-import com.haxepunk.HXP;
-import com.haxepunk.Entity;
+import haxepunk.graphics.Image;
+import haxepunk.graphics.Spritemap;
+import haxepunk.HXP;
+import haxepunk.Entity;
+import haxepunk.utils.Random;
 import scenes.Game;
 
 class Snapper extends Being
@@ -23,7 +24,7 @@ class Snapper extends Being
 		setHitbox(59, 32);
 		layer = 50;
 		type = "fish";
-		_spawnTime = HXP.random * 5;
+		_spawnTime = Random.random * 5;
 	}
 
 	public override function kill()
@@ -39,7 +40,7 @@ class Snapper extends Being
 
 		HXP.scene.add(new Bubble(x, y - 16));
 
-		_spawnTime = HXP.random * 2 + 2;
+		_spawnTime = Random.random * 2 + 2;
 	}
 
 	public override function update()
