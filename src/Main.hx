@@ -10,21 +10,16 @@ import flash.display.Stage;
 class Main extends Engine
 {
 
-	public static var backgroundMusic:audaxe.Channel;
-
 	public function new()
 	{
 		super(640, 400, 60);
-
-		backgroundMusic = audaxe.Engine.createChannel();
-		backgroundMusic.sound = audaxe.Sound.loadTracker("music/title.xm");
-		backgroundMusic.sound.play();
+		BackgroundMusic.play("music/title.xm");
 	}
 
 	override public function update()
 	{
 		if (Key.pressed(Key.F)) HXP.fullscreen = !HXP.fullscreen;
-		audaxe.Engine.volume = HXP.volume;
+		BackgroundMusic.update();
 		super.update();
 	}
 

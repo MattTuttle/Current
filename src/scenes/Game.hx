@@ -250,7 +250,7 @@ class Game extends Scene
 	{
 		if (HXP.volume == 0 && _currentMusic != "")
 		{
-			Main.backgroundMusic.sound = audaxe.Sound.loadTracker("music/" + _currentMusic + ".xm");
+			BackgroundMusic.play("music/" + _currentMusic + ".xm");
 			if (!_muted)
 				_soundFader.fadeTo(1, 4);
 		}
