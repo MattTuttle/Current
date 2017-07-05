@@ -30,7 +30,16 @@ class Snapper extends Being
 	var flipped(default, set):Bool;
 	function set_flipped(value:Bool)
 	{
-		_fish.scaleX = value ? -1 : 1;
+		if (value)
+		{
+			_fish.scaleX = -1;
+			_fish.originX = _fish.width;
+		}
+		else
+		{
+			_fish.scaleX = 1;
+			_fish.originX = 0;
+		}
 		return flipped = value;
 	}
 
