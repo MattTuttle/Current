@@ -2,7 +2,7 @@ package scenes;
 
 import haxepunk.Entity;
 import haxepunk.graphics.Image;
-import haxepunk.graphics.Tilemap;
+import haxepunk.graphics.tile.Tilemap;
 import haxepunk.HXP;
 import haxepunk.masks.Grid;
 import haxepunk.tweens.misc.NumTween;
@@ -39,12 +39,13 @@ class Game extends Scene
 
 		_currentMusic = "";
 
-		_soundFader = new Fader(soundFadeComplete);
+		_soundFader = new Fader();
+		_soundFader.onComplete.bind(soundFadeComplete);
 		addTween(_soundFader, false);
 		_muted = false;
 	}
 
-	private function fadeComplete(_)
+	private function fadeComplete()
 	{
 		if (_fadeTween.value == 1)
 		{
@@ -60,15 +61,17 @@ class Game extends Scene
 		load();
 
 		// lighting alpha tween
-		_alphaTween = new NumTween(alphaComplete, TweenType.Looping);
+		_alphaTween = new NumTween(TweenType.Looping);
+		_alphaTween.onComplete.bind(alphaComplete);
 		addTween(_alphaTween, true);
-		alphaComplete(null);
+		alphaComplete();
 
 		// fade to black
 		_fade = Image.createRect(HXP.screen.width, HXP.screen.height, 0);
 		_fade.scrollX = _fade.scrollY = 0;
 		addGraphic(_fade, 0).type = "keep";
-		_fadeTween = new NumTween(fadeComplete);
+		_fadeTween = new NumTween();
+		_fadeTween.onComplete.bind(fadeComplete);
 		addTween(_fadeTween, true);
 		_fadeTween.tween(1, 0, 2);
 
@@ -115,7 +118,7 @@ class Game extends Scene
 		return false;
 	}
 
-	private function alphaComplete(_)
+	private function alphaComplete()
 	{
 		var rand:Float = Math.random() * 5 + 10;
 		if (_alphaTween.value == 1)
@@ -130,9 +133,6 @@ class Game extends Scene
 
 	private function addImage(id:String, layer:Int):Image
 	{
-		var data = HXP.getBitmap(id);
-		if (data == null) return null;
-
 		var image:Image = new Image(id);
 		addGraphic(image, layer);
 		return image;
@@ -246,7 +246,7 @@ class Game extends Scene
 		}
 	}
 
-	private function soundFadeComplete(_)
+	private function soundFadeComplete()
 	{
 		if (HXP.volume == 0 && _currentMusic != "")
 		{
@@ -375,7 +375,8 @@ class Game extends Scene
 		var white:Image = Image.createRect(HXP.screen.width, HXP.screen.height);
 		white.alpha = white.scrollX = white.scrollY = 0;
 		addGraphic(white, 1);
-		var whiteout:VarTween = new VarTween(finalWhiteOut, TweenType.OneShot);
+		var whiteout:VarTween = new VarTween(TweenType.OneShot);
+		whiteout.onComplete.bind(finalWhiteOut);
 		whiteout.tween(white, "alpha", 1, 2);
 		addTween(whiteout, true);
 
@@ -383,7 +384,7 @@ class Game extends Scene
 		_soundFader.fadeTo(0, 1);
 	}
 
-	private function finalWhiteOut(_)
+	private function finalWhiteOut()
 	{
 		var text:String = "The path of life leads upward\nfor the prudent, that he may turn\naway from Sheol beneath.\n\nProverbs 15:24";
 		var a:Announce = new Announce(HXP.screen.width / 2, HXP.screen.height / 2, text, 0xFF000000, function() {
@@ -441,7 +442,7 @@ class Game extends Scene
 		if (_lighting != null)
 			_lighting.alpha = _alphaTween.value;
 
-		if (Input.pressed(Key.M))
+		if (Key.pressed(Key.M))
 		{
 			_muted = !_muted;
 			if (_muted)

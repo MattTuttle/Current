@@ -23,7 +23,7 @@ class Main extends Engine
 
 	override public function update()
 	{
-		if (Input.pressed(Key.F)) HXP.fullscreen = !HXP.fullscreen;
+		if (Key.pressed(Key.F)) HXP.fullscreen = !HXP.fullscreen;
 		audaxe.Engine.volume = HXP.volume;
 		super.update();
 	}
@@ -31,7 +31,7 @@ class Main extends Engine
 	override public function init()
 	{
 #if debug
-		HXP.console.enable();
+		haxepunk.debug.Console.enable();
 #end
 		// HXP.orientations = [Stage.OrientationLandscapeLeft, Stage.OrientationLandscapeRight];
 		HXP.defaultFont = "font/bubblesstandard.ttf";

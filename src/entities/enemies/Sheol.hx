@@ -24,13 +24,14 @@ class Sheol extends Physics
 		_target = target;
 		layer = 76;
 		setHitbox(128, 128, 64, 64);
-		_scaleTween = new VarTween(doneTween);
+		_scaleTween = new VarTween();
+		_scaleTween.onComplete.bind(doneTween);
 		addTween(_scaleTween, true);
 		_scaleTime = 0.5;
 		_provokeTime = 5;
 	}
 
-	private function doneTween(_)
+	private function doneTween()
 	{
 		if (_image.scale == 1)
 		{

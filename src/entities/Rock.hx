@@ -6,7 +6,7 @@ import haxepunk.HXP;
 import haxepunk.Entity;
 import haxepunk.graphics.Image;
 import haxepunk.masks.Circle;
-import haxepunk.utils.MathUtil;
+import haxepunk.math.MathUtil;
 import flash.geom.Point;
 
 class Rock extends Physics

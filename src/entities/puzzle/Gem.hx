@@ -15,9 +15,9 @@ class Gem extends Physics
 		_originX = x;
 		_originY = y;
 
-		_sprite = new Spritemap("gfx/objects/gem.png", 35, 35, onAnimEnd);
+		_sprite = new Spritemap("gfx/objects/gem.png", 35, 35);
 		_sprite.add("idle", [0]);
-		_sprite.add("shimmer", [1, 2, 3], 12);
+		_sprite.add("shimmer", [1, 2, 3], 12).onComplete.bind(function() _sprite.play("idle"));
 		_sprite.centerOrigin();
 		graphic = _sprite;
 
@@ -28,16 +28,12 @@ class Gem extends Physics
 		drag = 4;
 		_velocityTime = 0;
 		_startVelocity = false;
-		_alphaTween = new VarTween(tweenComplete);
+		_alphaTween = new VarTween();
+		_alphaTween.onComplete.bind(tweenComplete);
 		addTween(_alphaTween, true);
 	}
 
-	private function onAnimEnd()
-	{
-		_sprite.play("idle");
-	}
-
-	private function tweenComplete(_)
+	private function tweenComplete()
 	{
 		if (_sprite.alpha == 0)
 		{

@@ -5,26 +5,33 @@ import haxepunk.graphics.Image;
 import haxepunk.graphics.Spritemap;
 import haxepunk.HXP;
 import haxepunk.Entity;
-import haxepunk.utils.Random;
+import haxepunk.math.Random;
 import scenes.Game;
 
 class Snapper extends Being
 {
 
-	public function new(x:Float, y:Float, flipped:Bool = false)
+	public function new(x:Float, y:Float, isFlipped:Bool = false)
 	{
 		super(x, y);
 
 		_fish = new Spritemap("gfx/new_fish_anim.png", 59, 35);
 		_fish.add("swim", [0, 1, 2, 3, 4, 5], 6);
 		_fish.play("swim");
-		_fish.flipped = flipped;
+		this.flipped = isFlipped;
 		graphic = _fish;
 
 		setHitbox(59, 32);
 		layer = 50;
 		type = "fish";
 		_spawnTime = Random.random * 5;
+	}
+
+	var flipped(default, set):Bool;
+	function set_flipped(value:Bool)
+	{
+		_fish.scaleX = value ? -1 : 1;
+		return flipped = value;
 	}
 
 	public override function kill()
@@ -48,23 +55,23 @@ class Snapper extends Being
 		spawnBubbles();
 
 		// flip on level boundaries
-		if (_fish.flipped)
+		if (flipped)
 		{
 			x -= 1;
 			if (x < 0)
-				_fish.flipped = false;
+				flipped = false;
 		}
 		else
 		{
 			x += 1;
 			if (x > Game.levelWidth - width)
-				_fish.flipped = true;
+				flipped = true;
 		}
 
 		// collide with walls
 		if (collide("map", x, y) != null)
 		{
-			_fish.flipped = !_fish.flipped;
+			flipped = !flipped;
 		}
 		super.update();
 	}

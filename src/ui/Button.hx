@@ -4,7 +4,7 @@ import haxepunk.Entity;
 import haxepunk.Graphic;
 import haxepunk.graphics.Image;
 import haxepunk.tweens.misc.VarTween;
-import haxepunk.input.Input;
+import haxepunk.input.Mouse;
 
 class Button extends Entity
 {
@@ -25,15 +25,11 @@ class Button extends Entity
 
 	public override function added()
 	{
-		var showTween:VarTween = new VarTween(tweenComplete);
+		var showTween:VarTween = new VarTween();
+		showTween.onComplete.bind(function() _shown = true);
 		showTween.tween(_image, "scale", 1, 1);
 		scene.addTween(showTween, true);
 		_scaleDir = 0.02;
-	}
-
-	private function tweenComplete(_)
-	{
-		_shown = true;
 	}
 
 	public override function update()
@@ -42,7 +38,7 @@ class Button extends Entity
 		{
 			if (collidePoint(x, y, scene.mouseX, scene.mouseY))
 			{
-				if (Input.mousePressed)
+				if (Mouse.mousePressed)
 				{
 					_clicked();
 				}

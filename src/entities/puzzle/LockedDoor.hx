@@ -3,7 +3,7 @@ package entities.puzzle;
 import haxepunk.HXP;
 import haxepunk.Entity;
 import haxepunk.graphics.Spritemap;
-import haxepunk.utils.MathUtil;
+import haxepunk.math.MathUtil;
 import entities.Player;
 
 class LockedDoor extends Entity
@@ -12,9 +12,9 @@ class LockedDoor extends Entity
 	public function new(x:Float, y:Float, color:String, target:Player)
 	{
 		super(x, y);
-		_sprite = new Spritemap("gfx/objects/colored_door.png", 16, 64, onAnimEnd);
+		_sprite = new Spritemap("gfx/objects/colored_door.png", 16, 64);
 		_sprite.add("closed", [0]);
-		_sprite.add("open", [1, 2, 3], 12);
+		_sprite.add("open", [1, 2, 3], 12).onComplete.bind(function() scene.remove(this));
 		_sprite.play("closed");
 		graphic = _sprite;
 
@@ -33,14 +33,6 @@ class LockedDoor extends Entity
 		layer = 30;
 		_target = target;
 		type = "door";
-	}
-
-	public function onAnimEnd()
-	{
-		if (_sprite.currentAnim == "open")
-		{
-			scene.remove(this);
-		}
 	}
 
 	public override function update()

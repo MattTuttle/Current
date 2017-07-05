@@ -8,11 +8,9 @@ import haxepunk.Entity;
 import haxepunk.graphics.Image;
 import haxepunk.masks.Circle;
 import haxepunk.Sfx;
-import haxepunk.input.Input;
-import haxepunk.input.Key;
-import haxepunk.input.Touch;
+import haxepunk.input.*;
 import haxepunk.utils.Data;
-import haxepunk.utils.MathUtil;
+import haxepunk.math.MathUtil;
 import flash.geom.Point;
 import haxe.Serializer;
 import haxe.Unserializer;
@@ -341,14 +339,15 @@ class Player extends Physics
 		if (Input.multiTouchSupported)
 		{
 			var touchCount:Int = 0;
-			for (touch in Input.touches)
-			{
-				//trace(touch.sceneX + ", " + touch.sceneY);
-				acceleration.x = touch.sceneX - x;
-				acceleration.y = touch.sceneY - y;
-				acceleration.normalize(speed);
-				touchCount += 1;
-			}
+			// TODO: handle touch support
+			// for (touch in Input.touches)
+			// {
+			// 	//trace(touch.sceneX + ", " + touch.sceneY);
+			// 	acceleration.x = touch.sceneX - x;
+			// 	acceleration.y = touch.sceneY - y;
+			// 	acceleration.normalize(speed);
+			// 	touchCount += 1;
+			// }
 			if (touchCount == 0)
 			{
 				applyDrag(true, true);
@@ -391,7 +390,7 @@ class Player extends Physics
 		if (!hasPickup("shoot") || _tossObject != null) return;
 
 		_shootTime -= HXP.elapsed;
-		if (Input.mouseDown && _bubbles.length > 0 && _shootTime < 0)
+		if (Mouse.mouseDown && _bubbles.length > 0 && _shootTime < 0)
 		{
 			var bubble:Bubble = _bubbles.pop();
 			bubble.shoot(scene.mouseX, scene.mouseY);
@@ -454,7 +453,7 @@ class Player extends Physics
 	{
 		if (!hasPickup("toss")) return;
 
-		if (Input.mousePressed)
+		if (Mouse.mousePressed)
 		{
 			_tossObject = null;
 			if (_bubbles.length > 0)
@@ -474,7 +473,7 @@ class Player extends Physics
 				}
 			}
 		}
-		else if (Input.mouseReleased)
+		else if (Mouse.mouseReleased)
 		{
 			if (_tossObject != null)
 			{

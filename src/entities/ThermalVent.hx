@@ -27,7 +27,7 @@ class ThermalVent extends Entity
 	public override function update()
 	{
 		_spawnTime -= HXP.elapsed;
-		if (_spawnTime < 0 && onCamera)
+		if (_spawnTime < 0 && scene.camera.onCamera(this))
 			spawnBubble();
 
 	}

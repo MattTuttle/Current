@@ -1,6 +1,7 @@
 package entities.puzzle;
 
 import haxepunk.graphics.Spritemap;
+import haxepunk.graphics.Spritemap.Animation;
 import haxepunk.HXP;
 import haxepunk.Entity;
 import haxepunk.graphics.Image;
@@ -17,6 +18,7 @@ class GemPanel extends Entity
 		_sprite.add("closed", [0]);
 		_sprite.add("open", [1]);
 
+		_open = open;
 		if (open)
 			_sprite.play("open");
 		else
@@ -32,7 +34,7 @@ class GemPanel extends Entity
 	public override function update()
 	{
 		super.update();
-		if (_sprite.currentAnim == "open") return;
+		if (_open) return;
 
 		if (_gem == null)
 		{
@@ -63,6 +65,7 @@ class GemPanel extends Entity
 			{
 				HXP.scene.remove(_gem);
 				_sprite.play("open");
+				_open = true;
 			}
 		}
 	}
@@ -70,6 +73,7 @@ class GemPanel extends Entity
 	private var _offsetX:Float;
 	private var _offsetY:Float;
 	private var _gem:Entity;
+	private var _open:Bool = false;
 	private var _sprite:Spritemap;
 
 }

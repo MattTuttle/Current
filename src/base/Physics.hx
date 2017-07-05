@@ -2,14 +2,14 @@ package base;
 
 import haxepunk.HXP;
 import haxepunk.Entity;
-import haxepunk.utils.MathUtil;
-import flash.geom.Point;
+import haxepunk.math.MathUtil;
+import haxepunk.math.Vector2;
 
 class Physics extends Being
 {
 
-	public var velocity:Point;
-	public var acceleration:Point;
+	public var velocity:Vector2;
+	public var acceleration:Vector2;
 	public var maxSpeed:Float;
 	public var drag:Float;
 	public var speed:Float;
@@ -19,8 +19,8 @@ class Physics extends Being
 	{
 		super(x, y);
 
-		velocity = new Point();
-		acceleration = new Point();
+		velocity = new Vector2();
+		acceleration = new Vector2();
 		maxSpeed = 140;
 		drag = 8;
 		speed = 6;
@@ -73,8 +73,7 @@ class Physics extends Being
 	public override function update()
 	{
 		var change:Float, delta:Int;
-		velocity.x += acceleration.x;
-		velocity.y += acceleration.y;
+		velocity.add(acceleration);
 
 		// clamp to max speed
 		if (Math.abs(velocity.x) > maxSpeed)

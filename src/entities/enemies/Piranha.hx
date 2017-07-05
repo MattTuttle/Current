@@ -4,7 +4,7 @@ import base.Physics;
 import haxepunk.Entity;
 import haxepunk.HXP;
 import haxepunk.graphics.Spritemap;
-import haxepunk.utils.MathUtil;
+import haxepunk.math.MathUtil;
 
 enum PiranhaState
 {
@@ -40,13 +40,20 @@ class Piranha extends Physics
 		scene.remove(this);
 	}
 
+	var flipped(default, set):Bool;
+	function set_flipped(value:Bool)
+	{
+		_sprite.scaleX = value ? -1 : 1;
+		return flipped = value;
+	}
+
 	private function faceAngle(angle:Float)
 	{
 		_sprite.angle = angle;
-		_sprite.flipped = false;
+		flipped = false;
 		if (_sprite.angle > 90 && _sprite.angle < 270 || _sprite.angle < -90)
 		{
-			_sprite.flipped = true;
+			flipped = true;
 			_sprite.angle -= 180;
 		}
 	}
@@ -85,7 +92,7 @@ class Piranha extends Physics
 				else if (_point.length < 200)
 				{
 					var angle:Float = _sprite.angle;
-					if (_sprite.flipped) angle += 180;
+					if (flipped) angle += 180;
 					angle *= MathUtil.RAD;
 					acceleration.x = Math.cos(angle) * speed;
 					acceleration.y = Math.sin(angle) * speed;
