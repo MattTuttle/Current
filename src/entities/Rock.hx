@@ -7,7 +7,6 @@ import haxepunk.Entity;
 import haxepunk.graphics.Image;
 import haxepunk.masks.Circle;
 import haxepunk.math.MathUtil;
-import flash.geom.Point;
 
 class Rock extends Physics
 {
@@ -44,7 +43,7 @@ class Rock extends Physics
 	{
 		velocity.y += 4; // gravity
 
-		var hit:Entity = collideTypes(_hitTypes, x + MathUtil.sign(velocity.x) * 3, y + MathUtil.sign(velocity.y) * 3);
+		var hit:Entity = collide(_hitTypes, x + MathUtil.sign(velocity.x) * 3, y + MathUtil.sign(velocity.y) * 3);
 		if (hit != null)
 		{
 			if (Std.is(hit, Being))

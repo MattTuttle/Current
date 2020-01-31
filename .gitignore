@@ -1,3 +1,5 @@
+.haxelib/
+out/
 bin/
 libs/
 *.swf

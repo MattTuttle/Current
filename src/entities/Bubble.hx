@@ -7,7 +7,6 @@ import haxepunk.Entity;
 import haxepunk.graphics.Image;
 import haxepunk.Sfx;
 import haxepunk.masks.Circle;
-import flash.geom.Point;
 import scenes.Game;
 
 enum BubbleState
@@ -64,10 +63,10 @@ class Bubble extends Being
 		super.kill();
 	}
 
-	public var owned(get_owned, null):Bool;
+	public var owned(get, null):Bool;
 	private function get_owned():Bool { return (_owner != null); }
 
-	public var owner(null, set_owner):Dynamic;
+	public var owner(null, set):Dynamic;
 	private function set_owner(value:Dynamic):Dynamic
 	{
 		if (value != _owner && !dead)
@@ -99,7 +98,7 @@ class Bubble extends Being
 	{
 		if (dead) return;
 		// always check if we are colliding with something
-		var e:Entity = collideTypes(_enemyTypes, x, y);
+		var e:Entity = collide(_enemyTypes, x, y);
 		var enemy:Being = null;
 		if (e != null)
 			enemy = cast(e, Being);
@@ -121,7 +120,7 @@ class Bubble extends Being
 				if (_life < 0) scene.remove(this);
 
 				// hit map without an owner, POP!
-				if (collideTypes(_hitTypes, x, y) != null || enemy != null) kill();
+				if (collide(_hitTypes, x, y) != null || enemy != null) kill();
 			case OWNED:
 				_bubble.alpha = 1;
 				_point.x = targetX - x;
@@ -150,7 +149,7 @@ class Bubble extends Being
 					hurt(enemy.attack);
 				}
 				moveBy(targetX, targetY);
-				if (collideTypes(_hitTypes, x, y) != null) kill();
+				if (collide(_hitTypes, x, y) != null) kill();
 		}
 
 		super.update();

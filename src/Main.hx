@@ -1,11 +1,10 @@
-import flash.system.Capabilities;
+import haxepunk.debug.Console;
 import haxepunk.Engine;
 import haxepunk.HXP;
 import haxepunk.input.Input;
 import haxepunk.input.Key;
 import scenes.Game;
 import scenes.MainMenu;
-import flash.display.Stage;
 
 class Main extends Engine
 {
@@ -23,12 +22,18 @@ class Main extends Engine
 		super.update();
 	}
 
+	@:preload(
+		["assets/graphics", "gfx"],
+		["assets/audio", "sfx"],
+		["assets/music", "music"],
+		["assets/font", "font"],
+		["assets/levels", "levels"]
+	)
 	override public function init()
 	{
 #if debug
-		haxepunk.debug.Console.enable();
+		Console.enable();
 #end
-		// HXP.orientations = [Stage.OrientationLandscapeLeft, Stage.OrientationLandscapeRight];
 		HXP.defaultFont = "font/bubblesstandard.ttf";
 		HXP.scene = new MainMenu();
 
@@ -43,4 +48,5 @@ class Main extends Engine
 		// ripple.enable();
 	}
 
+	static function main() new Main();
 }

@@ -1,5 +1,6 @@
 package base;
 
+import haxepunk.math.Vector2;
 import haxepunk.Entity;
 
 class Being extends Entity
@@ -33,5 +34,7 @@ class Being extends Entity
 	{
 		dead = true;
 	}
+
+	var _point = new Vector2();
 
 }

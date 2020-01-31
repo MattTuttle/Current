@@ -11,7 +11,6 @@ import haxepunk.Sfx;
 import haxepunk.input.*;
 import haxepunk.utils.Data;
 import haxepunk.math.MathUtil;
-import flash.geom.Point;
 import haxe.Serializer;
 import haxe.Unserializer;
 import scenes.Game;
@@ -174,7 +173,7 @@ class Player extends Physics
 	/**
 	 * Sets how many bubble layers we can have
 	 */
-	public var maxLayer(get_maxLayer, set_maxLayer):Int;
+	public var maxLayer(get, set):Int;
 	private function get_maxLayer():Int { return _maxLayer; }
 	private function set_maxLayer(value:Int):Int
 	{
@@ -215,7 +214,7 @@ class Player extends Physics
 
 		super.update();
 
-		var e:Entity = collideTypes(_enemyTypes, x, y);
+		var e:Entity = collide(_enemyTypes, x, y);
 		if (e != null && _bubbles.length == 0)
 		{
 			if (Std.is(e, Being))

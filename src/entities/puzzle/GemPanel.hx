@@ -1,5 +1,6 @@
 package entities.puzzle;
 
+import haxepunk.math.Vector2;
 import haxepunk.graphics.Spritemap;
 import haxepunk.graphics.Spritemap.Animation;
 import haxepunk.HXP;
@@ -75,5 +76,6 @@ class GemPanel extends Entity
 	private var _gem:Entity;
 	private var _open:Bool = false;
 	private var _sprite:Spritemap;
+	private var _point = new Vector2();
 
 }

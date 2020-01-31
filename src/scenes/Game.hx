@@ -8,6 +8,7 @@ import haxepunk.masks.Grid;
 import haxepunk.tweens.misc.NumTween;
 import haxepunk.tweens.misc.VarTween;
 import haxepunk.tweens.sound.Fader;
+import haxepunk.assets.AssetCache;
 import haxepunk.graphics.atlas.AtlasData;
 import haxepunk.input.Input;
 import haxepunk.input.Key;
@@ -17,10 +18,8 @@ import haxepunk.Tween;
 import base.Physics;
 import entities.Pickup;
 import entities.Player;
-import flash.utils.ByteArray;
-import haxe.xml.Fast;
+import haxe.xml.Access;
 import ui.Announce;
-import openfl.Assets;
 
 class Game extends Scene
 {
@@ -140,16 +139,16 @@ class Game extends Scene
 
 	private function getLevelData(id:String):String
 	{
-		var level:String = Assets.getText("levels/" + id + "/level.oel");
+		var level:String = AssetCache.global.getText("levels/" + id + "/level.oel");
 		if (level != null)
 			return level;
-		return Assets.getText("levels/temple/" + id + ".oel");
+		return AssetCache.global.getText("levels/temple/" + id + ".oel");
 	}
 
 	private inline function destroyImage(imagePath:String)
 	{
-		var data = AtlasData.getAtlasDataByName(imagePath);
-		if (data != null) data.destroy();
+		// var data = AtlasData.getAtlasDataByName(imagePath);
+		// if (data != null) data.destroy();
 	}
 
 	private inline function unloadLevel()
@@ -201,7 +200,7 @@ class Game extends Scene
 		}
 		else
 		{
-			var xml:Fast = new Fast(Xml.parse(data));
+			var xml:Access = new Access(Xml.parse(data));
 			xml = xml.node.level;
 
 			_vignette = false;
@@ -265,31 +264,36 @@ class Game extends Scene
 		}
 	}
 
-	private function loadTilemap(group:Fast, layer:Int)
+	private function loadTilemap(group:Access, layer:Int)
 	{
 		var size:Int = 32;
+		var cols = Std.int(levelWidth / size);
 		var map:Tilemap = new Tilemap("levels/tileset.png", levelWidth, levelHeight, size, size);
 		map.usePositions = true;
 		for (obj in group.elements)
 		{
+			// TODO: verify this is right
+			var x = Std.int(Std.parseInt(obj.att.tx) / size);
+			var y = Std.int(Std.parseInt(obj.att.ty) / size);
+			var index = y * cols + x;
 			switch(obj.name)
 			{
 				case "tile":
 					map.setTile(Std.parseInt(obj.att.x),
 						Std.parseInt(obj.att.y),
-						map.getIndex(Std.int(Std.parseInt(obj.att.tx) / size), Std.int(Std.parseInt(obj.att.ty) / size)));
+						index);
 				case "rect":
 					map.setRect(Std.parseInt(obj.att.x),
 						Std.parseInt(obj.att.y),
 						Std.parseInt(obj.att.w),
 						Std.parseInt(obj.att.h),
-						map.getIndex(Std.int(Std.parseInt(obj.att.tx) / size), Std.int(Std.parseInt(obj.att.ty) / size)));
+						index);
 			}
 		}
 		addGraphic(map, layer);
 	}
 
-	private function loadWalls(group:Fast)
+	private function loadWalls(group:Access)
 	{
 		var size:Int = 8;
 		var grid:Grid = new Grid(levelWidth, levelHeight, size, size);
@@ -304,7 +308,7 @@ class Game extends Scene
 		addMask(grid, "map");
 	}
 
-	private function loadObjects(group:Fast)
+	private function loadObjects(group:Access)
 	{
 		var x:Float, y:Float, angle:Float;
 

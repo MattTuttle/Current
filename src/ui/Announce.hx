@@ -3,7 +3,7 @@ package ui;
 import haxepunk.HXP;
 import haxepunk.Entity;
 import haxepunk.graphics.text.Text;
-import flash.text.TextFormatAlign;
+import haxepunk.graphics.text.TextAlignType;
 
 class Announce extends Entity
 {
@@ -16,7 +16,7 @@ class Announce extends Entity
 		super(x, y);
 
 		_text = new Text("", 0, 0, HXP.width, 100, {
-			align: TextFormatAlign.CENTER,
+			align: TextAlignType.CENTER,
 			color: color,
 			size: 24,
 			resizable: true

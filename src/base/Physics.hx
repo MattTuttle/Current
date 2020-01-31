@@ -84,7 +84,7 @@ class Physics extends Being
 		// change in horizontal
 		onWall = false;
 		change = (velocity.x + Math.random() * 0.2) * HXP.elapsed; // adds wiggle
-		if (collideTypes(_solidTypes, x + change, y) == null)
+		if (collide(_solidTypes, x + change, y) == null)
 		{
 			x += change;
 		}
@@ -93,7 +93,7 @@ class Physics extends Being
 			delta = Std.int(change);
 			for (i in 0 ... Std.int(Math.abs(delta)))
 			{
-				if (collideTypes(_solidTypes, x + MathUtil.sign(delta), y) == null)
+				if (collide(_solidTypes, x + MathUtil.sign(delta), y) == null)
 				{
 					x += MathUtil.sign(delta);
 				}
@@ -113,7 +113,7 @@ class Physics extends Being
 		// change in vertical
 		onFloor = false;
 		change = (velocity.y + Math.random() * 1 - 0.5) * HXP.elapsed; // adds wiggle
-		if (collideTypes(_solidTypes, x, y + change) == null)
+		if (collide(_solidTypes, x, y + change) == null)
 		{
 			y += change;
 		}
@@ -122,7 +122,7 @@ class Physics extends Being
 			delta = Std.int(change);
 			for (i in 0 ... Std.int(Math.abs(delta)))
 			{
-				if (collideTypes(_solidTypes, x, y + MathUtil.sign(delta)) == null)
+				if (collide(_solidTypes, x, y + MathUtil.sign(delta)) == null)
 				{
 					y += MathUtil.sign(delta);
 				}
@@ -144,7 +144,7 @@ class Physics extends Being
 
 	public function collideSolid(x:Float, y:Float):Bool
 	{
-		return (collideTypes(_solidTypes, x, y) != null);
+		return (collide(_solidTypes, x, y) != null);
 	}
 
 	private function findClosestOpeningHoriz(step:Int = 8, segments:Int = 10)
@@ -158,7 +158,7 @@ class Physics extends Being
 		tx = x;
 		while (tx < max)
 		{
-			if (collideTypes(_solidTypes, x, y) == null)
+			if (collide(_solidTypes, x, y) == null)
 			{
 				ox = tx;
 				len = ox - x;
@@ -170,7 +170,7 @@ class Physics extends Being
 		tx = x;
 		while (tx > min)
 		{
-			if (collideTypes(_solidTypes, x, y) == null && x - tx < len)
+			if (collide(_solidTypes, x, y) == null && x - tx < len)
 			{
 				ox = tx;
 				break;
@@ -192,7 +192,7 @@ class Physics extends Being
 		ty = y;
 		while (ty < max)
 		{
-			if (collideTypes(_solidTypes, x, y) == null)
+			if (collide(_solidTypes, x, y) == null)
 			{
 				oy = ty;
 				len = oy - y;
@@ -204,7 +204,7 @@ class Physics extends Being
 		ty = y;
 		while (ty > min)
 		{
-			if (collideTypes(_solidTypes, x, y) == null && y - ty < len)
+			if (collide(_solidTypes, x, y) == null && y - ty < len)
 			{
 				oy = ty;
 				break;

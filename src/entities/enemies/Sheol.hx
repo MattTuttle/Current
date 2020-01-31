@@ -7,7 +7,6 @@ import haxepunk.Entity;
 import haxepunk.graphics.Image;
 import haxepunk.tweens.misc.VarTween;
 import entities.Player;
-import flash.geom.Point;
 import scenes.Game;
 
 class Sheol extends Physics
