@@ -1,13 +1,5 @@
--lib HaxePunk
+-lib haxepunk
 -cp src
 -main Main
 -debug
-
---each
-
 -js out/game.js
-
-# --next
-
-# -lib hlsdl
-# -hl out/game.hl

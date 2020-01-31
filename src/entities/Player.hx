@@ -1,5 +1,6 @@
 package entities;
 
+import haxe.ds.StringMap;
 import base.Being;
 import base.Interactable;
 import base.Physics;
@@ -11,8 +12,6 @@ import haxepunk.Sfx;
 import haxepunk.input.*;
 import haxepunk.utils.Data;
 import haxepunk.math.MathUtil;
-import haxe.Serializer;
-import haxe.Unserializer;
 import scenes.Game;
 
 enum Gesture
@@ -75,17 +74,15 @@ class Player extends Physics
 		// sets max bubbles as well
 		maxLayer = Data.readInt("maxLayer", 1);
 		// load pickups
-		var p = Data.read("pickups");
-		if (p != null)
-			_pickups = Unserializer.run(p);
-		else
-			_pickups = new Map<String,PickupType>();
+		_pickups = Data.read("pickups");
+		if (_pickups == null)
+			_pickups = new StringMap<PickupType>();
 	}
 
 	public function saveData()
 	{
 		Data.write("maxLayer", maxLayer);
-		Data.write("pickups", Serializer.run(_pickups));
+		Data.write("pickups", _pickups);
 	}
 
 	public function hasPickup(pickup:String, ?level:String):Bool
@@ -498,7 +495,7 @@ class Player extends Physics
 
 	private var _shootTime:Float;
 
-	private var _pickups:Map<String,PickupType>;
+	private var _pickups:StringMap<PickupType>;
 
 	private var _maxBubbles:Int;
 	private var _maxLayer:Int;
