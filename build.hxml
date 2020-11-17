@@ -1,4 +1,5 @@
 -lib haxepunk
+-lib hxmod
 -cp src
 -main Main
 -debug

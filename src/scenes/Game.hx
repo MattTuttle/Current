@@ -130,7 +130,7 @@ class Game extends Scene
 		}
 	}
 
-	private function addImage(id:String, layer:Int):Image
+	private function addImage(id:String, layer:Int):Null<Image>
 	{
 		var image:Image = new Image(id);
 		addGraphic(image, layer);
@@ -139,10 +139,10 @@ class Game extends Scene
 
 	private function getLevelData(id:String):String
 	{
-		var level:String = AssetCache.global.getText("levels/" + id + "/level.oel");
-		if (level != null)
-			return level;
-		return AssetCache.global.getText("levels/temple/" + id + ".oel");
+		var level = AssetCache.global.getText("levels/" + id + "/level.oel");
+		if (level == "")
+			level = AssetCache.global.getText("levels/temple/" + id + ".oel");
+		return level;
 	}
 
 	private inline function destroyImage(imagePath:String)
@@ -164,6 +164,7 @@ class Game extends Scene
 	{
 		if (_level != null) unloadLevel();
 		_level = StringTools.replace(id, "R", "room");
+		trace("loading level: " + _level);
 		var entities:Array<Entity> = new Array<Entity>();
 		getAll(entities);
 		for (entity in entities)
@@ -267,7 +268,7 @@ class Game extends Scene
 	private function loadTilemap(group:Access, layer:Int)
 	{
 		var size:Int = 32;
-		var cols = Std.int(levelWidth / size);
+		var tilesInRow = 13; // TODO: make it so this isn't hard coded for tileset
 		var map:Tilemap = new Tilemap("levels/tileset.png", levelWidth, levelHeight, size, size);
 		map.usePositions = true;
 		for (obj in group.elements)
@@ -275,7 +276,7 @@ class Game extends Scene
 			// TODO: verify this is right
 			var x = Std.int(Std.parseInt(obj.att.tx) / size);
 			var y = Std.int(Std.parseInt(obj.att.ty) / size);
-			var index = y * cols + x;
+			var index = y * tilesInRow + x;
 			switch(obj.name)
 			{
 				case "tile":

@@ -12,7 +12,6 @@ class Main extends Engine
 	public function new()
 	{
 		super(640, 400, 60);
-		BackgroundMusic.play("music/title.xm");
 	}
 
 	override public function update()
@@ -34,7 +33,8 @@ class Main extends Engine
 #if debug
 		Console.enable();
 #end
-		HXP.defaultFont = "font/bubblesstandard.ttf";
+		BackgroundMusic.play("music/title.xm");
+		//HXP.defaultFont = "font/bubblesstandard.ttf";
 		HXP.scene = new MainMenu();
 
 		// ripple = new PostProcess("shaders/ripple.frag");
