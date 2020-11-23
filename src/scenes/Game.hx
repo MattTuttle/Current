@@ -9,13 +9,11 @@ import haxepunk.tweens.misc.NumTween;
 import haxepunk.tweens.misc.VarTween;
 import haxepunk.tweens.sound.Fader;
 import haxepunk.assets.AssetCache;
-import haxepunk.graphics.atlas.AtlasData;
-import haxepunk.input.Input;
+import haxepunk.graphics.shader.SceneShader;
 import haxepunk.input.Key;
 import haxepunk.utils.Data;
 import haxepunk.Scene;
 import haxepunk.Tween;
-import base.Physics;
 import entities.Pickup;
 import entities.Player;
 import haxe.xml.Access;
@@ -29,12 +27,21 @@ class Game extends Scene
 	public static var levelWidth:Int;
 	public static var levelHeight:Int;
 
+	var ripple:SceneShader;
+	var rippleTime:Float = 0;
+
 	public function new()
 	{
 		super();
 
 //		shader = new WaterShader();
 		_exits = new Map<String,String>();
+
+		ripple = SceneShader.fromAsset("shaders/ripple.frag");
+		ripple.setUniform("speed", 2.0);
+		ripple.setUniform("density", 1.4);
+		ripple.setUniform("scale", 2.5);
+		shaders.push(ripple);
 
 		_currentMusic = "";
 
@@ -440,6 +447,8 @@ class Game extends Scene
 
 	public override function update()
 	{
+		rippleTime += HXP.elapsed;
+		ripple.setUniform("uTime", rippleTime);
 		if (_fadeTween != null)
 			_fade.alpha = _fadeTween.value;
 
