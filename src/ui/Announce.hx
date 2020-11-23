@@ -15,12 +15,12 @@ class Announce extends Entity
 	{
 		super(x, y);
 
-		_text = new Text("", 0, 0, HXP.width, 100, {
+		_text = new Text("", 10, 0, HXP.width - 20, 100, {
 			align: TextAlignType.CENTER,
 			color: color,
 			size: 24,
 			font: "bubblesstandard",
-			resizable: true
+			wordWrap: true
 		});
 		_text.scrollX = _text.scrollY = 0;
 		_text.centerOrigin();
@@ -55,7 +55,7 @@ class Announce extends Entity
 			else
 			{
 				_text.alpha -= 0.01;
-				if (_text.alpha < 0)
+				if (_text.alpha <= 0)
 				{
 					if (_complete != null)
 						_complete();

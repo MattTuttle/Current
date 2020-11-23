@@ -59,6 +59,7 @@ class MainMenu extends Scene
 
 	private function onNewGame()
 	{
+		Data.load(); // wipe out old game
 		Data.save("Current");
 		onContinue();
 	}

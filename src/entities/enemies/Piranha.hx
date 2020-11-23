@@ -32,6 +32,7 @@ class Piranha extends Physics
 		_target = target;
 		_waitTime = 0;
 		speed = 20;
+		layer = 50;
 		faceAngle(angle);
 	}
 

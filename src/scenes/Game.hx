@@ -22,10 +22,11 @@ import ui.Announce;
 class Game extends Scene
 {
 
-//	public var shader:WaterShader;
 	public var player:Player;
 	public static var levelWidth:Int;
 	public static var levelHeight:Int;
+
+	@:const var defaultLevel = "R01";
 
 	var ripple:SceneShader;
 	var rippleTime:Float = 0;
@@ -34,7 +35,6 @@ class Game extends Scene
 	{
 		super();
 
-//		shader = new WaterShader();
 		_exits = new Map<String,String>();
 
 		ripple = SceneShader.fromAsset("shaders/ripple.frag");
@@ -90,7 +90,7 @@ class Game extends Scene
 	{
 		player = null;
 		_doors = Data.read("doors", new Array<String>());
-		_nextLevel = Data.readString("level", "R01");
+		_nextLevel = Data.readString("level", defaultLevel);
 		_direction = "none"; // fake direction
 		_fadeTween.tween(0, 1, 1);
 	}
@@ -100,7 +100,7 @@ class Game extends Scene
 		Data.load("Current");
 		_doors = Data.read("doors", new Array<String>());
 
-		loadLevel(Data.readString("level", "R01"));
+		loadLevel(Data.readString("level", defaultLevel));
 	}
 
 	public function save()
@@ -162,17 +162,13 @@ class Game extends Scene
 
 	private inline function unloadLevel()
 	{
-		destroyImage("levels/" + _level + "/immediatebg.png");
-		destroyImage("levels/" + _level + "/walls.png");
-		destroyImage("levels/" + _level + "/decor.png");
-		destroyImage("levels/" + _level + "/front.png");
-		destroyImage("levels/" + _level + "/lighting.png");
-	}
-
-	private function loadLevel(id:String)
-	{
-		if (_level != null) unloadLevel();
-		_level = StringTools.replace(id, "R", "room");
+		if (_level != null) {
+			destroyImage("levels/" + _level + "/immediatebg.png");
+			destroyImage("levels/" + _level + "/walls.png");
+			destroyImage("levels/" + _level + "/decor.png");
+			destroyImage("levels/" + _level + "/front.png");
+			destroyImage("levels/" + _level + "/lighting.png");
+		}
 		var entities:Array<Entity> = new Array<Entity>();
 		getAll(entities);
 		for (entity in entities)
@@ -180,6 +176,12 @@ class Game extends Scene
 			if (entity.type != "keep")
 				remove(entity);
 		}
+	}
+
+	private function loadLevel(id:String)
+	{
+		unloadLevel();
+		_level = StringTools.replace(id, "R", "room");
 
 		addImage("levels/" + _level + "/immediatebg.png", 90);
 		var walls:Image = addImage("levels/" + _level + "/walls.png", 30);
@@ -385,6 +387,7 @@ class Game extends Scene
 
 	public function finishGame()
 	{
+		unloadLevel();
 		var white:Image = Image.createRect(HXP.screen.width, HXP.screen.height);
 		white.alpha = white.scrollX = white.scrollY = 0;
 		addGraphic(white, 1);
@@ -410,12 +413,11 @@ class Game extends Scene
 
 	public function switchLevel(direction:String)
 	{
-		_direction = direction;
+		 _direction = direction;
 		_nextLevel = _exits.get(direction);
 		player.frozen = true; // don't let player move
 		if (_nextLevel == "")
 		{
-//			trace("No level to switch to");
 			finishGame();
 			return;
 		}

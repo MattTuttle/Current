@@ -23,7 +23,8 @@ class Rock extends Physics
 		graphic = _image = new Image(image);
 		_image.centerOrigin();
 		type = "rock";
-		mask = new Circle(16, -16, 16);
+		var radius = 12;
+		mask = new Circle(radius, -radius, -radius);
 		layer = 10;
 		maxSpeed = 450;
 

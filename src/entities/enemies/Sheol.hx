@@ -32,7 +32,7 @@ class Sheol extends Physics
 
 	private function doneTween()
 	{
-		if (_image.scale == 1)
+		if (_image.scale == 1 && scene != null)
 		{
 			// spawn fish
 			if (Math.random() > 0.5)
@@ -49,40 +49,6 @@ class Sheol extends Physics
 		else
 		{
 //			_spawnTime = Math.random() * 3 + 2; // 2-5
-		}
-	}
-
-	private function pullBubbles()
-	{
-		_bubbleTime -= HXP.elapsed;
-
-		if (_bubble == null)
-		{
-			if (_bubbleTime > 0) return;
-			_point.x = _target.x - x;
-			_point.y = _target.y - y;
-			if (_point.length < 150)
-			{
-				_bubble = _target.lastBubble();
-				if (_bubble != null)
-					_bubble.owned();
-			}
-		}
-		else
-		{
-			_point.x = x - _bubble.x;
-			_point.y = y - _bubble.y;
-			if (_point.length < 2)
-			{
-				_bubble.kill();
-				_bubble = null;
-				_bubbleTime = 1; // grab the next bubble
-			}
-			else
-			{
-				_bubble.targetX = x;
-				_bubble.targetY = y;
-			}
 		}
 	}
 
@@ -113,10 +79,6 @@ class Sheol extends Physics
 		}
 		super.update();
 	}
-
-	// pull off bubbles
-	private var _bubble:Bubble;
-	private var _bubbleTime:Float;
 
 	private var _provokeTime:Float;
 	private var _scaleTime:Float;
