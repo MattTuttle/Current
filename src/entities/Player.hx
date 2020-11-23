@@ -228,14 +228,14 @@ class Player extends Physics
 				interact.activate(this);
 		}
 
+		var game:Game = cast(HXP.scene, Game);
 		if (collide("exit", x, y) != null)
 		{
-			cast(scene, Game).finishGame();
+			game.finishGame();
 			frozen = true;
 		}
 
 		// check if player heads off screen
-		var game:Game = cast(HXP.scene, Game);
 		if (dead)
 		{
 			game.restart();
@@ -251,9 +251,17 @@ class Player extends Physics
 			else if (y > Game.levelHeight)
 				game.switchLevel("bottom");
 
+			// remove unowned bubbles
+			var i = 0;
+			while (i < _bubbles.length)
+			{
+				if (_bubbles[i].dead) {
+					_bubbles.splice(i, 1);
+				} else i++;
+			}
 			// rotate bubbles
 			_bubbleAngle += 1;
-			for (i in 0 ... _bubbles.length)
+			for (i in 0..._bubbles.length)
 			{
 				moveBubble(i);
 			}
@@ -309,24 +317,24 @@ class Player extends Physics
 		_bubbles[index].targetY = Math.sin(angle) * offsetRadius + y;
 	}
 
-	public function removeBubble(?bubble:Bubble)
+	public function removeBubble()
 	{
-		if (bubble == null)
-		{
-			if (_bubbles.length > 0)
-				_bubbles.pop().kill();
-		}
-		else
-		{
-			_bubbles.remove(bubble);
+		// find the last bubble in the list to kill
+		var i = _bubbles.length - 1;
+		while (i >= 0) {
+			if (!_bubbles[i].dead) {
+				_bubbles[i].kill();
+				break;
+			}
+			i -= 1;
 		}
 	}
 
 	private function addBubble(bubble:Bubble)
 	{
-		if (bubble.owned || _bubbles.length >= _maxBubbles) return;
+		if (bubble.dead || _bubbles.length >= _maxBubbles) return;
 		_bubbles.push(bubble);
-		bubble.owner = this;
+		bubble.owned();
 		moveBubble(_bubbles.length - 1);
 	}
 

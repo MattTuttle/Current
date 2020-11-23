@@ -4,10 +4,8 @@ import base.Being;
 import haxepunk.graphics.Spritemap;
 import haxepunk.HXP;
 import haxepunk.Entity;
-import haxepunk.graphics.Image;
 import haxepunk.Sfx;
 import haxepunk.masks.Circle;
-import scenes.Game;
 
 enum BubbleState
 {
@@ -52,34 +50,18 @@ class Bubble extends Being
 
 	public override function kill()
 	{
-		if (_owner != null)
-		{
-			if (Reflect.hasField(_owner, "removeBubble"))
-				_owner.removeBubble(this);
-		}
+		_owner = null;
+		type = "dead";
 		if (_state == OWNED || _state == SHOOT)
 			new Sfx("sfx/pop" + #if flash ".mp3" #else ".wav" #end).play();
-		HXP.scene.remove(this);
+		if (scene != null) scene.remove(this);
 		super.kill();
 	}
 
-	public var owned(get, null):Bool;
-	private function get_owned():Bool { return (_owner != null); }
-
-	public var owner(null, set):Dynamic;
-	private function set_owner(value:Dynamic):Dynamic
+	public function owned()
 	{
-		if (value != _owner && !dead)
-		{
-			// if we're owned try to remove the bubble
-			if (_owner != null && Reflect.hasField(_owner, "removeBubble"))
-				_owner.removeBubble(this);
-
-			_owner = value;
-			_state = OWNED;
-			type = "keep";
-		}
-		return value;
+		_state = OWNED;
+		type = "keep";
 	}
 
 	public function shoot(wx:Float, wy:Float)

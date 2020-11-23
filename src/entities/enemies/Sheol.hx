@@ -65,7 +65,7 @@ class Sheol extends Physics
 			{
 				_bubble = _target.lastBubble();
 				if (_bubble != null)
-					_bubble.owner = this;
+					_bubble.owned();
 			}
 		}
 		else
