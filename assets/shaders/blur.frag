@@ -1,3 +1,7 @@
+#ifdef GL_ES
+precision highp float;
+#endif
+
 //"in" attributes from our vertex shader
 varying vec2 vTexCoord;
 

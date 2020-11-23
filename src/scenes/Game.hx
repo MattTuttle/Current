@@ -43,6 +43,8 @@ class Game extends Scene
 		ripple.setUniform("scale", 2.5);
 		shaders.push(ripple);
 
+		shaders.push(SceneShader.fromAsset("shaders/blur.frag"));
+
 		_currentMusic = "";
 
 		_soundFader = new Fader();
@@ -171,7 +173,6 @@ class Game extends Scene
 	{
 		if (_level != null) unloadLevel();
 		_level = StringTools.replace(id, "R", "room");
-		trace("loading level: " + _level);
 		var entities:Array<Entity> = new Array<Entity>();
 		getAll(entities);
 		for (entity in entities)
