@@ -19,6 +19,7 @@ class Announce extends Entity
 			align: TextAlignType.CENTER,
 			color: color,
 			size: 24,
+			font: "bubblesstandard",
 			resizable: true
 		});
 		_text.scrollX = _text.scrollY = 0;

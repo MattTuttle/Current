@@ -34,7 +34,6 @@ class Main extends Engine
 		Console.enable();
 #end
 		BackgroundMusic.play("music/title.xm");
-		//HXP.defaultFont = "font/bubblesstandard.ttf";
 		HXP.scene = new MainMenu();
 	}
 
