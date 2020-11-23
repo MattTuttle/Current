@@ -43,16 +43,7 @@ class Piranha extends Physics
 	var flipped(default, set):Bool;
 	function set_flipped(value:Bool)
 	{
-		if (value)
-		{
-			_sprite.scaleX = -1;
-			_sprite.originX = _sprite.width;
-		}
-		else
-		{
-			_sprite.scaleX = 1;
-			_sprite.originX = 0;
-		}
+		_sprite.scaleX = value ? -1 : 1;
 		return flipped = value;
 	}
 
