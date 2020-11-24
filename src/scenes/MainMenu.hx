@@ -1,7 +1,6 @@
 package scenes;
 
 import haxepunk.HXP;
-import haxepunk.Entity;
 import haxepunk.Tween;
 import haxepunk.graphics.Image;
 import haxepunk.tweens.misc.VarTween;
@@ -54,7 +53,6 @@ class MainMenu extends Scene
 		var hw:Float = HXP.screen.width / 2;
 		add(new Button(hw, 280, "gfx/menu/new_game.png", onNewGame));
 		add(new Button(hw, 330, "gfx/menu/continue.png", onContinue));
-//		add(new Button(hw, 380, "gfx/menu/about.png", onAbout));
 	}
 
 	private function onNewGame()
@@ -79,10 +77,6 @@ class MainMenu extends Scene
 		fader.onComplete.bind(fadeComplete);
 		fader.fadeTo(0, fadeTime);
 		addTween(fader, true);
-	}
-
-	private function onAbout()
-	{
 	}
 
 	private function fadeComplete()
