@@ -59,7 +59,7 @@ class Announce extends Entity
 				{
 					if (_complete != null)
 						_complete();
-					HXP.scene.remove(this);
+					removeFromScene();
 				}
 			}
 		}

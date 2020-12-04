@@ -45,8 +45,7 @@ class Snapper extends Being
 
 	public override function kill()
 	{
-		if (scene != null)
-			scene.remove(this);
+		removeFromScene();
 	}
 
 	private function spawnBubbles()

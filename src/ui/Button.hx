@@ -28,7 +28,7 @@ class Button extends Entity
 		var showTween:VarTween = new VarTween();
 		showTween.onComplete.bind(function() _shown = true);
 		showTween.tween(_image, "scale", 1, 1);
-		scene.addTween(showTween, true);
+		scene.may((s) -> s.addTween(showTween, true));
 		_scaleDir = 0.02;
 	}
 
@@ -36,7 +36,7 @@ class Button extends Entity
 	{
 		if (_shown)
 		{
-			if (collidePoint(x, y, scene.mouseX, scene.mouseY))
+			if (scene.map((s) -> collidePoint(x, y, s.mouseX, s.mouseY), false))
 			{
 				if (Mouse.mousePressed)
 				{

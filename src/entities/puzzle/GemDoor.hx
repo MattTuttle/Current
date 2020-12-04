@@ -24,7 +24,7 @@ class GemDoor extends Entity
 	public function onOpenEnd()
 	{
 		cast(scene, Game).openedDoor();
-		scene.remove(this);
+		removeFromScene();
 	}
 
 	public function open()

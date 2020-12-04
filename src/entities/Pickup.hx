@@ -66,7 +66,7 @@ class Pickup extends Interactable
 		}
 		var sfx:Sfx = new Sfx("sfx/powerup" + #if flash ".mp3" #else ".wav" #end);
 		sfx.play(0.9);
-		HXP.scene.remove(this);
+		removeFromScene();
 	}
 
 	private var _startY:Float;

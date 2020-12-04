@@ -35,14 +35,16 @@ class Sheol extends Physics
 		if (_image.scale == 1 && scene != null)
 		{
 			// spawn fish
-			if (Math.random() > 0.5)
-			{
-				scene.add(new Piranha(x, y, 0, _target));
-			}
-			else
-			{
-				scene.add(new Snapper(x, y, (Math.random() < 0.5) ? true : false));
-			}
+			scene.may((scene) -> {
+				if (Math.random() > 0.5)
+				{
+					scene.add(new Piranha(x, y, 0, _target));
+				}
+				else
+				{
+					scene.add(new Snapper(x, y, (Math.random() < 0.5) ? true : false));
+				}
+			});
 
 			_scaleTween.tween(_image, "scale", 0, _scaleTime); // hide
 		}

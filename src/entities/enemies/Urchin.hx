@@ -20,7 +20,7 @@ class Urchin extends Being
 
 	public override function kill()
 	{
-		scene.remove(this);
+		removeFromScene();
 	}
 
 }

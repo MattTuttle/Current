@@ -38,7 +38,7 @@ class Piranha extends Physics
 
 	public override function kill()
 	{
-		scene.remove(this);
+		removeFromScene();
 	}
 
 	var flipped(default, set):Bool;

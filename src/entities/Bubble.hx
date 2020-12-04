@@ -54,7 +54,7 @@ class Bubble extends Being
 		type = "dead";
 		if (_state == OWNED || _state == SHOOT)
 			new Sfx("sfx/pop" + #if flash ".mp3" #else ".wav" #end).play();
-		if (scene != null) scene.remove(this);
+		scene.may((s) -> s.remove(this));
 		super.kill();
 	}
 
@@ -99,7 +99,7 @@ class Bubble extends Being
 					_bubble.alpha = _life;
 					if (scene != null) type = "dead"; // check _scene to prevent crash...
 				}
-				if (_life < 0) scene.remove(this);
+				if (_life < 0) removeFromScene();
 
 				// hit map without an owner, POP!
 				if (collide(_hitTypes, x, y) != null || enemy.exists()) kill();

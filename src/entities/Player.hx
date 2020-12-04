@@ -188,7 +188,7 @@ class Player extends Physics
 
 	public override function kill()
 	{
-		HXP.scene.remove(this);
+		removeFromScene();
 		var pop:Sfx = new Sfx("sfx/pop" + #if flash ".mp3" #else ".wav" #end);
 		pop.play();
 		super.kill();
@@ -390,13 +390,15 @@ class Player extends Physics
 	{
 		if (!hasPickup("shoot") || _tossObject != null) return;
 
-		_shootTime -= HXP.elapsed;
-		if (Mouse.mouseDown && _bubbles.length > 0 && _shootTime < 0)
-		{
-			var bubble:Bubble = _bubbles.pop();
-			bubble.shoot(scene.mouseX, scene.mouseY);
-			_shootTime = 0.2; // shoot cooldown
-		}
+		scene.may((scene) -> {
+			_shootTime -= HXP.elapsed;
+			if (Mouse.mouseDown && _bubbles.length > 0 && _shootTime < 0)
+			{
+				var bubble:Bubble = _bubbles.pop();
+				bubble.shoot(scene.mouseX, scene.mouseY);
+				_shootTime = 0.2; // shoot cooldown
+			}
+		});
 	}
 
 	private function handleGrab()
@@ -454,34 +456,36 @@ class Player extends Physics
 	{
 		if (!hasPickup("toss")) return;
 
-		if (Mouse.mousePressed)
-		{
-			_tossObject = null;
-			if (_bubbles.length > 0)
+		scene.may((scene) -> {
+			if (Mouse.mousePressed)
 			{
-				var i:Int = 0;
-				while (_tossObject == null && i < _tossTypes.length)
+				_tossObject = null;
+				if (_bubbles.length > 0)
 				{
-					var e:Entity = scene.collidePoint(_tossTypes[i], scene.mouseX, scene.mouseY);
-					if (e != null && Std.is(e, Physics))
-						_tossObject = cast(e, Physics);
-					i += 1;
+					var i:Int = 0;
+					while (_tossObject == null && i < _tossTypes.length)
+					{
+						var e:Entity = scene.collidePoint(_tossTypes[i], scene.mouseX, scene.mouseY);
+						if (e != null && Std.is(e, Physics))
+							_tossObject = cast(e, Physics);
+						i += 1;
+					}
+					if (_tossObject != null)
+					{
+						_tossX = scene.mouseX;
+						_tossY = scene.mouseY;
+					}
 				}
+			}
+			else if (Mouse.mouseReleased)
+			{
 				if (_tossObject != null)
 				{
-					_tossX = scene.mouseX;
-					_tossY = scene.mouseY;
+					removeBubble();
+					_tossObject.toss(scene.mouseX - _tossX, scene.mouseY - _tossY);
 				}
 			}
-		}
-		else if (Mouse.mouseReleased)
-		{
-			if (_tossObject != null)
-			{
-				removeBubble();
-				_tossObject.toss(scene.mouseX - _tossX, scene.mouseY - _tossY);
-			}
-		}
+		});
 	}
 
 	private static var _enemyTypes:Array<String>;

@@ -14,7 +14,7 @@ class LockedDoor extends Entity
 		super(x, y);
 		_sprite = new Spritemap("gfx/objects/colored_door.png", 16, 64);
 		_sprite.add("closed", [0]);
-		_sprite.add("open", [1, 2, 3], 12).onComplete.bind(function() scene.remove(this));
+		_sprite.add("open", [1, 2, 3], 12).onComplete.bind(removeFromScene);
 		_sprite.play("closed");
 		graphic = _sprite;
 

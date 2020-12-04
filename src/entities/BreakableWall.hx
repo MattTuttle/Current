@@ -18,7 +18,7 @@ class BreakableWall extends Being
 
 	public override function kill()
 	{
-		HXP.scene.remove(this);
+		removeFromScene();
 	}
 
 }

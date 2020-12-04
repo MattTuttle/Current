@@ -36,7 +36,7 @@ class Rock extends Physics
 
 	public override function kill()
 	{
-		HXP.scene.remove(this);
+		removeFromScene();
 		super.kill();
 	}
 
@@ -48,7 +48,7 @@ class Rock extends Physics
 			if (Std.is(hit, Being))
 				cast(hit, Being).hurt(attack);
 			else
-				HXP.scene.remove(hit);
+				hit.removeFromScene();
 		});
 
 		super.update();
