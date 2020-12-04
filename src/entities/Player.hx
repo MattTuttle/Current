@@ -211,22 +211,21 @@ class Player extends Physics
 
 		super.update();
 
-		var e:Entity = collide(_enemyTypes, x, y);
-		if (e != null && _bubbles.length == 0)
-		{
-			if (Std.is(e, Being))
-				hurt(cast(e, Being).attack);
-			else
-				hurt(1);
-		}
+		collide(_enemyTypes, x, y).may(function(e) {
+			if (_bubbles.length == 0)
+			{
+				if (Std.is(e, Being))
+					hurt(cast(e, Being).attack);
+				else
+					hurt(1);
+			}
+		});
 
-		var e:Entity = collide("interact", x, y);
-		if (e != null)
-		{
+		collide("interact", x, y).may(function(e) {
 			var interact:Interactable = cast(e, Interactable);
 			if (interact != null)
 				interact.activate(this);
-		}
+		});
 
 		var game:Game = cast(HXP.scene, Game);
 		if (collide("exit", x, y) != null)
@@ -266,15 +265,13 @@ class Player extends Physics
 				moveBubble(i);
 			}
 
-			e = collide("bubble", x, y);
-			if (e != null)
-			{
+			collide("bubble", x, y).may(function(e) {
 				var bubble:Bubble = cast(e, Bubble);
 				if (bubble != null)
 				{
 					addBubble(bubble);
 				}
-			}
+			});
 		}
 	}
 

@@ -3,7 +3,7 @@ package entities;
 import base.Being;
 import haxepunk.graphics.Spritemap;
 import haxepunk.HXP;
-import haxepunk.Entity;
+import haxepunk.ds.Maybe;
 import haxepunk.Sfx;
 import haxepunk.masks.Circle;
 
@@ -80,10 +80,10 @@ class Bubble extends Being
 	{
 		if (dead) return;
 		// always check if we are colliding with something
-		var e:Entity = collide(_enemyTypes, x, y);
-		var enemy:Being = null;
-		if (e != null)
-			enemy = cast(e, Being);
+		var enemy:Maybe<Being> = null;
+		collide(_enemyTypes, x, y).may(function(b) {
+			enemy = cast(b, Being);
+		});
 
 		switch (_state)
 		{
@@ -102,7 +102,7 @@ class Bubble extends Being
 				if (_life < 0) scene.remove(this);
 
 				// hit map without an owner, POP!
-				if (collide(_hitTypes, x, y) != null || enemy != null) kill();
+				if (collide(_hitTypes, x, y) != null || enemy.exists()) kill();
 			case OWNED:
 				_bubble.alpha = 1;
 				_point.x = targetX - x;
@@ -123,13 +123,12 @@ class Bubble extends Being
 				}
 
 				// pop if we hit something
-				if (enemy != null) hurt(1);
+				if (enemy.exists()) hurt(1);
 			case SHOOT:
-				if (enemy != null)
-				{
+				enemy.may(function(enemy) {
 					enemy.hurt(attack);
 					hurt(enemy.attack);
-				}
+				});
 				moveBy(targetX, targetY);
 				if (collide(_hitTypes, x, y) != null) kill();
 		}

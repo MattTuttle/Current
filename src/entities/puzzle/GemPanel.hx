@@ -39,9 +39,7 @@ class GemPanel extends Entity
 
 		if (_gem == null)
 		{
-			var gem:Entity = collide("gem", x, y);
-			if (gem != null)
-			{
+			collide("gem", x, y).may(function(gem) {
 				_gem = gem;
 				var doors:Array<Entity> = new Array<Entity>();
 				scene.getType("door", doors);
@@ -50,7 +48,7 @@ class GemPanel extends Entity
 					new Sfx("sfx/save" + #if flash ".mp3" #else ".wav" #end).play();
 					cast(e, GemDoor).open();
 				}
-			}
+			});
 		}
 		else
 		{

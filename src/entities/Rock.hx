@@ -44,14 +44,12 @@ class Rock extends Physics
 	{
 		velocity.y += 4; // gravity
 
-		var hit:Entity = collide(_hitTypes, x + MathUtil.sign(velocity.x) * 3, y + MathUtil.sign(velocity.y) * 3);
-		if (hit != null)
-		{
+		collide(_hitTypes, x + MathUtil.sign(velocity.x) * 3, y + MathUtil.sign(velocity.y) * 3).may(function(hit) {
 			if (Std.is(hit, Being))
 				cast(hit, Being).hurt(attack);
 			else
 				HXP.scene.remove(hit);
-		}
+		});
 
 		super.update();
 
