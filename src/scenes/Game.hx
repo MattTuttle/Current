@@ -37,6 +37,7 @@ class Game extends Scene
 
 		_exits = new Map<String,String>();
 
+		#if !hl
 		ripple = SceneShader.fromAsset("shaders/ripple.frag");
 		ripple.setUniform("speed", 2.0);
 		ripple.setUniform("density", 1.4);
@@ -44,6 +45,7 @@ class Game extends Scene
 		shaders.push(ripple);
 
 		shaders.push(SceneShader.fromAsset("shaders/blur.frag"));
+		#end
 
 		_currentMusic = "";
 
@@ -450,8 +452,10 @@ class Game extends Scene
 
 	public override function update()
 	{
+		#if !hl
 		rippleTime += HXP.elapsed;
 		ripple.setUniform("uTime", rippleTime);
+		#end
 		if (_fadeTween != null)
 			_fade.alpha = _fadeTween.value;
 
@@ -470,7 +474,6 @@ class Game extends Scene
 
 		super.update();
 		clampCamera();
-//		shader.update();
 	}
 
 	// music

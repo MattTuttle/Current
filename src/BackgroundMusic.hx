@@ -45,7 +45,7 @@ class BackgroundMusic
 		startTime = context.currentTime - bufferOffset;
 		createSource(0.2);
 	}
-	
+
 	public static function update()
 	{
 		if (HXP.engine.paused || context == null) return;
@@ -57,29 +57,6 @@ class BackgroundMusic
 	}
 }
 
-#elseif audaxe
-
-class BackgroundMusic
-{
-	public static var backgroundMusic:audaxe.Channel;
-
-	public static function play(path:String)
-	{
-		if (backgroundMusic == null)
-		{
-			backgroundMusic = audaxe.Engine.createChannel();
-		}
-
-		backgroundMusic.sound = audaxe.Sound.loadTracker(path);
-		backgroundMusic.sound.play();
-	}
-
-	public static function update()
-	{
-		audaxe.Engine.volume = HXP.volume;
-	}
-}
-
 #else
 
 // null player
@@ -87,6 +64,7 @@ class BackgroundMusic
 {
 	public static function play(path:String) {}
 	public static function update() {}
+	public static function resume() {}
 }
 
 #end

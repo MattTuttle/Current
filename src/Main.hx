@@ -22,7 +22,7 @@ class Main extends Engine
 
 	@:preload(
 		["assets/graphics", "gfx"],
-		["assets/audio", "sfx"],
+		{path:"assets/audio", alias:"sfx", ext:["wav", "ogg"]},
 		["assets/music", "music"],
 		["assets/font", "font"],
 		["assets/levels", "levels"],
@@ -33,6 +33,7 @@ class Main extends Engine
 #if debug
 		Console.enable();
 #end
+		HXP.screen.color = 0x017DD7;
 		BackgroundMusic.play("music/title.xm");
 		HXP.scene = new MainMenu();
 	}
