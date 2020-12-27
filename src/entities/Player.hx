@@ -465,8 +465,8 @@ class Player extends Physics
 					var i:Int = 0;
 					while (_tossObject == null && i < _tossTypes.length)
 					{
-						var e:Entity = scene.collidePoint(_tossTypes[i], scene.mouseX, scene.mouseY);
-						if (e != null && Std.is(e, Physics))
+						var e = scene.collidePoint(_tossTypes[i], scene.mouseX, scene.mouseY);
+						if (e.exists() && Std.is(e, Physics))
 							_tossObject = cast(e, Physics);
 						i += 1;
 					}

@@ -20,14 +20,12 @@ class Main extends Engine
 		super.update();
 	}
 
-	@:preload(
-		["assets/graphics", "gfx"],
-		{path:"assets/audio", alias:"sfx", ext:["wav", "ogg"]},
-		["assets/music", "music"],
-		["assets/font", "font"],
-		["assets/levels", "levels"],
-		["assets/shaders", "shaders"]
-	)
+	@:preload("assets/graphics", "gfx")
+	@:preload("assets/audio", "sfx", ["wav", "ogg"])
+	@:preload("assets/music", "music")
+	@:preload("assets/font", "font")
+	@:preload("assets/levels", "levels")
+	@:preload("assets/shaders", "shaders")
 	override public function init()
 	{
 #if debug
